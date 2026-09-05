@@ -4915,7 +4915,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v250 · 5 September 2026";
+const BUILD="v251 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -10947,7 +10947,7 @@ function ndots(k,cls){ let s=""; for(let i=0;i<k;i++) s+=`<i class="coin${cls?" 
 function hand(){
  /* v250: the five cards teach, and then five questions ask. Counters only —
     the numeral is off the question card on purpose, so the child counts. */
- if(S.hnPhase==="q"){
+ if(S.hnPhase==="q"||(S.hnI||0)>=HAND.length){
   const qi=S.hqI||0;
   if(qi>=HANDQ.length) return done("🖐️","One hand");
   const q=HANDQ[qi], ans=HAND[q.n-1].w, pick=S.hqPick, right=pick===ans;
@@ -10963,7 +10963,6 @@ function hand(){
            :face("👆","Count the dots. Tap the word.")));
  }
  const i=S.hnI||0;
- if(i>=HAND.length){ S.hnPhase="q"; return hand() }
  const c=HAND[i], said=S.hnSaid;
  return wrap(`<div class="nhead">
    <div class="numeral">${c.n}</div>
@@ -10981,9 +10980,8 @@ function jee(){
     pattern nobody had shown them. The four cards below now say it plainly —
     five, and this many more, and here is the word with the two halves tinted —
     and only then does it ask. Teaching before testing, as everywhere else. */
- if(S.jePhase!=="q"){
+ if(S.jePhase!=="q"&&(S.jmI||0)<JEE.length){
   const m=S.jmI||0;
-  if(m>=JEE.length){ S.jePhase="q"; return jee() }
   const c=JEE[m], small=c.n-5, said=S.jmSaid;
   return wrap(`<div class="nhead">
     <div class="numeral">${c.n}</div>
@@ -11504,7 +11502,7 @@ const PKEYS=["hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","j
    screen changed; v155 changes only the drawer, so a v153 place still resumes
    onto exactly the screen it was written from. Bump it the next time an
    activity's stages move. */
-const PLACE_BUILD=250;   /* v243 inserts a screen in the greeting and one
+const PLACE_BUILD=251;   /* v243 inserts a screen in the greeting and one
                             between the asking and the machine, so a place
                             written by an older build would resume past them */
 function placeKeep(){
@@ -11829,7 +11827,19 @@ function openAct(id,force){ S.world=stopOf(id); S.startAt=null;
    S.offered.add(id); S.detourTo=id; S.view="detour"; render(); return;
  }
  S.act=id;S.view="act";S.touched=false;S.openStop=stopOf(id);
- Object.assign(S,{gi:0,gpick:null,ki:0,kpick:null,oi:0,omany:false,
+ Object.assign(S,{
+  /* v251: these were missing, and that was one bug wearing two faces. Clear
+     wipes S.place and the finished set but not the live keys, and openAct is
+     what puts those back — so with the counting keys absent from this list,
+     Clear cleared nothing a child could see and the stop reopened on the very
+     question they were already looking at. That in turn left the stop with a
+     single history entry, which is why the step-back arrow walked out of the
+     activity instead of back through its cards, and why start-over was greyed:
+     there was no earlier screen recorded to go back to. */
+  hnI:0,hnSaid:null,hnPhase:"meet",hqI:0,hqPick:null,
+  jmI:0,jmSaid:null,jePhase:"meet",jeI:0,jePick:null,
+  tnI:0,tnPhase:"meet",tqI:0,tqPick:null,
+  gi:0,gpick:null,ki:0,kpick:null,oi:0,omany:false,
   sqI:0,sqPick:null,sqWrong:0,
   sqPhase:"meet",sqM:0,sqStep:0,sqPress:0,li:0,gsel:null,gput:{},gRound:0,gmiss:null,gfed:null,gno:null,gheard:{},
   gPhase:"teach",gT:0,gTP:{},brP:0,brAsk:null,brRight:null,diI:0,diPhase:"meet",diFound:{},diMiss:null,
@@ -12251,12 +12261,12 @@ document.body.addEventListener("click",function(e){
   else { S.vlI=(S.vlI||0)+1 }
   sMove(); render(); return}
  if(d.hsaid!==undefined){ if(d.clip) play(t,d.clip); S.hnSaid=true; render(); return}
-   if(d.hnext!==undefined){ S.hnI=(S.hnI||0)+1; S.hnSaid=null; sMove(); render(); return}
+   if(d.hnext!==undefined){ S.hnI=(S.hnI||0)+1; S.hnSaid=null; if(S.hnI>=HAND.length) S.hnPhase="q"; sMove(); render(); return}
    if(d.hq){ const q=HANDQ[S.hqI||0], ans=HAND[q.n-1].w; if(S.hqPick===ans) return;
      S.hqPick=d.hq; (d.hq===ans?sGood:sOops)(); render(); return}
    if(d.hqnext!==undefined){ S.hqI=(S.hqI||0)+1; S.hqPick=null; sMove(); render(); return}
    if(d.jmsaid!==undefined){ if(d.clip) play(t,d.clip); S.jmSaid=true; render(); return}
-   if(d.jmnext!==undefined){ S.jmI=(S.jmI||0)+1; S.jmSaid=null; sMove(); render(); return}
+   if(d.jmnext!==undefined){ S.jmI=(S.jmI||0)+1; S.jmSaid=null; if(S.jmI>=JEE.length) S.jePhase="q"; sMove(); render(); return}
    if(d.je){ const c=JEE[S.jeI||0]; if(S.jePick===c.tail) return;
      S.jePick=d.je; (d.je===c.tail?sGood:sOops)(); render(); return}
    if(d.jenext!==undefined){ S.jeI=(S.jeI||0)+1; S.jePick=null; sMove(); render(); return}
