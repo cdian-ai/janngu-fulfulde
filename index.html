@@ -4657,6 +4657,31 @@ body{min-height:0}
 .seerow b{font-size:31px!important}
 .seelist{gap:13px}
 
+
+/* ================= v253 =================
+
+   1. The find-the-ending screen carried two counters that looked alike and
+      meant nothing like each other: "-al · 2 of 2" at the top was which round
+      this is, "0 of 3 found" at the bottom was how many words are caught. Two
+      X-of-Y readings on one card invite the child (and the grown-up) to read
+      them as one thing counting wrong. The round is said in words now — words
+      you have met, then words you have not met — which is also what the round
+      is actually for, and the only counter left on the card counts words.
+
+   2. The coat card. Everything sat in one clump in the middle of a tall card
+      with dead space above and below, and the word box was the biggest thing
+      on a screen whose subject is the little word beside it. The pieces keep
+      their place in the middle but stand apart from each other, and the word
+      comes down from 31px to 24px so the box stops dominating the card. */
+
+.meet.endrill .estamp{margin-bottom:26px}
+.meet.endrill .eshelf{margin-bottom:30px}
+.meet.endrill .ecard{margin:0 0 30px;padding:14px 12px 13px}
+.meet.endrill .ecrow{margin-top:6px}
+.meet.endrill .ecw{font-size:24px}
+.meet.endrill .ecmk{font-size:21px}
+.meet.endrill .ecen{margin-top:7px}
+
 </style>
 </head>
 <body>
@@ -4955,7 +4980,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v252 · 5 September 2026";
+const BUILD="v253 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -6896,7 +6921,8 @@ function wmTeach(){
      :"All three again \u2014 and you had not seen any of those.")
    : "Tap the words that end -"+sfx+". Leave the others alone.";
   return wrap(`<div class="meet endspot" style="${mvars(L.k)}">
-    <p class="estep"><b class="ff">-${esc(sfx)}</b> \u00b7 ${rnd} of 2</p>
+    <p class="estep"><b class="ff">-${esc(sfx)}</b> \u00b7 ${
+      rnd===1?"words you have met":"words you have not met"}</p>
     <div class="spotgrid">${chips2.map(function(c){
       const got=!!S.mSpot[c.id], bad=(S.mSpotBad===c.id);
       /* v210: a twelve-letter word broken across two lines in a half-width
