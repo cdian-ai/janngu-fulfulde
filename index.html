@@ -4915,7 +4915,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v249 · 5 September 2026";
+const BUILD="v250 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -5120,11 +5120,11 @@ const ACTS={
  swap:{t:"Letter swap",em:"🔁",u:1,n:"7 swaps",say:"Which letter comes back? Tap it.",
   ad:["Mutations","f→p, s→c, r→d, y→g, and the three two-letter ones dropping their front. Seven swaps in the whole language — a closed list, learnable in a week.","v245: the drilled pairs were rebuilt from words Peeral actually prints for Guinea. fowru/pobbi, sehre/cehe, rawaandu/dawaaɗi, njambala/jambali and ngabbu/gabi all went — the first three are other-dialect or marked rare, the last two are not in the book at all, and the Guinea words that replace them (kemmba/kenɗi, gabbii/gabbi) show no mutation, so they could not carry the drill. The pairs now are fayannde/payanɗe (a clay pot), saare/ca'e (a town), debbo/rewɓe (a woman), mbabba/babbi (a donkey), njogaari/jogaaji (a tool) and ngaari/ga'i (a bull). Every one is mined from the dictionary's own singular-plural pairs. ngaari is deliberate: the child already met it learning the two-letter ng."]},
 
- hand:{t:"One hand",em:"🖐️",u:0,n:"1 to 5",say:"Press the number. Say it. Hold up that many fingers.",
+ hand:{t:"One hand",em:"🖐️",u:0,n:"1 to 5 · 5 asked",say:"Press the number. Say it. Hold up that many fingers.",
   ad:["Counting to five","Five words, and every one of them is two syllables built from letters just met — go-’o, ɗi-ɗi, ta-ti, na-yi, jo-wi. It sits in the letters Fouta because it is reading practice that happens to be counting, and because counting to five is the second thing after a greeting that a child can carry to a grandparent the same evening."]},
- jee:{t:"The other hand",em:"🖐️🖐️",u:0,n:"6 to 9",say:"Five, and how many more? Tap the word that finishes it.",
+ jee:{t:"The other hand",em:"🖐️🖐️",u:0,n:"6 to 9 · shown, then asked",say:"Five, and how many more? Tap the word that finishes it.",
   ad:["Six to nine are five plus","Fulfulde counts on one hand and then starts the other. Peeral prints it outright: jeego’o is /jowi e go’o/, jeeɗiɗi is /jowi e ɗiɗi/. jee- is jowi wearing a coat and the rest of the word is the number added to it, so there are four fewer words here than there look. The child is not asked to remember nine things; they are asked to spot one pattern, which is what this whole course is."]},
- tens:{t:"Ten and the tens",em:"🪜",u:2,n:"10, 20, then the ladder",say:"Ten and twenty are their own words. After that they are built.",
+ tens:{t:"Ten and the tens",em:"🪜",u:2,n:"3 shown · 6 asked",say:"Ten and twenty are their own words. After that they are built.",
   ad:["The tens","Not one rule but three. sappo and noogay are their own words and cannot be built from anything — Peeral’s entry for cappanɗe says outright that it is the term for the tens from thirty onwards. So it is ten, twenty, and then cappanɗe plus a number the child already owns. This stop stands in front of the number machine so that the machine has something to build with."]},
  nummac:{t:"Build a number",em:"🔢",u:2,n:"0 to 99",say:"Turn the dials. Listen to the number you made.",
   ad:["Numbers","Fulfulde numbers are built, not memorised — cappanɗe tati e jeeɗiɗi is three-tens-and-seven. Eleven words reach a billion."]},
@@ -10919,25 +10919,87 @@ const TENSTEP=[
  {n:30,w:"cappanɗe tati", why:"From thirty on, it is cappanɗe and a number you already have. Three tens."}
 ];
 
+
+/* The checks ask with counters and words only — never with the numeral beside
+   the answer, which would let a child pass by matching shapes. Option orders are
+   fixed in the data rather than shuffled at render, because a re-render on every
+   tap would move the buttons under the child's finger. */
+const HANDQ=[
+ {n:3,o:["nayi","tati","ɗiɗi"]},
+ {n:1,o:["go’o","jowi","tati"]},
+ {n:5,o:["nayi","jowi","go’o"]},
+ {n:2,o:["ɗiɗi","tati","nayi"]},
+ {n:4,o:["jowi","ɗiɗi","nayi"]}
+];
+const TENQ=[
+ {n:10, a:"sappo",             o:["noogay","sappo","cappanɗe go’o"]},
+ /* the wrong answer offered for twenty is the mistake itself: two tens. */
+ {n:20, a:"noogay",            o:["cappanɗe ɗiɗi","noogay","sappo"]},
+ {n:40, a:"cappanɗe nayi",     o:["cappanɗe nayi","cappanɗe tati","noogay"]},
+ {n:70, a:"cappanɗe jeeɗiɗi",  o:["cappanɗe jeego’o","cappanɗe jeeɗiɗi","cappanɗe jeetati"]},
+ {n:90, a:"cappanɗe jeenayi",  o:["cappanɗe jeenayi","cappanɗe jeetati","teemedere"]},
+ {n:100,a:"teemedere",         o:["cappanɗe sappo","teemedere","cappanɗe jeenayi"]}
+];
+
 function ndots(k,cls){ let s=""; for(let i=0;i<k;i++) s+=`<i class="coin${cls?" "+cls:""}"></i>`; return s }
 
 /* ---- one hand ---- */
 function hand(){
+ /* v250: the five cards teach, and then five questions ask. Counters only —
+    the numeral is off the question card on purpose, so the child counts. */
+ if(S.hnPhase==="q"){
+  const qi=S.hqI||0;
+  if(qi>=HANDQ.length) return done("🖐️","One hand");
+  const q=HANDQ[qi], ans=HAND[q.n-1].w, pick=S.hqPick, right=pick===ans;
+  return wrap(`<div class="nhead">
+    <div class="bay" style="justify-content:center">${ndots(q.n)}</div>
+    <div class="numword">${right?esc(ans):`<span class="jeeblank">?</span>`}</div>
+   </div>`,HAND.length+qi,HAND.length+HANDQ.length)
+  +(right?face("⭐",`<b class="ff">${esc(ans)}</b> — ${q.n}.`)
+         +`<button class="wallbtn" data-hqnext>next ›</button>`
+    :`<div class="controls c3">${q.o.map(function(x){
+       return `<button class="ctl big${pick===x?" wrong":""}" data-hq="${esc(x)}">${esc(x)}</button>`}).join("")}</div>`
+     +(pick?face("🤔","Count them again, one finger at a time.")
+           :face("👆","Count the dots. Tap the word.")));
+ }
  const i=S.hnI||0;
- if(i>=HAND.length) return done("🖐️","One hand");
+ if(i>=HAND.length){ S.hnPhase="q"; return hand() }
  const c=HAND[i], said=S.hnSaid;
  return wrap(`<div class="nhead">
    <div class="numeral">${c.n}</div>
    <div class="bay" style="justify-content:center">${ndots(c.n)}</div>
    <div class="numword">${c.syl.map(function(s){return `<span class="syl">${esc(s)}</span>`}).join("")}</div>
    <button class="hearbtn" data-clip="num/n${pad(c.n,3)}.mp3" data-hsaid><span class="bars"><i></i><i></i><i></i></span>listen</button>
-  </div>`,i,HAND.length)
+  </div>`,i,HAND.length+HANDQ.length)
  +(said?`<button class="wallbtn" data-hnext>next ›</button>`
        :face("👆","Press it, then say it. Hold up that many fingers while you do."));
 }
 
 /* ---- the other hand: the tail IS the number ---- */
 function jee(){
+ /* v250: this stop used to open with a question, which asked a child to spot a
+    pattern nobody had shown them. The four cards below now say it plainly —
+    five, and this many more, and here is the word with the two halves tinted —
+    and only then does it ask. Teaching before testing, as everywhere else. */
+ if(S.jePhase!=="q"){
+  const m=S.jmI||0;
+  if(m>=JEE.length){ S.jePhase="q"; return jee() }
+  const c=JEE[m], small=c.n-5, said=S.jmSaid;
+  return wrap(`<div class="nhead">
+    <div class="numeral">${c.n}</div>
+    <div class="mat" style="gap:8px">
+     <div class="col"><span class="cname"><span class="sw" style="background:#6E9C7C"></span><b>jowi</b>five</span>
+      <div class="bay">${ndots(5)}</div></div>
+     <div class="col"><span class="cname"><span class="sw" style="background:#F0B54A"></span><b>${esc(HAND[small-1].w)}</b>${small} more</span>
+      <div class="bay">${ndots(small,"gold")}</div></div>
+    </div>
+    <div class="numword"><span class="jeepre">jee</span><span class="jeetail ok">${esc(c.tail)}</span></div>
+    <button class="hearbtn" data-clip="num/n${pad(c.n,3)}.mp3" data-jmsaid><span class="bars"><i></i><i></i><i></i></span>listen</button>
+   </div>`,m,JEE.length*2)
+  +(said?face("🖐️",`<b class="ff">jee</b> is jowi — five. After it comes <b class="ff">${esc(c.tail)}</b>, the number you added.`)
+        +`<button class="wallbtn" data-jmnext>next ›</button>`
+   :face("👀","Five on one hand, and this many on the other. Press the word."));
+ }
  const i=S.jeI||0;
  if(i>=JEE.length) return done("🖐️🖐️","The other hand");
  const c=JEE[i], pick=S.jePick, right=pick===c.tail;
@@ -10947,35 +11009,53 @@ function jee(){
    <div class="mat" style="gap:8px">
     <div class="col"><span class="cname"><span class="sw" style="background:#6E9C7C"></span><b>jowi</b>five</span>
      <div class="bay">${ndots(5)}</div></div>
-    <div class="col"><span class="cname"><span class="sw" style="background:#F0B54A"></span><b>${esc(HAND[small-1].w)}</b>${small}</span>
+    <div class="col"><span class="cname"><span class="sw" style="background:#F0B54A"></span><b>?</b>${small} more</span>
      <div class="bay">${ndots(small,"gold")}</div></div>
    </div>
    <div class="numword"><span class="jeepre">jee</span>${pick?`<span class="jeetail${right?" ok":" no"}">${esc(pick)}</span>`:`<span class="jeeblank">?</span>`}</div>
    ${right?`<button class="hearbtn" data-clip="num/n${pad(c.n,3)}.mp3"><span class="bars"><i></i><i></i><i></i></span>listen</button>`:""}
-  </div>`,i,JEE.length)
- +(right?face("⭐",`<b class="ff">jee</b> is jowi wearing a coat. The rest of the word is the number you added.`)
+  </div>`,JEE.length+i,JEE.length*2)
+ +(right?face("⭐",`<b class="ff">${esc(c.w)}</b> — five and ${small}.`)
         +`<button class="wallbtn" data-jenext>next ›</button>`
    :`<div class="controls c3">${c.o.map(function(x){
       return `<button class="ctl big${pick===x?" wrong":""}" data-je="${esc(x)}">${esc(x)}</button>`}).join("")}</div>`
-    +(pick?face("🤔","Not that one. Which number did you add to five?"):face("🖐️","Five, and how many more? Tap the word that finishes it.")));
+    +(pick?face("🤔","Not that one. Count the gold ones — that is the word you need.")
+          :face("🖐️","Five, and how many more? Tap the word that finishes it.")));
 }
 
 /* ---- ten, twenty, and the rest ---- */
 function tens(){
+ const N=TENSTEP.length+1+TENQ.length;
+ if(S.tnPhase==="q"){
+  const qi=S.tqI||0;
+  if(qi>=TENQ.length) return done("🪜","Ten and the tens");
+  const q=TENQ[qi], pick=S.tqPick, right=pick===q.a;
+  return wrap(`<div class="nhead">
+    <div class="numeral">${q.n}</div>
+    <div class="numword ff">${right?esc(q.a):`<span class="jeeblank">?</span>`}</div>
+    ${right?`<button class="hearbtn" data-clip="num/n${pad(q.n,3)}.mp3"><span class="bars"><i></i><i></i><i></i></span>listen</button>`:""}
+   </div>`,TENSTEP.length+1+qi,N)
+  +(right?face("⭐",q.n<30?"Its own word — nothing built.":`cappanɗe and the number: ${Math.floor(q.n/10)} tens.`)
+         +`<button class="wallbtn" data-tqnext>next ›</button>`
+   :`<div class="controls">${q.o.map(function(x){
+      return `<button class="ctl${pick===x?" wrong":""}" data-tq="${esc(x)}">${esc(x)}</button>`}).join("")}</div>`
+    +(pick?face("🤔",q.n<30?"This one is not built from anything. It has its own word.":"How many tens is it? That is the number after cappanɗe.")
+          :face("🪜","Which word is this number?")));
+ }
  const i=S.tnI||0;
  if(i>=TENSTEP.length){
   return wrap(`<div class="nhead"><div class="numword">the whole ladder</div></div>
    <div class="tenlad">${[1,2,3,4,5,6,7,8,9].map(function(k){
      return `<button class="tenrung" data-clip="num/n${pad(k*10,3)}.mp3"><b>${k*10}</b><span class="ff">${esc(TENSW[k])}</span></button>`}).join("")}
-    <button class="tenrung hun" data-clip="num/n100.mp3"><b>100</b><span class="ff">teemedere</span></button></div>`,3,4)
-   +`<button class="wallbtn" data-finish>done ✓</button>`;
+    <button class="tenrung hun" data-clip="num/n100.mp3"><b>100</b><span class="ff">teemedere</span></button></div>`,TENSTEP.length,N)
+   +`<button class="wallbtn" data-tqgo>now check ›</button>`;
  }
  const c=TENSTEP[i];
  return wrap(`<div class="nhead">
    <div class="numeral">${c.n}</div>
    <div class="numword ff">${esc(c.w)}</div>
    <button class="hearbtn" data-clip="num/n${pad(c.n,3)}.mp3"><span class="bars"><i></i><i></i><i></i></span>listen</button>
-  </div>`,i,4)
+  </div>`,i,N)
  +face(i===2?"🪜":"🔟",esc(c.why))
  +`<button class="wallbtn" data-tnnext>next ›</button>`;
 }
@@ -11398,7 +11478,7 @@ function render(){
    reach the seventh. Every activity writes its own place as it goes now, and
    picks it up again on the way back in. A finished stop starts from the top;
    a half-done one resumes exactly where it was left. */
-const PKEYS=["hnI","hnSaid","jeI","jePick","tnI","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
+const PKEYS=["hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "sqPhase","sqM","sqStep","sqPress","sqChunk","li","lopen","gsel","gput","gRound",
  "gmiss","gfed","gno","gheard","gPhase","gT","gTP","brP","brAsk","brRight","eCel",
  "diI","diPhase","diFound","diMiss",
@@ -11424,7 +11504,7 @@ const PKEYS=["hnI","hnSaid","jeI","jePick","tnI","gi","gpick","ki","kpick","oi",
    screen changed; v155 changes only the drawer, so a v153 place still resumes
    onto exactly the screen it was written from. Bump it the next time an
    activity's stages move. */
-const PLACE_BUILD=249;   /* v243 inserts a screen in the greeting and one
+const PLACE_BUILD=250;   /* v243 inserts a screen in the greeting and one
                             between the asking and the machine, so a place
                             written by an older build would resume past them */
 function placeKeep(){
@@ -11964,7 +12044,7 @@ document.body.addEventListener("click",function(e){
     word and never counted as pressed — leaving a stop with no door out of it */
  if(d.clip!==undefined&&d.mpress===undefined&&d.mstep===undefined
     &&d.lsmeet===undefined&&d.jobpick===undefined&&d.esee===undefined&&d.ehear===undefined
-    &&d.gsaid===undefined&&d.hsaid===undefined){play(t,d.clip);return}
+    &&d.gsaid===undefined&&d.hsaid===undefined&&d.jmsaid===undefined){play(t,d.clip);return}
  if(d.act){openAct(d.act);return}
  if(d.goto){openAct(d.goto,true);return}
  if(d.force){openAct(d.force,true);return}
@@ -12172,10 +12252,19 @@ document.body.addEventListener("click",function(e){
   sMove(); render(); return}
  if(d.hsaid!==undefined){ if(d.clip) play(t,d.clip); S.hnSaid=true; render(); return}
    if(d.hnext!==undefined){ S.hnI=(S.hnI||0)+1; S.hnSaid=null; sMove(); render(); return}
+   if(d.hq){ const q=HANDQ[S.hqI||0], ans=HAND[q.n-1].w; if(S.hqPick===ans) return;
+     S.hqPick=d.hq; (d.hq===ans?sGood:sOops)(); render(); return}
+   if(d.hqnext!==undefined){ S.hqI=(S.hqI||0)+1; S.hqPick=null; sMove(); render(); return}
+   if(d.jmsaid!==undefined){ if(d.clip) play(t,d.clip); S.jmSaid=true; render(); return}
+   if(d.jmnext!==undefined){ S.jmI=(S.jmI||0)+1; S.jmSaid=null; sMove(); render(); return}
    if(d.je){ const c=JEE[S.jeI||0]; if(S.jePick===c.tail) return;
      S.jePick=d.je; (d.je===c.tail?sGood:sOops)(); render(); return}
    if(d.jenext!==undefined){ S.jeI=(S.jeI||0)+1; S.jePick=null; sMove(); render(); return}
    if(d.tnnext!==undefined){ S.tnI=(S.tnI||0)+1; sMove(); render(); return}
+   if(d.tqgo!==undefined){ S.tnPhase="q"; sMove(); render(); return}
+   if(d.tq){ const q=TENQ[S.tqI||0]; if(S.tqPick===q.a) return;
+     S.tqPick=d.tq; (d.tq===q.a?sGood:sOops)(); render(); return}
+   if(d.tqnext!==undefined){ S.tqI=(S.tqI||0)+1; S.tqPick=null; sMove(); render(); return}
    if(d.pair!==undefined){S.pans=+d.pair;(S.pans===S.ptar?sGood:sOops)();render();return}
  if(d.pnext!==undefined){S.pi++;S.ptar=null;S.pans=null;render();return}
  if(d.gp){S.gpick=d.gp;(d.gp===GEM[S.gi][1]?sGood:sOops)();render();return}
