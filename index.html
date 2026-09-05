@@ -18,7 +18,7 @@
 <meta name="apple-mobile-web-app-title" content="Janngu">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
-<title>Janngu Fulfulde 1 — v236</title>
+<title>Janngu Fulfulde 1 — v241</title>
 <style>
 /* Fonts embedded — this file makes no network calls. The Fulfulde
    letters ɓ ɗ ƴ ŋ ñ are carried by the embedded faces, so they
@@ -4340,6 +4340,266 @@ img{-webkit-user-drag:none;user-drag:none;
 main{padding-bottom:calc(126px + env(safe-area-inset-bottom))}
 .findme{bottom:calc(84px + env(safe-area-inset-bottom))}
 .symsheet{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
+
+/* ==================== v237 ====================
+   The cheap four from the design audit: a greeting on day one, the calendar
+   off the road, one lesson per card at Tugee, and somewhere to stop. */
+
+/* the word on the "which little word" screen is a word to be read and heard,
+   not a control \u2014 same treatment the phrase gets on the screen after it */
+.whichw{border:none;background:none;padding:2px 6px;margin:10px 0 2px;cursor:pointer;
+  font-family:'FulSerif',serif;font-weight:600;font-size:clamp(26px,8vw,42px);
+  line-height:1.1;border-radius:14px}
+.whichw:active{transform:translateY(2px);background:var(--mk-soft)}
+
+/* what a child says to somebody, printed where they will see it as they leave */
+.sayto{display:flex;flex-direction:column;align-items:center;gap:4px;margin:14px 0 2px;
+  padding:14px 12px;border-radius:16px;background:var(--gold-bg,#FBF2DC)}
+.sayto b{font-size:26px;color:var(--gold-deep);line-height:1.1}
+.sayto span{font-family:'FulSans',sans-serif;font-size:13px;color:#6C7186}
+
+/* ---- the resting place ----
+   Nothing new on the screen: the same two doors, the other way round. The
+   moon is the whole of the signal, and "or one more" keeps the road open for
+   a child who is not tired \u2014 a stopping point that refuses to let you carry
+   on is a wall, and this is an inn. */
+.restcard{display:flex;align-items:center;gap:12px;width:100%;margin:12px 0 8px;
+  padding:14px 14px;border:none;border-radius:19px;cursor:pointer;font:inherit;
+  text-align:left;background:var(--unit);color:#fff;
+  box-shadow:0 3px 0 rgba(16,28,69,.18),0 10px 22px rgba(16,28,69,.14)}
+.restcard:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(16,28,69,.18)}
+.restcard .rb{flex:0 0 auto;width:44px;height:44px;border-radius:14px;
+  background:rgba(255,255,255,.16);display:flex;align-items:center;
+  justify-content:center;font-size:23px}
+.restcard .rx{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.restcard .rx em{font-style:normal;font-family:'FulSans',sans-serif;font-size:10.5px;
+  font-weight:800;letter-spacing:.09em;text-transform:uppercase;opacity:.72}
+.restcard .rx b{font-size:17px;line-height:1.2}
+.restcard .rx small{font-size:12px;opacity:.75}
+.restcard .ra{font-size:24px;opacity:.7}
+.nextcard.quietcard{background:transparent;box-shadow:none;
+  border:1.5px solid var(--line)}
+
+/* ==================== v239 ====================
+   Two names for one day, at the same size, because they are not a headword
+   and a footnote — they are two answers to the same question, centuries apart. */
+.twoname{display:flex;gap:9px;width:100%;margin:6px 0 0}
+.nmcard{flex:1 1 0;min-width:0}
+.nmcard{display:flex;flex-direction:column;align-items:center;gap:5px;
+  padding:16px 9px 12px;border-radius:19px;border:2px solid transparent;
+  cursor:pointer;font:inherit;background:var(--sunk);
+  box-shadow:0 2px 0 rgba(16,28,69,.06)}
+.nmcard:active{transform:translateY(2px);box-shadow:none}
+.nmcard b{font-size:clamp(17px,5.6vw,25px);line-height:1.12;color:var(--ink);
+  text-align:center;overflow-wrap:normal;word-break:keep-all}
+.nmcard span{font-family:'FulSans',sans-serif;font-size:10.5px;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center}
+.nmcard.own{background:var(--unit-bg);border-color:var(--unit)}
+.nmcard.own b,.nmcard.own span{color:var(--unit)}
+.nmcard.lent{background:var(--gold-bg,#FBF2DC)}
+.nmcard.lent b{color:var(--gold-deep)}
+.nmsame{font-family:'FulSans',sans-serif;font-size:12px;color:var(--muted);
+  text-align:center;margin:10px 0 0;letter-spacing:.03em}
+
+/* ==================== v240 ====================
+   The doubled letter stops being a shape to spot and becomes the difference
+   between laughing and being strong. */
+.gpwrap{display:flex;flex-direction:column;align-items:center;width:100%}
+.gppic{font-size:62px;line-height:1.05;margin:2px 0 12px}
+.gprow{display:flex;gap:9px;width:100%}
+.gpw{flex:1 1 0;min-width:0;padding:15px 8px;border-radius:18px;border:2px solid var(--line);
+  background:#fff;cursor:pointer;font-family:'FulSerif',serif;font-weight:600;
+  font-size:clamp(15px,4.8vw,21px);color:var(--ink);line-height:1.15;
+  overflow-wrap:normal;word-break:keep-all;
+  box-shadow:0 2px 0 rgba(16,28,69,.07)}
+.gpw:active{transform:translateY(2px);box-shadow:none}
+.gpw em{font-style:normal;color:var(--gold-deep);background:var(--gold-bg,#FBF2DC);
+  border-radius:6px;padding:0 3px}
+.gpw.hit{border-color:var(--leaf-deep);background:#F3F9F1}
+.gpw.miss{border-color:var(--coral);animation:msshake .34s}
+.gpw.dim{opacity:.5}
+.gpsay{width:100%;margin-top:13px;padding:11px 12px;border-radius:15px;background:var(--sunk)}
+.gpsay p{display:flex;align-items:baseline;gap:9px;margin:0 0 5px;font-size:14px}
+.gpsay p b{font-size:17px;color:var(--ink)}
+.gpsay p span{color:var(--muted)}
+.gpsay .gphold{justify-content:center;margin:8px 0 0;padding-top:8px;
+  border-top:1px solid rgba(16,28,69,.08);font-size:19px;color:var(--gold-deep)}
+
+/* ==================== v241 ====================
+   A doing word and a describing word, because a child with thirty-three nouns
+   and nothing to do with them cannot be handed a sentence. */
+.vbwrap,.ajwrap{display:flex;flex-direction:column;align-items:center;width:100%}
+.vbpic,.ajpic{font-size:56px;line-height:1.05;margin:2px 0 10px}
+.vbline{justify-content:center;flex-wrap:wrap}
+.sw.plain{opacity:.55}
+.sw.doing{background:var(--leaf-bg,#EAF4E6);color:var(--leaf-deep);font-weight:700}
+.sw.hole{display:inline-block;min-width:78px;height:26px;border-radius:9px;
+  border:2px dashed var(--unit);background:var(--unit-bg);vertical-align:middle;
+  animation:dockwait 1.9s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.sw.hole{animation:none}}
+
+.ajphrase{display:flex;align-items:baseline;justify-content:center;gap:9px;
+  flex-wrap:wrap;width:100%}
+/* older engines ignore flex gap and the two words run together; the margin is
+   belt and braces and costs nothing where gap already works */
+.ajphrase>b{margin-right:9px}
+.gpsay p b{margin-right:9px}
+.ajphrase>b{font-size:clamp(21px,6.6vw,31px);color:var(--ink);line-height:1.1}
+.ajstem{font-size:clamp(18px,5.6vw,26px);color:#A2A7BC;
+  border-bottom:3px dashed #C6CBDA;padding-bottom:2px}
+.ajfull{font-size:clamp(21px,6.6vw,31px);color:var(--unit);line-height:1.1}
+.ajfull em{font-style:normal;color:var(--gold-deep);
+  background:var(--gold-bg,#FBF2DC);border-radius:6px;padding:0 3px}
+.ajsay{width:100%;margin-top:14px;padding:12px;border-radius:15px;background:var(--sunk)}
+.ajsay .ajen{margin:0;text-align:center;font-size:15px;color:var(--muted)}
+.ajsay .ajsw{display:flex;flex-direction:column;align-items:center;gap:3px;
+  margin:9px 0 0;padding-top:9px;border-top:1px solid rgba(16,28,69,.08);
+  font-size:18px;color:var(--gold-deep)}
+.ajsay .ajsw span{font-family:'FulSans',sans-serif;font-size:11px;font-weight:800;
+  letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+
+/* ==================== v243 ====================
+   ---- the greeting is a conversation, so it looks like one ----
+   v242 put the words in a bubble but left three things in the way: the button
+   holding the phrase still wore the pressable-word chrome from elsewhere in
+   the course (a grey box inside the bubble), a gold listen button stood
+   between the two turns so they never read as one exchange, and the reply
+   simply appeared. The bubbles are the sound buttons now, they sit one under
+   the other, and the second one only exists once the child has chosen it. */
+.gsay,.gbub .gsay{border:none!important;background:none!important;
+  box-shadow:none!important;padding:0;margin:0;min-height:0;cursor:pointer;
+  font:inherit;color:inherit;text-align:left;display:block;width:100%}
+.gbub{cursor:pointer}
+.gbub:active{transform:translateY(2px)}
+.gline.new .gbub{animation:bubin .42s cubic-bezier(.2,1.35,.4,1) both}
+@keyframes bubin{from{opacity:0;transform:translateY(14px) scale(.94)}
+  to{opacity:1;transform:none}}
+/* it arrives as a wave, and the wave settles into the person waving */
+.gwho.arrive{position:relative;display:block;width:48px;height:48px}
+.gwho.arrive i{position:absolute;left:0;top:0;font-style:normal;
+  font-size:42px;line-height:1}
+.gwho.arrive .w{animation:gwave 1.15s ease both}
+.gwho.arrive .f{opacity:0;animation:gface .42s ease .95s both}
+@keyframes gwave{0%{opacity:0;transform:scale(.5) rotate(-20deg)}
+  16%{opacity:1;transform:scale(1.05) rotate(16deg)}
+  34%{transform:rotate(-14deg)}52%{transform:rotate(14deg)}
+  70%{transform:rotate(-6deg)}86%{opacity:1;transform:rotate(0)}
+  100%{opacity:0;transform:scale(.78)}}
+@keyframes gface{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+/* the reply, once chosen, asks to be pressed until it has been heard once */
+.gbub.mine.nudge{animation:gnudge 2s ease-in-out infinite}
+@keyframes gnudge{0%,100%{transform:none;box-shadow:0 2px 7px rgba(16,28,69,.08)}
+  50%{transform:translateY(-3px);box-shadow:0 8px 18px rgba(47,107,69,.20)}}
+/* the three things that could be said back */
+.gopts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%;
+  margin-top:16px}
+.gopt{flex:1 1 auto;min-width:96px;min-height:66px;border:none;border-radius:20px;
+  background:var(--sunk);cursor:pointer;font-family:inherit;padding:8px 14px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  box-shadow:0 2px 6px rgba(16,28,69,.07)}
+.gopt b{font-family:'FulSerif',serif;font-weight:600;font-size:clamp(19px,5.6vw,24px);
+  color:var(--ink);line-height:1.1}
+.gopt .gob{display:flex;gap:2px;align-items:flex-end;height:9px}
+.gopt .gob i{width:3px;border-radius:2px;background:var(--muted);height:5px}
+.gopt .gob i:nth-child(2){height:9px}.gopt .gob i:nth-child(3){height:6px}
+.gopt:active{transform:scale(.96)}
+.gopt.no{background:var(--oops-bg);animation:shake .3s}
+@media (prefers-reduced-motion:reduce){.gline.new .gbub,.gwho.arrive .w,
+  .gwho.arrive .f,.gbub.mine.nudge{animation:none}.gwho.arrive .f{opacity:1}}
+
+/* ---- the four forms, written on the card ----
+   The finished pattern was a box inside a box: each row had a tinted tray and
+   inside it a white pill, because .pw carries the pressable-word chrome used
+   for word buttons elsewhere and these are not buttons, they are the answer.
+   The words sit on the card's own paper now, one hairline apart. */
+.pgrid .prow2,.pgrid.plain .prow2,.pgrid.plain .prow2.has,.pgrid.full .prow2{
+  background:none;border:none;border-radius:0;box-shadow:none;
+  padding:9px 2px;border-bottom:1px solid rgba(16,28,69,.07)}
+.pgrid .prow2:last-child{border-bottom:none}
+.pgrid.plain .prow2.now,.pgrid .prow2.now{background:none;border-color:transparent;
+  border-bottom:1px solid rgba(16,28,69,.07)}
+.pgrid .prow2 .pw{background:none!important;border:none!important;
+  box-shadow:none!important;min-height:0;padding:0}
+.tdmk{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0 10px}
+
+/* ---- the page could not be scrolled ----
+   Closing the drawer from anywhere outside its own closure (Start again, and
+   the buttons in the drawer that move you) removed the drawer and the scrim
+   but not the class on <body> that holds the page still while the drawer is
+   up. main kept overflow:hidden and touch-action:none for the rest of the
+   session, which is a frozen screen with its lower half out of reach. */
+.hand.rest{padding-top:8px}
+.hand.rest .big{font-size:46px}
+.hand.rest h2{font-size:21px;margin:8px 0 2px}
+.hand.rest p{margin:0 0 10px}
+
+/* ==================== v242 ====================
+   ---- a greeting is said TO somebody ----
+   The card put the speaker's face INSIDE the panel, so the greeting read as
+   a label with a picture beside it rather than as words coming out of a
+   person's mouth. It is a speech bubble now: the words fill the bubble, and
+   the bubble's tail points down at the face of whoever is speaking, who
+   stands outside it. The elder speaks from the left; the reply comes back
+   from the right, out of the child's own traveller, so the two turns of a
+   real greeting sit one under the other the way a conversation does. */
+.gline{width:100%;display:flex;flex-direction:column;align-items:flex-start;
+  margin:2px 0 4px}
+.greet .gline:first-child{margin-top:14px}
+.gline.you{align-items:flex-end}
+.gbub{position:relative;box-sizing:border-box;width:100%;
+  background:var(--unit-bg);border-radius:26px;padding:17px 19px;
+  box-shadow:0 2px 7px rgba(16,28,69,.08)}
+/* the tail: it leaves the bubble at the bottom corner nearest the speaker
+   and leans towards them, so the eye runs from the words to the face */
+.gbub::after{content:"";position:absolute;bottom:-13px;left:27px;width:0;height:0;
+  border-top:16px solid var(--unit-bg);border-right:17px solid transparent}
+.gbub .gtext{width:100%;text-align:left}
+.gbub .gtext b{font-size:clamp(24px,7.4vw,32px);color:var(--unit);line-height:1.15}
+.gbub .gtext small{font-size:13px;margin-top:4px}
+/* the face, standing under its own words rather than inside them */
+.gwho{display:block;font-size:42px;line-height:1;margin:15px 0 0 14px;
+  filter:drop-shadow(0 3px 4px rgba(16,28,69,.16))}
+.gline.you .gwho{margin:15px 14px 0 0}
+.gwho img{display:block;width:46px;height:46px;border-radius:50%;object-fit:cover}
+
+/* the child's turn: the same bubble mirrored, in the colour a right answer
+   already wears everywhere else in the course */
+.gline.you .gbub{background:var(--good-bg);text-align:center}
+.gline.you .gbub::after{left:auto;right:27px;border-right:none;
+  border-left:17px solid transparent;border-top-color:var(--good-bg)}
+.gbub .gword{display:inline-block;border:none;background:none;padding:3px 8px;margin:0;cursor:pointer;
+  font-family:'FulSerif',serif;font-weight:600;line-height:1.15;
+  font-size:clamp(25px,7.8vw,33px);color:var(--good);border-radius:12px}
+.gbub .gword:active{transform:translateY(2px);background:rgba(255,255,255,.6)}
+.gline.you .gbub small{display:block;font-size:13px;color:#4A5064;margin-top:1px}
+/* before the reply is chosen the bubble is empty and waiting, so the three
+   words below are visibly what goes in it */
+.gbub.empty{min-height:84px;display:grid;place-items:center;background:var(--sunk);
+  box-shadow:inset 0 0 0 2px var(--good);animation:gwait 1.9s ease-in-out infinite}
+.gbub.empty::after{border-top-color:var(--sunk)}
+.gq{font-family:'FulSerif',serif;font-size:32px;color:var(--good);opacity:.45}
+@keyframes gwait{0%,100%{opacity:.82}50%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.gbub.empty{animation:none}}
+
+/* ---- v248: the settings bar sits on the bottom edge, and nothing shows under it ----
+   Two faults, one visible symptom. First, the closed drawer was translated up by
+   58px PLUS the safe-area inset, but the handle was min-height:58px with the inset
+   as padding INSIDE that 58 (everything is border-box here). So the reveal was
+   taller than the gold bar by exactly the inset, and the top slice of the drawer
+   body — the grown-ups text about audio files — sat in the open below it.
+   The handle now measures 58px plus the inset, so the reveal and the bar are the
+   same height and the label still clears the home indicator.
+   Second, html and body could still scroll: #phone was min-height:100vh, so on a
+   short road the document ran past the viewport and the page itself moved under
+   the fixed drawer. The shell is locked to the viewport now and only main scrolls,
+   which is what it was always built to do. */
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+body{min-height:0}
+#phone{min-height:0;height:100vh;overflow:hidden}
+@supports (height:100dvh){ html,body{height:100dvh} #phone{height:100dvh} }
+.dhandle{min-height:calc(58px + env(safe-area-inset-bottom,0px))}
+.drawer.open .dhandle{min-height:58px;padding-bottom:0}
+
 </style>
 </head>
 <body>
@@ -4462,61 +4722,84 @@ function vinwClip(w){
 const GEM=[["mbabba","b"],["accu","c"],["immo","m"],["nunnu","n"],["wallu","l"],["neɗɗo","ɗ"],
 ["foññe","ñ"],["wujji","j"],["woɓɓe","ɓ"],["kaŋŋe","ŋ"],
 ["uttere","t"],["eyyo","y"],["ukkere","k"],["woppu","p"]];
+/* ---- v240: doubling is not a shape, it is a difference ----
+   Fourteen cards of spotting taught a child to FIND two letters standing
+   together and said nothing about why anyone should care. These three pairs
+   say it: hold the letter longer and you have said a different word. All six
+   words are Peeral's, with his glosses, and every one of them is a real
+   headword in the Saggitorde rather than a pair built to make a point.
+     jalugol  rire            jallugol  \u00eatre fort
+     fetere   roche ; rocher  fettere   \u00e9tincelle
+     hu\u0253ugol  \u00eatre lux\u00e9        hu\u0253\u0253ugol  prendre feu
+   NO CLIPS EXIST FOR THESE SIX WORDS. The card therefore has no listen
+   button \u2014 a button that points at a missing file is the worst thing a button
+   can do to a child, and this course learnt that the hard way at v175. What
+   is needed, if you want them heard: gem/p00a.mp3 and gem/p00b.mp3 through
+   gem/p02a/b.mp3, six recordings, each one word said twice with a beat
+   between. Until they exist the grown-ups' drawer asks the adult to say the
+   pair aloud, which is better than a silent button anyway. */
+const GEMPAIR=[
+ {a:"jalugol",  ae:"to laugh",     ag:"\ud83d\ude04",
+  b:"jallugol", be:"to be strong", bg:"\ud83d\udcaa", d:"l", ask:"b"},
+ {a:"fetere",   ae:"a rock",       ag:"\ud83e\udea8",
+  b:"fettere",  be:"a spark",      bg:"\u2728", d:"t", ask:"a"},
+ {a:"hu\u0253ugol",  ae:"sprained it",  ag:"\ud83e\udd15",
+  b:"hu\u0253\u0253ugol", be:"it caught fire", bg:"\ud83d\udd25", d:"\u0253", ask:"b"}];
 
 /* ---------- UNIT 2: all 33 headwords ---------- */
 const W2=[
-{g:"📖",sg:"alluwal",pl:"alluuje",de:"alluwel",dp:"alluhoy",m:["ngal","ɗee","ngel","koy"],en:"slate"},
-{g:"🐃",sg:"eda",pl:"edi",de:"edel",dp:"edoy",m:["mbaa","ɗii","ngel","koy"],en:"buffalo"},
-{g:"🚩",sg:"iililal",pl:"iilile",de:"iililel",dp:"iililoy",m:["ngal","ɗee","ngel","koy"],en:"flag"},
-{g:"✉️",sg:"ombolookuru",pl:"ombolookuuji",de:"ombolookuwel",dp:"ombolookuhoy",m:["nduu","ɗii","ngel","koy"],en:"envelope"},
-{g:"👟",sg:"paɗal",pl:"paɗe",de:"paɗel",dp:"paɗoy",m:["ngal","ɗee","ngel","koy"],en:"shoe"},
-{g:"🚪",sg:"baafal",pl:"baafe",de:"baafel",dp:"baafoy",m:["ngal","ɗee","ngel","koy"],en:"door"},
-{g:"🪢",sg:"ɓoggol",pl:"ɓoggi",de:"ɓoggel",dp:"ɓokkoy",m:["ngol","ɗii","ngel","koy"],en:"rope"},
-{g:"🪰",sg:"coongii",pl:"cooɗi",de:"coongel",dp:"cookoy",m:["ngii","ɗii","ngel","koy"],en:"fly"},
-{g:"🚪",sg:"damal",pl:"dame",de:"damel",dp:"damoy",m:["ngal","ɗee","ngel","koy"],en:"doorway (way in or out)"},
-{g:"🛣️",sg:"ɗatal",pl:"ɗate",de:"ɗatel",dp:"ɗatoy",m:["ngal","ɗee","ngel","koy"],en:"road"},
-{g:"🐺",sg:"fowru",pl:"pobbi",de:"pobel",dp:"poboy",m:["nduu","ɗii","ngel","koy"],en:"hyena"},
-{g:"🗡️",sg:"gaawal",pl:"gaawe",de:"gaawel",dp:"gaawoy",m:["ngal","ɗee","ngel","koy"],en:"spear"},
-{g:"🚁",sg:"helikoptawal",pl:"helikoptaaje",de:"helikoptawel",dp:"helikoptahoy",m:["ngal","ɗee","ngel","koy"],en:"helicopter"},
-{g:"🦌",sg:"jawre",pl:"jawe",de:"jawel",dp:"jawoy",m:["ndee","ɗee","ngel","koy"],en:"gazelle"},
-{g:"🍁",sg:"kaakol",pl:"kaaki",de:"kaakel",dp:"kaakoy",m:["ngol","ɗii","ngel","koy"],en:"leaf"},
-{g:"🔪",sg:"laɓi",pl:"laɓɗe",de:"laɓel",dp:"laɓoy",m:["kii","ɗee","ngel","koy"],en:"knife"},
-{g:"🐘",sg:"mawba",pl:"mawɗi",de:"mawbawel",dp:"mawbahoy",m:["mbaa","ɗii","ngel","koy"],en:"elephant"},
-{g:"🫏",sg:"mbabba",pl:"babi",de:"babel",dp:"baboy",m:["mbaa","ɗii","ngel","koy"],en:"donkey"},
-{g:"🪴",sg:"naakoore",pl:"naakooje",de:"naakowel",dp:"naakohoy",m:["ndee","ɗee","ngel","koy"],en:"garden"},
-{g:"🪞",sg:"ndaarorgal",pl:"ndaarorɗe",de:"ndaarorgel",dp:"ndaarorkoy",m:["ngal","ɗee","ngel","koy"],en:"mirror"},
-{g:"🦛",sg:"ngabbu",pl:"gabi",de:"gabel",dp:"ngaboy",m:["nguu","ɗii","ngel","koy"],en:"hippo"},
-{g:"🦒",sg:"njambala",pl:"jambali",de:"jambalel",dp:"jambaloy",m:["mbaa","ɗii","ngel","koy"],en:"giraffe"},
-{g:"📿",sg:"ŋannawol",pl:"ŋannaaji",de:"ŋannawel",dp:"ŋannahoy",m:["ngol","ɗii","ngel","koy"],en:"necklace"},
-{g:"🧑‍⚖️",sg:"ñaawoowo",pl:"ñaawooɓe",de:"ñaawoowel",dp:"ñaawoohoy",m:["oo","ɓee","ngel","koy"],en:"judge"},
-{g:"✂️",sg:"pennitorgal",pl:"pennitorɗe",de:"pennitorgel",dp:"pennitorkoy",m:["ngal","ɗee","ngel","koy"],en:"nail cutter"},
-{g:"🐕",sg:"rawaandu",pl:"dawaaɗi",de:"dawangel",dp:"dawakoy",m:["nduu","ɗii","ngel","koy"],en:"dog"},
-{g:"🏔️",sg:"sehre",pl:"cehe",de:"cehel",dp:"cehoy",m:["ndee","ɗee","ngel","koy"],en:"plateau"},
-{g:"🍽️",sg:"taabal",pl:"taabe",de:"taabel",dp:"taaboy",m:["ngal","ɗee","ngel","koy"],en:"table"},
-{g:"☂️",sg:"waado",pl:"waadooji",de:"waadowel",dp:"waadohoy",m:["ngoo","ɗii","ngel","koy"],en:"umbrella"},
-{g:"🦫",sg:"yeendu",pl:"yeenduuji",de:"yeenduwel",dp:"yeenduhoy",m:["nduu","ɗii","ngel","koy"],en:"aardvark"},
-{g:"🦵",sg:"koyngal",pl:"koyɗe",de:"koyngel",dp:"koykoy",m:["ngal","ɗee","ngel","koy"],en:"leg"},
-{g:"🦉",sg:"ƴuruƴukkuwal",pl:"ƴuruƴukkuuje",de:"ƴuruƴukkuwel",dp:"ƴuruƴukkuhoy",m:["ngal","ɗee","ngel","koy"],en:"owl"},
-{g:"🐄",sg:"nagge",pl:"na’i",de:"naggel",dp:"nakkoy",m:["ngee","ɗii","ngel","koy"],en:"cow"},
-{g:"🏠",sg:"suudu",pl:"cuuɗi",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"house"},
-{g:"🛏️",sg:"danki",pl:"danɗe",de:"",dp:"",nd:1,m:["kii","ɗee"],en:"bed"},
-{g:"🥣",sg:"booliwal",pl:"booliije",de:"",dp:"",nd:1,m:["ngal","ɗee"],en:"bowl"},
-{g:"🔑",sg:"saabiwal",pl:"saabiije",de:"",dp:"",nd:1,m:["ngal","ɗee"],en:"key"},
-{g:"🖊️",sg:"karambol",pl:"karambi",de:"",dp:"",nd:1,m:["ngol","ɗii"],en:"pen"},
-{g:"📕",sg:"deftere",pl:"defte",de:"",dp:"",nd:1,m:["ndee","ɗee"],en:"book"},
-{g:"👁️",sg:"yiitere",pl:"gite",de:"",dp:"",nd:1,m:["ndee","ɗee"],en:"eye"},
-{g:"👂",sg:"nowru",pl:"noppi",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"ear"},
-{g:"👃",sg:"kinal",pl:"kine",de:"",dp:"",nd:1,m:["ngal","ɗee"],en:"nose"},
-{g:"🦷",sg:"ñiire",pl:"ñiiƴe",de:"",dp:"",nd:1,m:["ndee","ɗee"],en:"tooth"},
-{g:"✋",sg:"junngo",pl:"juuɗe",de:"",dp:"",nd:1,m:["ngoo","ɗee"],en:"hand"},
-{g:"🐈",sg:"gomooru",pl:"gomooji",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"cat"},
-{g:"🐦",sg:"sonndu",pl:"colli",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"bird"},
-{g:"🐟",sg:"linngii",pl:"liƴƴi",de:"",dp:"",nd:1,m:["ngii","ɗii"],en:"fish"},
-{g:"🥚",sg:"woofoonde",pl:"boofooɗe",de:"",dp:"",nd:1,m:["ndee","ɗee"],en:"egg"},
-{g:"🐐",sg:"mbeewa",pl:"be'i",de:"",dp:"",nd:1,m:["mbaa","ɗii"],en:"goat"},
-{g:"🏫",sg:"lekkol",pl:"lekkolji",de:"",dp:"",nd:1,m:["ngol","ɗii"],en:"school"},
-{g:"🛒",sg:"yaadu",pl:"yaaduuji",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"market"},
-{g:"🌙",sg:"lewru",pl:"lebbi",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"moon"}];
+{g:"📖",sg:"alluwal",pl:"alluuje",de:"alluwel",dp:"alluhoy",m:["ngal","ɗee","ngel","koy"],en:"writing board",fr:"planchette coranique"},
+{g:"🐃",sg:"eda",pl:"edi",de:"edel",dp:"edoy",m:["mbaa","ɗii","ngel","koy"],en:"buffalo",fr:"buffle"},
+{g:"🚩",sg:"iililal",pl:"iilile",de:"iililel",dp:"iililoy",m:["ngal","ɗee","ngel","koy"],en:"flag",fr:"drapeau",unverified:true},
+{g:"✉️",sg:"ombolookuru",pl:"ombolookuuji",de:"ombolookuwel",dp:"ombolookuhoy",m:["nduu","ɗii","ngel","koy"],en:"envelope",fr:"enveloppe",unverified:true},
+{g:"👟",sg:"paɗal",pl:"paɗe",de:"paɗel",dp:"paɗoy",m:["ngal","ɗee","ngel","koy"],en:"shoe",fr:"chaussure"},
+{g:"🚪",sg:"baafal",pl:"baafe",de:"baafel",dp:"baafoy",m:["ngal","ɗee","ngel","koy"],en:"door",fr:"porte ; battant d'une porte"},
+{g:"🪢",sg:"ɓoggol",pl:"ɓoggi",de:"ɓoggel",dp:"ɓokkoy",m:["ngol","ɗii","ngel","koy"],en:"rope",fr:"corde"},
+{g:"🪰",sg:"coongii",pl:"cooƴi",de:"coongel",dp:"cookoy",m:["ngii","ɗii","ngel","koy"],en:"fly",fr:"mouche"},
+{g:"🚪",sg:"damal",pl:"dame",de:"damel",dp:"damoy",m:["ngal","ɗee","ngel","koy"],en:"doorway (way in or out)",fr:"porte ; entrée"},
+{g:"🛣️",sg:"ɗatal",pl:"ɗate",de:"ɗatel",dp:"ɗatoy",m:["ngal","ɗee","ngel","koy"],en:"road",fr:"chemin ; route"},
+{g:"🐺",sg:"bonooru",pl:"bonooji",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"hyena",fr:"hyène"},
+{g:"🗡️",sg:"gaawal",pl:"gaawe",de:"gaawel",dp:"gaawoy",m:["ngal","ɗee","ngel","koy"],en:"spear",fr:"lance"},
+{g:"🚁",sg:"helikoptawal",pl:"helikoptaaje",de:"helikoptawel",dp:"helikoptahoy",m:["ngal","ɗee","ngel","koy"],en:"helicopter",fr:"hélicoptère",unverified:true},
+{g:"🦌",sg:"jawre",pl:"jawe",de:"jawel",dp:"jawoy",m:["ndee","ɗee","ngel","koy"],en:"gazelle",fr:"gazelle"},
+{g:"🍁",sg:"kaakol",pl:"kaaki",de:"kaakel",dp:"kaakoy",m:["ngol","ɗii","ngel","koy"],en:"leaf",fr:"feuille"},
+{g:"🔪",sg:"laɓi",pl:"laɓɗe",de:"laɓel",dp:"laɓoy",m:["kii","ɗee","ngel","koy"],en:"knife",fr:"couteau"},
+{g:"🐘",sg:"mawba",pl:"mawɗi",de:"mawbawel",dp:"mawbahoy",m:["mbaa","ɗii","ngel","koy"],en:"elephant",fr:"éléphant"},
+{g:"🫏",sg:"mbabba",pl:"babbi",de:"babel",dp:"baboy",m:["mbaa","ɗii","ngel","koy"],en:"donkey",fr:"âne"},
+{g:"🪴",sg:"naakoore",pl:"naakooje",de:"naakowel",dp:"naakohoy",m:["ndee","ɗee","ngel","koy"],en:"garden",fr:"jardin potager",unverified:true},
+{g:"🪞",sg:"ndaarorgal",pl:"ndaarorɗe",de:"ndaarorgel",dp:"ndaarorkoy",m:["ngal","ɗee","ngel","koy"],en:"mirror",fr:"miroir ; glace ; vitre"},
+{g:"🦛",sg:"gabbii",pl:"gabbi",de:"",dp:"",nd:1,m:["ngii","ɗii"],en:"hippo",fr:"hippopotame"},
+{g:"🦒",sg:"kemmba",pl:"kenɗi",de:"",dp:"",nd:1,m:["mbaa","ɗii"],en:"giraffe",fr:"girafe"},
+{g:"📿",sg:"ŋannawol",pl:"ŋannaaji",de:"ŋannawel",dp:"ŋannahoy",m:["ngol","ɗii","ngel","koy"],en:"necklace",fr:"collier"},
+{g:"🧑‍⚖️",sg:"ñaawoowo",pl:"ñaawooɓe",de:"ñaawoowel",dp:"ñaawoohoy",m:["oo","ɓee","ngel","koy"],en:"judge",fr:"juge"},
+{g:"✂️",sg:"pennitorgal",pl:"pennitorɗe",de:"pennitorgel",dp:"pennitorkoy",m:["ngal","ɗee","ngel","koy"],en:"nail cutter",fr:"coupe-ongles",unverified:true},
+{g:"🐕",sg:"bareeru",pl:"bareeji",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"dog",fr:"chien"},
+{g:"🏔️",sg:"sehre",pl:"cehe",de:"cehel",dp:"cehoy",m:["ndee","ɗee","ngel","koy"],en:"plateau",fr:"plateau",unverified:true},
+{g:"🍽️",sg:"taabal",pl:"taabe",de:"taabel",dp:"taaboy",m:["ngal","ɗee","ngel","koy"],en:"table",fr:"table"},
+{g:"☂️",sg:"waado",pl:"waadooji",de:"waadowel",dp:"waadohoy",m:["ngoo","ɗii","ngel","koy"],en:"umbrella",fr:"parapluie"},
+{g:"🦫",sg:"yeendu",pl:"yeenduuji",de:"yeenduwel",dp:"yeenduhoy",m:["nduu","ɗii","ngel","koy"],en:"aardvark",fr:"oryctérope",unverified:true},
+{g:"🦵",sg:"koyngal",pl:"koyɗe",de:"koyngel",dp:"koykoy",m:["ngal","ɗee","ngel","koy"],en:"leg",fr:"jambe ; pied"},
+{g:"🦉",sg:"ƴuruƴukkuwal",pl:"ƴuruƴukkuuje",de:"ƴuruƴukkuwel",dp:"ƴuruƴukkuhoy",m:["ngal","ɗee","ngel","koy"],en:"owl",fr:"hibou"},
+{g:"🐄",sg:"nagge",pl:"na’i",de:"naggel",dp:"nakkoy",m:["ngee","ɗii","ngel","koy"],en:"cow",fr:"vache, bovin"},
+{g:"🏠",sg:"suudu",pl:"cuuɗi",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"house",fr:"maison"},
+{g:"🛏️",sg:"danki",pl:"danɗe",de:"",dp:"",nd:1,m:["kii","ɗee"],en:"bed",fr:"lit"},
+{g:"🥣",sg:"booliwal",pl:"booliije",de:"",dp:"",nd:1,m:["ngal","ɗee"],en:"bowl",fr:"bol"},
+{g:"🔑",sg:"saabiwal",pl:"saabiije",de:"",dp:"",nd:1,m:["ngal","ɗee"],en:"key",fr:"clé"},
+{g:"🖊️",sg:"karambol",pl:"karambi",de:"",dp:"",nd:1,m:["ngol","ɗii"],en:"pen",fr:"stylo"},
+{g:"📕",sg:"deftere",pl:"defte",de:"",dp:"",nd:1,m:["ndee","ɗee"],en:"book",fr:"livre"},
+{g:"👁️",sg:"yiitere",pl:"gite",de:"",dp:"",nd:1,m:["ndee","ɗee"],en:"eye",fr:"œil"},
+{g:"👂",sg:"nowru",pl:"noppi",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"ear",fr:"oreille"},
+{g:"👃",sg:"kinal",pl:"kine",de:"",dp:"",nd:1,m:["ngal","ɗee"],en:"nose",fr:"nez"},
+{g:"🦷",sg:"ñiire",pl:"ñiiƴe",de:"",dp:"",nd:1,m:["ndee","ɗee"],en:"tooth",fr:"dent"},
+{g:"✋",sg:"junngo",pl:"juuɗe",de:"",dp:"",nd:1,m:["ngoo","ɗee"],en:"hand",fr:"main"},
+{g:"🐈",sg:"ñaariiru",pl:"ñaariiji",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"cat",fr:"chat"},
+{g:"🐦",sg:"sonndu",pl:"colli",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"bird",fr:"oiseau"},
+{g:"🐟",sg:"linngii",pl:"liƴƴi",de:"",dp:"",nd:1,m:["ngii","ɗii"],en:"fish",fr:"poisson"},
+{g:"🥚",sg:"woofoonde",pl:"boofooɗe",de:"",dp:"",nd:1,m:["ndee","ɗee"],en:"egg",fr:"œuf"},
+{g:"🐐",sg:"mbeewa",pl:"be'i",de:"",dp:"",nd:1,m:["mbaa","ɗii"],en:"goat",fr:"chèvre"},
+{g:"🏫",sg:"duɗal",pl:"duɗe",de:"",dp:"",nd:1,m:["ngal","ɗee"],en:"school",fr:"école"},
+{g:"🛒",sg:"luumo",pl:"luube",de:"",dp:"",nd:1,m:["ngoo","ɗii"],en:"market",fr:"marche ; voyage"},
+{g:"🌙",sg:"lewru",pl:"lebbi",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"moon",fr:"lune ; mois"}];
 
 /* v232: the everyday swap. Nineteen words a child in London or Paris uses
    at home, taken from Bah's own Saggitorde Fulfulde-Faransiire, which is
@@ -4540,34 +4823,34 @@ const CQ=[
 {w:"laawol",o:["ngal","kol","ngol"],a:2},{w:"gatal",o:["ngal","kol","ngol"],a:0},
 {w:"binndol",o:["ngel","ngol","kol"],a:1},
 {w:"alluwal",o:["ngol","ngal","ngel"],a:1},{w:"eda",o:["mbaa","ndii","nduu"],a:0},
-{w:"ɓoggol",o:["ngal","ngel","ngol"],a:2},{w:"cooɗi",o:["ɗii","koy","ɗee"],a:0},
-{w:"fowru",o:["ngol","nduu","ngel"],a:1},{w:"jawre",o:["nduu","ngel","ndee"],a:2},
+{w:"ɓoggol",o:["ngal","ngel","ngol"],a:2},{w:"cooƴi",o:["ɗii","koy","ɗee"],a:0},
+{w:"bonooru",o:["ngol","nduu","ngel"],a:1},{w:"jawre",o:["nduu","ngel","ndee"],a:2},
 {w:"kaakol",o:["ngii","ngol","ngal"],a:1},{w:"deftere",o:["ngee","ɗee","ndee"],a:2},
 {w:"gorko",o:["koo","ngoo","oo"],a:2},{w:"rewɓe",o:["ɓee","ɗee","ngee"],a:0},
 {w:"maayo",o:["oo","ngoo","koo"],a:1},
 {w:"bamɗi",o:["koy","ɗee","ɗii"],a:2},{w:"mawɗi",o:["ngol","ɗii","ngal"],a:1},
-{w:"gabi",o:["ɗii","ɗee","ɓee"],a:0},{w:"ñaawoowo",o:["ngel","oo","kii"],a:1},
-{w:"rawaandu",o:["nduu","nguu","ngol"],a:0},{w:"waado",o:["nduu","ngel","ngoo"],a:2},
+{w:"gabbi",o:["ɗii","ɗee","ɓee"],a:0},{w:"ñaawoowo",o:["ngel","oo","kii"],a:1},
+{w:"bareeru",o:["nduu","nguu","ngol"],a:0},{w:"waado",o:["nduu","ngel","ngoo"],a:2},
 {w:"yeendu",o:["nduu","oo","ɗii"],a:0},{w:"laɓi",o:["kaa","kii","kum"],a:1},
 {w:"ngudirde",o:["nduu","ngee","ndee"],a:2},{w:"janngoowo",o:["koo","ngoo","oo"],a:2},
 {w:"mbeewa",o:["mbaa","kaa","ngal"],a:0},{w:"puccu",o:["nduu","nguu","kum"],a:1},
 {w:"teewu",o:["nguu","nduu","ngii"],a:0}];
 
 /* consonant mutations */
-const SWAP=[{sg:"fowru",pl:"pobbi",a:"f",b:"p",g:"🐺",o:["p","f","b","w"]},
-{sg:"sehre",pl:"cehe",a:"s",b:"c",g:"🏔️",o:["s","c","j","t"]},
-{sg:"rawaandu",pl:"dawaaɗi",a:"r",b:"d",g:"🐕",o:["d","r","ɗ","n"]},
-{sg:"mbabba",pl:"babi",a:"mb",b:"b",g:"🫏",o:["mb","b","ɓ","m"]},
-{sg:"njambala",pl:"jambali",a:"nj",b:"j",g:"🦒",o:["j","nj","ñ","c"]},
-{sg:"ngabbu",pl:"gabi",a:"ng",b:"g",g:"🦛",o:["ng","g","ŋ","k"]}];
+const SWAP=[{sg:"fayannde",pl:"payanɗe",a:"f",b:"p",g:"🏺",o:["p","f","b","w"]},
+{sg:"saare",pl:"ca'e",a:"s",b:"c",g:"🏘️",o:["s","c","j","t"]},
+{sg:"debbo",pl:"rewɓe",a:"d",b:"r",g:"👩",o:["d","r","ɗ","n"]},
+{sg:"mbabba",pl:"babbi",a:"mb",b:"b",g:"🫏",o:["mb","b","ɓ","m"]},
+{sg:"njogaari",pl:"jogaaji",a:"nj",b:"j",g:"🔧",o:["j","nj","ñ","c"]},
+{sg:"ngaari",pl:"ga'i",a:"ng",b:"g",g:"🐂",o:["ng","g","ŋ","k"]}];
 
 /* ---------- UNIT 3 ---------- */
 const UNITSW=["","go’o","ɗiɗi","tati","nayi","jowi","jeegoo","jeeɗiɗi","jeetati","jeenayi"];
 const TENSW=["","sappo","noogay","cappanɗe tati","cappanɗe nayi","cappanɗe jowi",
 "cappanɗe jeegoo","cappanɗe jeeɗiɗi","cappanɗe jeetati","cappanɗe jeenayi"];
 const NUMQ=[16,23,37,74,49,54,86,97,67];
-const DAYS=[["Asewe","Hoorebiire"],["Alat","Dewo"],["Tenen","Aaɓunde"],["Talaata","Mawbaare"],
-["Alarba","Njeslaare"],["Alkamisa","Naasaande"],["Juma","Mawnde"]];
+const DAYS=[["Asewe","Hoore biir"],["Alati","Dewo"],["Tenen","Aaɓnde"],["Talaata","Mawbaare"],
+["Alarba","Njeslaare"],["Alkamisa","Naasannde"],["Juma","Mawnde"]];
 const SEASONS={"Ceeɗu":["Siilo","Colite","Mbooy"],"Demminaare":["Seeɗto","Duujal","Korse"],
 "Ndunngu":["Morso","Juko","Silto"],"Dabbunde":["Yarkomaa","Jolal","Bowte"]};
 const MONTHS=[].concat(...Object.values(SEASONS));
@@ -4615,7 +4898,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v236 · 3 September 2026";
+const BUILD="v248 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -4776,11 +5059,11 @@ const ACTS={
   ad:["Syllable machine","Both of the book's syllable tables, every cell a sound. Pick a letter and its ten syllables are fetched while it is still saying itself, so pressing a vowel sounds straight away. Let them play with no goal — the exploring is the lesson."]},
  pairs:{t:"Long or short",em:"👂",u:0,n:"10 pairs",say:"Listen. Then tap the word you heard.",
   ad:["Listening","Short against long vowels — the hardest thing in the book and impossible on paper. If they struggle, say both words yourself and let them watch your mouth."]},
- gemin:{t:"Find the twin",em:"👯",u:0,n:"17 words",say:"One letter comes twice. Tap it.",
-  ad:["Doubled letters","A doubled consonant is held longer — neɗɗo is not neɗo. The tapping spots it; the holding has to be heard. Say both aloud together."]},
+ gemin:{t:"Find the twin",em:"👯",u:0,n:"14 words · 3 pairs",say:"One letter comes twice. Tap it.",
+  ad:["Doubled letters","A doubled consonant is held longer — neɗɗo is not neɗo. The fourteen spotting cards find the shape; the three pairs at the end say why it matters, because in each of them the doubling is the whole difference: jalugol to laugh against jallugol to be strong, fetere a rock against fettere a spark, huɓugol sprained against huɓɓugol caught fire. All six are Peeral’s headwords with his glosses. THERE ARE NO RECORDINGS for those six yet, so the pair cards carry no listen button on purpose — say each pair aloud yourself, one after the other, and let the child watch your mouth. If you record them they want to be gem/p00a.mp3 and gem/p00b.mp3 up to gem/p02a and p02b. Two things worth knowing. Doubling means the same for vowels as for consonants — hold it longer — which is why fetere is a rock and feetere is madness: one rule with two applications, and saying so is worth more than teaching them apart. And mb, nd, ng and nj are NOT doubles: they are single letters in this alphabet, which is what the stop before this one teaches, and a child who has just learnt that two symbols mean hold it longer will try it on those four. anndu, janngo and junnju left this activity at v191 for exactly that reason. Where the doubles come from, if a grown-up asks: mostly a seam. A suffix arrives, its consonant meets the stem’s, and the two collapse into one long one rather than sit in a cluster. Peeral writes the joins into his headwords — caɗ-t-al gives cattal, hoɗ-n-u-gol gives honnugol, fot-d-u-gol gives foddugol. It is the same hardening the course teaches at Dugun as the letter swap, happening in the middle of a word instead of at the front."]},
 
  wordmac:{t:"The first little word",em:"🐄",u:1,n:"ngal, and its two places",say:"A new little word. Press it three times.",
-  ad:["Word machine","The words were met on the way here, six towns of them, so the forms now change on words that are already words. In the singular the ending is tinted to match the marker and the rhyme is said in one line — words ending -al take ngal, and so on: thirteen rules cover all thirty-three, and twelve of the words are just -al. Say it out loud with them. It is a rhyme, not grammar, and no child needs the phrase noun class to hold it. Under the word you will see the little word on both sides, which is how the primer prints every one of these — but the two are not the same thing. The African Union's 2010 orthography rules are explicit: before the noun the marker is a demonstrative, ngee nagge, \"this cow\"; after the noun it is the definite article, nagge ngee, \"the cow\"; and standing alone with a short vowel it replaces the noun outright, nge. Bah names the two positions jooporde and toɗɗorde. The child is shown this one and the one; the terms are yours."]},
+  ad:["Word machine","The words were met on the way here, six towns of them, so the forms now change on words that are already words. In the singular the ending is tinted to match the marker and the rhyme is said in one line — words ending -al take ngal, and so on: thirteen rules cover all thirty-three, and twelve of the words are just -al. Say it out loud with them. It is a rhyme, not grammar, and no child needs the phrase noun class to hold it. Three of the animals are built the same way and it is worth seeing once: Peeral prints bono, bare and \u00f1aari as bare stems with no class at all, then bono-o-ru, bare-e-ru and \u00f1aari-i-ru as the singular \u2014 the -ru IS the class, welded on. Plural swaps it for -ji: bonooji, bareeji, \u00f1aariiji. That is also why the hyena of the tales is Kaawu Bono and not Kaawu Bonooru: a name does not need the class on it. Under the word you will see the little word on both sides, which is how the primer prints every one of these — but the two are not the same thing. The African Union's 2010 orthography rules are explicit: before the noun the marker is a demonstrative, ngee nagge, \"this cow\"; after the noun it is the definite article, nagge ngee, \"the cow\"; and standing alone with a short vowel it replaces the noun outright, nge. Bah names the two positions jooporde and toɗɗorde. The child is shown this one and the one; the terms are yours."]},
  jobset:{t:"Whose word is it?",em:"\ud83d\udc6a",u:1,n:"seven families",
   say:"Press a little word. See every noun that takes it.",
   ad:["The seven families",
@@ -4800,9 +5083,15 @@ const ACTS={
  kinfolk:{t:"Who is who",em:"👪",u:1,n:"9 people",
   say:"Listen. Then tap who it is.",
   ad:["Family words","baba, neene, koto, jaaja, soro, pati \u2014 asked by picture. kaaw, bappa and yaaye are told rather than asked, because the difference between them is which side of the family they are on, which no face can show. pati is told, not asked, because it is a word for talking about your grandmother \u2014 to her face you say neene or neene maw\u0257o. Juuli\u2019s story uses maama, which still wants placing."]},
+ verbs:{t:"Doing words",em:"🏃",u:1,n:"6 verbs",
+  say:"What is she doing? Choose the word.",
+  ad:["Doing words","Six verbs, each lifted out of one of the primer's own sentences and put back by the child, so the recording is the one the sentence unit already uses and nothing new had to be written or recorded. The child arrives at the sentences with thirty-three nouns and, until this stop, no verbs at all \u2014 and every one of the sixteen sentences has a verb in it. The decoys are the other five verbs from this same stop, never invented forms, so a wrong tap still shows a real word. Some of the subjects and objects are words the child has not met, comci and kummbele among them; that is deliberate, because a verb learnt outside a sentence is a label. The gloss underneath carries the rest."]},
+ adjs:{t:"Describing words",em:"🎨",u:1,n:"6 phrases",
+  say:"Which ending does this one take?",
+  ad:["Describing words","This is where the noun classes finally do something. Peeral cannot print a Fulfulde adjective as a word \u2014 every one is a stem with a hyphen, famar-, ra\u0253\u0253-, hecc-, melen-, moolanaa-, hormante- \u2014 because it is not a word until it takes the ending of the noun it describes. Until something has to agree with a noun, its class is a label with no consequence, which is what it has been for the whole Fouta up to here.\n\nAll six phrases are attested in the Saggitorde with his own glosses. Nothing is derived. That matters, because the endings for ngal, ngol, \u0257ee and koy \u2014 the classes this course leans on hardest \u2014 have no worked example anywhere in the book, so a speaker has to give them before the stop can cover them. The check sheet that came with this build asks for exactly that.\n\nra\u0253\u0253- appears twice on purpose: da\u0253\u0253o after gorko and ra\u0253\u0253iri after ngaari. One adjective, two shapes, and the noun decides \u2014 including whether the first letter hardens. That is the same swap drilled at Dugun, arriving here as a consequence instead of an exercise.\n\nNO RECORDINGS exist for these six phrases, which is why there is no listen button. Say each one aloud yourself. If you record them they want to be adj/a00.mp3 to adj/a05.mp3."]},
  onemany:{t:"One and many",em:"👥",u:1,n:"4 changes \u00b7 12 words",
   say:"One on its own. Tap to make it many.",
-  ad:["Pullo and Ful\u0253e","The language\u2019s own name carries the rule: one is a Pullo, many are Ful\u0253e \u2014 P and F are the same letter in two coats, and the ending changes too. gorko/wor\u0253e, debbo/rew\u0253e and \u0253i\u0257\u0257o/\u0253i\u0253\u0253e do the same. v234 put three words behind each change rather than one; v235 checked all twelve against Peeral's Saggitorde (2010) and swapped out the three it refuted \u2014 gaynaako is ngaynaako in Guinea (pl ngaynaakoo\u0253e, no g/w change; gaynaako is tagged Adamawa and Fuuta Tooro), wuro is a cattle pen or herder's camp with plurals wurooji/gureele rather than a village, and the dictionary has jannoowo, not janngoowo. In their place: gujjo/wuy\u0253e, wullaandu/gullaali and aaden/aaden\u0253e, each printed as a pair in the book. fello/pelle and reedu/deedi survived, but fello is a mountain rather than a hill. SEPARATE QUESTION, NOT DECIDED HERE: the dictionary gives \u00f1arkeeru for hyena and tags fowru as Adamawa/Fuuta Tooro/Maasina, and gives bareeru beside rawaandu for dog \u2014 fowru/pobbi is one of the seven in Letter swap and one of the thirty-three nouns, so it is left alone until you rule on it. That is why this card now uses fello/pelle and fetere/pete for f/p instead of fowru. This is what Letter swap drills at the next stop."]},
+  ad:["Pullo and Ful\u0253e","The language\u2019s own name carries the rule: one is a Pullo, many are Ful\u0253e \u2014 P and F are the same letter in two coats, and the ending changes too. gorko/wor\u0253e, debbo/rew\u0253e and \u0253i\u0257\u0257o/\u0253i\u0253\u0253e do the same. v234 put three words behind each change rather than one; v235 checked all twelve against Peeral's Saggitorde (2010) and swapped out the three it refuted \u2014 gaynaako is ngaynaako in Guinea (pl ngaynaakoo\u0253e, no g/w change; gaynaako is tagged Adamawa and Fuuta Tooro), wuro is a cattle pen or herder's camp with plurals wurooji/gureele rather than a village, and the dictionary has jannoowo, not janngoowo. In their place: gujjo/wuy\u0253e, wullaandu/gullaali and aaden/aaden\u0253e, each printed as a pair in the book. fello/pelle and reedu/deedi survived, but fello is a mountain rather than a hill. SETTLED IN v245 against the 366-page Saggitorde of 4 Sep 2026: fowru is tagged [A-FT-M] and rawaandu is marked {rare}, so the road now carries bonooru and bareeru, and the tale was renamed to match. Neither had a recording yet, so nothing was orphaned. lekkol went too: the book puts it in class o, which contradicted the -ol rhyme the machine teaches, so the road now carries du\u0257al \u2014 Peeral\u0027s own cross-reference, native, and -al so the rhyme holds. It is glossed plainly as school, on a native speaker\u0027s ruling and against the book: Peeral prints \u00e9cole coranique, which is where the word comes from, but the du\u0257al WAS the school, so in living Guinea usage it means a place you study, full stop. DO NOT narrow this gloss back to the book\u0027s. That is why this card now uses fello/pelle and fetere/pete for f/p instead of fowru. This is what Letter swap drills at the next stop."]},
  makeword:{t:"Make the word",em:"🧱",u:1,n:"3 families · 11 words",
   say:"Look at how many. Then choose the little word.",
   ad:["Make the word","The pens go word → little word. This goes the other way: the child is shown how many there are and picks the little word themselves. The four options are always that noun's own four, so nothing can be guessed from the shape of the choices — only from the ending, which is the whole point."]},
@@ -4812,14 +5101,14 @@ const ACTS={
  mpens:{t:"Which pen?",em:"🏷️",u:1,n:"38 words",say:"Look at the end of the word. Pick its pen.",
   ad:["Noun classes","Every item from the book's four quizzes, with its answer key. The word's ending decides the marker. A wrong pen costs nothing — the ending lights up and they try again."]},
  swap:{t:"Letter swap",em:"🔁",u:1,n:"7 swaps",say:"Which letter comes back? Tap it.",
-  ad:["Mutations","f→p, s→c, r→d, y→g, and the three two-letter ones dropping their front. Seven swaps in the whole language — a closed list, learnable in a week."]},
+  ad:["Mutations","f→p, s→c, r→d, y→g, and the three two-letter ones dropping their front. Seven swaps in the whole language — a closed list, learnable in a week.","v245: the drilled pairs were rebuilt from words Peeral actually prints for Guinea. fowru/pobbi, sehre/cehe, rawaandu/dawaaɗi, njambala/jambali and ngabbu/gabi all went — the first three are other-dialect or marked rare, the last two are not in the book at all, and the Guinea words that replace them (kemmba/kenɗi, gabbii/gabbi) show no mutation, so they could not carry the drill. The pairs now are fayannde/payanɗe (a clay pot), saare/ca'e (a town), debbo/rewɓe (a woman), mbabba/babbi (a donkey), njogaari/jogaaji (a tool) and ngaari/ga'i (a bull). Every one is mined from the dictionary's own singular-plural pairs. ngaari is deliberate: the child already met it learning the two-letter ng."]},
 
  nummac:{t:"Build a number",em:"🔢",u:2,n:"0 to 99",say:"Turn the dials. Listen to the number you made.",
   ad:["Numbers","Fulfulde numbers are built, not memorised — cappanɗe tati e jeeɗiɗi is three-tens-and-seven. Eleven words reach a billion."]},
  numq:{t:"Catch it",em:"🎯",u:2,n:"9 numbers",say:"Read it. Tap the number it means.",
   ad:["Number reading","The book's own nine. If they stall, read the Fulfulde aloud with a pause between the tens part and the ones part."]},
  days:{t:"Seven days",em:"🌙",u:2,n:"7 days",say:"Tap a day to hear both its names.",
-  ad:["Days","Two naming systems: one came through Arabic, one is the older Fulɓe name still used in Senegal and Mauritania. Tell them which your family uses."]},
+  ad:["Days","Two names for every day, and the card shows them side by side rather than one above the other. The tenen / talaata / alarba set came through Arabic with Islam — Peeral marks them Etym: Ar. Aaɓnde, Mawbaare, Njeslaare, Naasannde, Mawnde, Dewo and Hoore biir are what Fulɓe said in their own language, and they are the same seven used in Fuuta Tooro: common inheritance sitting in a Guinean course, not a Guinean list. None of the seven is in Peeral's dictionary, which is worth knowing — it is the set that has been falling out of houses, and the reason it is here. One caution before telling a child these are the ancient names: they are probably not pre-Islamic. Peeral has mawnde as greatness, so Friday — Mawnde — is the great one, the day of the great prayer; and the week as ordered here begins on Saturday, which is the Islamic week rather than an inherited Fulɓe one. What these seven most likely record is Fulɓe meeting Islam and answering in their own words instead of borrowing — which is a better story than an older one, and a true one. Which set your own family says differs house to house. Tell the child yours, and tell them the other exists."]},
  seasons:{t:"Four seasons",em:"🌦️",u:2,n:"12 months",say:"Pick a month. Then pick its season.",
   ad:["Months and seasons","Twelve months, four seasons, three months each. The pattern is the lesson."]},
 
@@ -5709,7 +5998,13 @@ function pairs(){
    :`It was <b class="ff">${esc(p[S.ptar])}</b>. Listen for how long the vowel is held.`)
   +`<button class="wallbtn" data-pnext>next ›</button>`:""}`}
 
-function gemin(){const[w,d]=GEM[S.gi],t0=tok(w),uniq=[...new Set(t0)].slice(0,8);
+function gemin(){
+ /* the fourteen spotting cards first, then the three that say why it matters */
+ if((S.gi||0)>=GEM.length){
+  if((S.gpI||0)>=GEMPAIR.length) return done("\ud83d\udc6f","Held it longer");
+  return gempairs();
+ }
+ const[w,d]=GEM[S.gi],t0=tok(w),uniq=[...new Set(t0)].slice(0,8);
  /* where the two stand together.
     v191: anndu, janngo and junnju have left this activity. Under the course's
     own tokenising the second n is part of nd / ng / nj, so the word holds one
@@ -5728,6 +6023,36 @@ function gemin(){const[w,d]=GEM[S.gi],t0=tok(w),uniq=[...new Set(t0)].slice(0,8)
    data-gp="${esc(x)}" ${S.gpick?'disabled':''}>${esc(x)}</button>`).join("")}</div>
   ${S.gpick?face(S.gpick===d?"⭐":"🤔",S.gpick===d?`Two <b class="ff">${esc(d)}</b> side by side.`:`Look for two the same, next to each other.`)
   +`<button class="wallbtn" data-gnext>next ›</button>`:""}`}
+
+
+/* one letter, held longer, and the word is a different word */
+function gemLit(w,d,dbl){
+ const need=dbl?d+d:d;
+ const i=w.indexOf(need);
+ if(i<0) return esc(w);
+ return esc(w.slice(0,i))+`<em>${esc(need)}</em>`+esc(w.slice(i+need.length));
+}
+function gempairs(){
+ const i=Math.min(S.gpI||0,GEMPAIR.length-1), q=GEMPAIR[i];
+ const wantB=(q.ask==="b"), want=wantB?q.b:q.a;
+ const pic=wantB?q.bg:q.ag, got=S.gpPick===want;
+ ACTS.gemin.say=got?"One letter, held longer \u2014 and it is another word."
+   :"Look at the picture. Which one is it?";
+ return wrap(`<div class="gpwrap">
+   <div class="gppic">${pic}</div>
+   <div class="gprow">${[q.a,q.b].map(function(w){
+     const dbl=(w===q.b), right=(w===want);
+     const cls=got?(right?" hit":" dim"):(S.gpMiss===w?" miss":"");
+     return `<button class="gpw ff${cls}" ${got?"disabled":`data-gpp="${esc(w)}"`}>${
+       gemLit(w,q.d,dbl)}</button>`}).join("")}</div>
+   ${got?`<div class="gpsay">
+      <p><b class="ff">${esc(q.a)}</b> <span>${esc(q.ae)}</span></p>
+      <p><b class="ff">${esc(q.b)}</b> <span>${esc(q.be)}</span></p>
+      <p class="gphold"><b class="ff">${esc(q.d)}</b> \u2192 <b class="ff">${esc(q.d+q.d)}</b></p>
+     </div>
+     <button class="wallbtn good" data-gpnext>next \u203a</button>`:""}
+  </div>`,GEM.length+i,GEM.length+GEMPAIR.length);
+}
 
 /* ---------- unit 2 ---------- */
 /* Ordered regular-first. The diminutives are perfectly regular across all
@@ -6245,7 +6570,26 @@ function wordmac(){ return wmTeach() }
 function wordmac2(){ return wmTeach() }
 function wordmac3(){
  if(S.wmPhase==="forms") return wmForms();
+ if(S.wmPhase==="tdone") return wmTDone();
  return wmTCheck();
+}
+/* ---- v243: the beat between the asking and the machine ----
+   Six questions answered is a thing that happened, and the screen that
+   followed it gave no sign of it: the machine simply appeared, mid-word. The
+   six little words the child has just placed stand here together — which is
+   also the first time they have been seen as a set — and the door on is
+   theirs to press. */
+function wmTDone(){
+ const mks=TQ.map(function(q){ return W2[q.i].m[MIX[q.f]] })
+   .filter(function(v,j,a){ return a.indexOf(v)===j });
+ return `<div class="chunkdone">
+   <div class="big">⭐</div>
+   <h2>${TQ.length} · ${TQ.length}</h2>
+   <div class="tdmk">${mks.map(function(m){
+     return `<span class="chipm ff" style="${mvars(m)}">${esc(m)}</span>`}).join("")}</div>
+   <p>the little words you have just put in front</p>
+   <button class="ctl" style="width:100%" data-tdone>next ›</button>
+  </div>`;
 }
 
 /* The four cards above are all one noun, so they teach baafal's four forms and
@@ -7042,7 +7386,7 @@ function wmTCheck(){
    \u2014 a word cannot be both the name of the group and a thing to put in it. */
 const MASSQ=[
  {w:"njaareendi", g:"\ud83c\udfdc\ufe0f", en:"sand", mass:true},
- {w:"rawaandu",   g:"\ud83d\udc15", en:"dog",         mass:false},
+ {w:"bareeru",   g:"\ud83d\udc15", en:"dog",         mass:false},
  {w:"leydi",      g:"\ud83c\udf0d", en:"earth, land", mass:true},
  {w:"kaakol",     g:"\ud83c\udf41", en:"leaf",        mass:false},
  {w:"lamɗam",     g:"\ud83e\uddc2", en:"salt",        mass:true},
@@ -7167,23 +7511,42 @@ const FQ=[10,18,14,29,26,22];
 function fmTeach(){
  const k=Math.min(S.fmM||0,FAMS.length-1), F=FAMS[k], w=W2[F.lead];
  const side=S.mSide||"front", keys=FAMS.map(function(f){return f.k});
- seeSide(F.k,side);
- /* both places filled for the little word on screen: the card is finished and
-    what is left is in the rail */
+ /* ---- v237: which little word, and then where it stands ----
+    One card was carrying two lessons at once: the ending that predicts the
+    marker, and the fact that the marker occupies two different positions with
+    two different meanings. A child was being asked to hold both while doing
+    neither. They are two screens now. The first says which little word this
+    family takes and shows the three words it covers; the second is the phrase
+    with its two boxes, and that is the only thing on it. */
+ const where=(S.fmWhere||0)===1;
+ if(where) seeSide(F.k,side);
  const mkDone=!!(S.mSeen&&S.mSeen.has(F.k));
- ACTS.makeword.say="The end of the word tells you the little word.";
- return wrap(`<div class="meet" style="${mvars(F.k)}">
-   ${mrail(FSET,F.k,S.mSeen,["ngal"],S.mBoth,mkDone&&!allTurned(keys))}
+ ACTS.makeword.say=where
+  ?"The little word has two places. Send it round."
+  :"The end of the word tells you the little word.";
+
+ /* screen one: which little word this family takes */
+ if(!where) return wrap(`<div class="meet" style="${mvars(F.k)}">
+   ${mrail(FSET,F.k,S.mSeen,["ngal"],S.mBoth,false)}
    <div class="bigmark ff" style="color:var(--mk-deep)">${esc(F.k)}</div>
    <p class="marksays">for the ones ending -${esc(F.end)}</p>
    <div class="picturn">
-    <div class="objs${S.mTurned?" still":""}"><span class="obj" style="font-size:64px">${w.g}</span></div>
+    <div class="objs"><span class="obj" style="font-size:64px">${w.g}</span></div>
    </div>
-   ${turnCard(k,F.k,esc(w.sg),(side==="front"?"this ":"the ")+w.en,side,
-     "words/w"+pad(F.lead,2)+"-sg.mp3",4,!mkDone)}
+   <button class="whichw ff" data-mclip="words/w${pad(F.lead,2)}-sg.mp3"
+     style="color:var(--mk-deep)">${esc(w.sg)}</button>
    <p class="rhyme">the <b>-${esc(F.end)}</b> ones take <b>${esc(F.k)}</b></p>
    <div class="famrow">${F.rest.map(function(i){
      return `<span>${W2[i].g} <b>${esc(W2[i].sg)}</b></span>`}).join("")}</div>
+   <button class="wallbtn good" data-fwhere>next \u203a</button>
+   ${backStrip("mk",k,FAMS.length)}
+  </div>`,k,FAMS.length,true);
+
+ /* screen two: and where it stands */
+ return wrap(`<div class="meet" style="${mvars(F.k)}">
+   ${mrail(FSET,F.k,S.mSeen,["ngal"],S.mBoth,mkDone&&!allTurned(keys))}
+   ${turnCard(k,F.k,esc(w.sg),(side==="front"?"this ":"the ")+w.en,side,
+     "words/w"+pad(F.lead,2)+"-sg.mp3",4,!mkDone)}
    ${""/* the listen block is gone: the little words at the top are the sound
         now, so pressing one both goes there and says it */}
    ${allTurned(keys)?`<button class="wallbtn good" data-fnext>next \u203a</button>`
@@ -7792,9 +8155,30 @@ function numq(){
   ${S.nqa!==null?face(S.nqa===n?"⭐":"🤔",S.nqa===n?`Yes — ${n}.`:`It was ${n}. <b class="ff">cappanɗe</b> means tens.`)
   +`<button class="wallbtn" data-nqnext>next ›</button>`:""}`}
 
+/* ---- v239: one day, two names, and which is which ----
+   The card printed the Arabic-derived name big and the Fulfulde one small
+   underneath, as though the second were a footnote to the first. It is the
+   other way round in age: tenen, talaata, alarba, alkamisa, asewe, alat and
+   juma are borrowings — Peeral tags them Etym: Ar himself — and Aaɓunde,
+   Mawbaare, Njeslaare, Naasannde, Mawnde, Dewo and Hoore biir are what Fulɓe
+   said in their own language for the same seven days. The second set is the
+   one missing from the dictionary, the one that fell out of houses, and the
+   one this course exists to carry.
+   So neither leads. They stand side by side at the same size, each saying
+   itself when pressed, each labelled for what it is. The label is two words of
+   English on a course that carries none — kept because the difference between
+   a borrowed word and an inherited one is a relation, and no picture holds a
+   relation. It is the same judgement as the gloss captions.
+   Which one a child's own family says is the question the grown-ups' drawer
+   asks them to answer, because it differs house to house. */
 function days(){const[a,b]=DAYS[S.di];
- return wrap(`<div class="wordbig">${esc(a)}</div>
-  <div style="margin-top:9px"><span class="chipm ff" style="font-size:17px">${esc(b)}</span></div>
+ return wrap(`<div class="twoname">
+   <button class="nmcard own" data-clip="days/d${S.di}.mp3">
+    <b class="ff">${esc(b)}</b><span>our own word</span></button>
+   <button class="nmcard lent" data-clip="days/d${S.di}.mp3">
+    <b class="ff">${esc(a)}</b><span>came with Arabic</span></button>
+  </div>
+  <p class="nmsame">one day · two names</p>
   <button class="hearbtn" data-clip="days/d${S.di}.mp3"><span class="bars"><i></i><i></i><i></i></span>hear both</button>`,S.di,7)
  +`<div class="controls c4" style="margin-top:11px">${DAYS.map((d,i)=>`<button class="ctl sm ${S.di===i?'on':''}"
    data-d="${i}">${i+1}</button>`).join("")}</div>`}
@@ -7870,7 +8254,7 @@ const REGIONS=[
   learn:"The thirty-two letters and the sounds they make. Short vowels against long ones, and the doubled letters.",
   factT:"Two names, one language",
   factP:"Here by the river people call the language <b>Pulaar</b>. Further east it is called <b>Fulfulde</b>. Same language, two names \u2014 which is why the very first page of the book says <i>Limto Fulfulde (Pulaar)</i>.",
-  factQ:"The old Fulɓe day-names \u2014 Hoorebiire, Dewo, Aa\u0253unde \u2014 are still used by Fulɓe here."},
+  factQ:"The old Fulɓe day-names \u2014 Hoore biir, Dewo, Aa\u0253nde \u2014 are still used by Fulɓe here."},
 
  {n:"Fuuta Jaloo", where:"Guinea", flag:"\u26f0\ufe0f",
   learn:"Thirty-three words and their classes \u2014 one, many, little one \u2014 and the letter that changes at the front.",
@@ -7910,7 +8294,7 @@ const WORLDS=[
   fly:[{e:"\ud83d\udd4a\ufe0f",d:26,y:"top:30px",z:22},{e:"\ud83d\udd4a\ufe0f",d:34,y:"top:56px",z:17}],
   orb:{s:"right:24px;top:24px;width:54px;height:54px;background:radial-gradient(circle,#FFF0C0,#FFC24D);animation:glow 4s ease-in-out infinite"}},
 
- {name:"The cattle plain", sub:"nagge, njambala, mawba",
+ {name:"The cattle plain", sub:"nagge, kemmba, mawba",
   sky:"linear-gradient(180deg,#9FD8F2 0%,#BFE7D8 60%,#DCEFC9 100%)",
   band:"linear-gradient(180deg,#E4F2D8,#D8EDCA)", g1:"#7FB871", g2:"#6BA65E",
   props:[{e:"\ud83c\udf33",s:"left:7%;bottom:14px;font-size:44px"},
@@ -8215,8 +8599,21 @@ const JOURNEY=[
      The wall is no longer a step at all — it lives in the reference. */
   ids:[]},
  {stop:"Words",            lm:"\ud83c\udf33", why:"Now the letters make words that change shape.",
-  ids:["wordmac","greet","kinfolk","mpens","onemany","swap"]},
+  ids:["wordmac","kinfolk","mpens","onemany","swap"]},
  {stop:"Numbers & time",   lm:"\u26f0\ufe0f", why:"Counting, days, months and seasons.",
+  /* ---- v238: the seasons stay, and the reason is a good one ----
+     v237 took the twelve months and four seasons off the road on the audit's
+     advice: sixteen words a child cannot use, taught between the noun classes
+     and the syllables. That judged them by what they do for reading, which is
+     little. The author judged them by what they give a child to SAY, which is
+     a lot \u2014 Ceeɗu and Ndungu are the kind of thing a child repeats at a table,
+     argues about with a cousin, and is asked about by an aunt. On this course's
+     own terms that is the higher test: a word that gets used survives, and a
+     word that only decodes does not. So they are back.
+     Still open, and needing your audio inventory before I touch it: the number
+     machine goes to ninety-nine, which is a maths lesson rather than a reading
+     one. Capping it at twenty means cutting NUMQ to numbers under twenty too,
+     and I cannot see which num/nNN.mp3 clips you actually have. */
   ids:["nummac","numq","days","seasons"]},
  {stop:"Splitting words",  lm:"\ud83c\udfc1", why:"Break any word \u2014 even your own name.",
   ids:["splitter","shapes","names"]},
@@ -8234,7 +8631,13 @@ const JOURNEY=[
    Fuuta Tooro too but sit on the Mauritanian side, so they are off this line.
    Halwar is the one Places could not confirm as a locality — it is a small
    village near Podor, and El Hadj Umar Tall was born there. */
-const TOORO_PLACES=["Dagana","Podor","Halwar","Guédé Chantier","Ndioum",
+/* v237: the greeting stop opens the course and has no town, on purpose. There
+   is no Fuuta Tooro town west of Dagana \u2014 the Fouta starts there \u2014 and a
+   greeting is not somewhere you travel to anyway: it is what you say before
+   you set off. So it is a home stop, like Dugun at the far end, and the header
+   says "our village" rather than naming a place. If you would rather it were a
+   town, the name is yours to give. */
+const TOORO_PLACES=["","Dagana","Podor","Halwar","Guédé Chantier","Ndioum",
  "Aéré Lao","Saldé","Thilogne","Ouro Sogui","Matam","Bakel"];
 
 /* Fuuta Jaloo, twelve stops, every one checked on the map. The child climbs the
@@ -8274,14 +8677,37 @@ const JALOO_PLACES=["Maamu","Dalaba","Telimile","Pita","Leeluma","Timbi Madiina"
    little words came before the child had met the nouns those little words
    belong to. Bantiñel is new to the list, for the stop that had no town.
    Spellings remain the author's to settle. */
+/* ---- v241: one town added, and an off-by-one put right ----
+   The road must be exactly one name shorter than the Fouta's list of stops:
+   the Look back is appended last and is meant to take no town, which leaves
+   Dugun \u2014 home \u2014 on the last teaching stop, where a road that ends where you
+   live should end. When greet moved to the first Fouta at v237 the two lists
+   came level, so every stop from Kubia onward slid back one and Dugun landed
+   on the Look back. Adding the doing-words and describing-words stops needs
+   one more town anyway, so both are fixed together.
+   Timbi Tuunni is a real sub-prefecture in Pita, and the second Timbi \u2014 which
+   is why it sits beside Timbi Madiina here. Like every other name on this
+   road, the spelling and the choice are the author's to settle. */
 const JALOO_ROAD=["Maamu","Telimile","Pita","Tolo","Dalaba","Ditinn","Mombeya",
  "Timbo","Fodee Haaji","Buriya","Fugumba","Leeluma","Timbi Madiina","Labe",
- "Kebali","Kankalabe","Koyin","Bantiñel","Tugee","Kubia","Gaawal","Kunndaara",
- "Maali","Yemberen",HOME_VILLAGE];
+ "Kebali","Kankalabe","Koyin","Bantiñel","Tugee","Kubia","Gaawal","Timbi Tuunni",
+ "Kunndaara","Maali","Yemberen",HOME_VILLAGE];
 
 /* each letter group is its own stop now, so stopping after the vowels counts
    as having arrived somewhere rather than abandoning a long task */
-JOURNEY[0].ids=["hf0","hf1","hf2","hf3","hf4","hf5","hf6","gpens","sylmac","pairs","gemin"];
+/* ---- v237: something to say on the first day ----
+   Greetings sat at Gaawal, four-fifths of the way through the second Fouta \u2014
+   step forty of fifty-one. For a child with no class, no peers and no exam,
+   the only thing that makes them open this again tomorrow is having said
+   something real to someone who loved hearing it, and they were being made to
+   wait forty steps for the chance. It is step one now. Before the letters,
+   because a greeting is heard and said long before it is read: on the first
+   visit the card only listens and answers itself, and once the seven letter
+   stops are behind them the same card starts asking for the reply in writing.
+   The same stop, met twice, doing a different job each time. */
+JOURNEY[0].ids=["greet","hf0","hf1","hf2","hf3","hf4","hf5","hf6","gpens","sylmac","pairs","gemin"];
+/* a greeting belongs to nobody's town */
+if(ACTS.greet) ACTS.greet.home=true;
 /* one town per group of nouns, then the machine, then the rest of the Fouta:
    six plus one plus five is twelve, which is how many towns the road has */
 /* The little words used to be taught at Labe, the seventh stop, after all
@@ -8315,7 +8741,17 @@ JOURNEY[1].ids=["wm0","wm1","wm2",
   "lw0","lw1","lw2","lw3",
   "wm3","wm4","wm5",
   "lw4","lw5","lw6","jobset"]
- .concat(["makeword","masswords","greet","kinfolk","mpens","onemany","swap"]);
+ /* v237: greet has moved to the first Fouta \u2014 see JOURNEY[0] below */
+ /* ---- v241: something to say ABOUT a word, and something to DO ----
+    The Fouta taught thirty-three nouns, their markers, their four forms and
+    the seven swaps, and then handed the child over to the sentences with no
+    verb and no adjective in their possession. Every one of the primer's
+    sixteen sentences has a verb in it. And the adjectives are the payoff of
+    the whole class system: until something has to AGREE with a noun, the
+    class is a label with no consequence. Both stops sit after the pens, where
+    the child knows the classes, and before the swap, which they now have a
+    reason to care about. */
+ .concat(["makeword","masswords","verbs","adjs","kinfolk","mpens","onemany","swap"]);
 
 const ORDER=JOURNEY.reduce((a,s)=>a.concat(s.ids),[]);
 
@@ -8334,6 +8770,17 @@ const NEEDS={
  sentmark:{on:"sentbuild",why:"Build a few sentences before you start marking them."}
 };
 const stopOf=id=>{ const i=JOURNEY.findIndex(s=>s.ids.indexOf(id)>=0); return i<0?0:i };
+/* ---- v237: somewhere to stop ----
+   Fifty-one steps with no seams in them is a road with no inns. A grown-up
+   cannot tell where a sitting should end, so it ends when the child has had
+   enough \u2014 which means every session ends in fatigue rather than in finishing
+   something. Every fourth step is now a resting place: the same screen, with
+   the order of its two doors reversed. Stopping is the big one and going on is
+   the quiet one, which is the only difference, and it is enough. Four steps is
+   ten to twenty minutes on a phone with a six-year-old.
+   Counted off the running order rather than listed by name, so it keeps
+   working when the road changes. */
+const isSeam=id=>{ const i=ORDER.indexOf(id); return i>=0 && (i+1)%4===0 };
 /* The first unfinished stop in a given Fouta. Without this, finishing a step
    offered "the next unfinished step in the whole course", which after skipping
    ahead meant being sent back to a Fouta you had already left. It was never a
@@ -8348,7 +8795,7 @@ let S={view:"dash",previewAll:true,longMark:true,act:null,done:new Set(),offered
  gi:0,gpick:null,ki:0,kpick:null,oi:0,omany:false,intro:null,introSeen:new Set(),
  sqChunk:0,sqI:0,sqWrong:0,sqPick:null,sqDone:new Set(),
  sqPhase:"meet",sqM:0,sqStep:0,sqPress:0,
- li:0,lopen:null,lfound:new Set(),lmiss:null,gsel:null,gput:{},gRound:0,gmiss:null,gfed:null,gno:null,gheard:{},
+ gpI:0,gpPick:null,gpMiss:null,vbI:0,vbPick:null,vbMiss:null,ajI:0,ajPick:null,ajMiss:null,li:0,lopen:null,lfound:new Set(),lmiss:null,gsel:null,gput:{},gRound:0,gmiss:null,gfed:null,gno:null,gheard:{},
   gPhase:"teach",gT:0,gTP:{},brP:0,brAsk:null,brRight:null,diI:0,diPhase:"meet",diFound:{},diMiss:null,
  vlI:0,vlSeen:{},vlDone:false,vlJust:null,vcI:0,vcPick:null,vcDone:false,viI:0,viGot:null,viMiss:null,viDone:false,viDoneSet:{},made:[],chal:null,symReady:false,vjust:null,
  lwG:null,lwPhase:"meet",lwM:0,lwI:0,lwPick:null,lwMiss:null,lwSeen:{},
@@ -8356,7 +8803,7 @@ let S={view:"dash",previewAll:true,longMark:true,act:null,done:new Set(),offered
  pi:0,ptar:null,pans:null,gi:0,gpick:null,
  wi:0,form:"sg",flip:false,ci:0,chint:false,cpick:null,
  wmPhase:"meet",wmG:0,wmM:0,wmI:0,wmPick:null,wmMiss:null,gsI:0,gsGot:null,gsMiss:null,mkI:0,mkPick:null,msI:0,msPick:null,msBad:null,
- mkPhase:"fteach",fmM:0,fmI:0,fmPick:null,fmMiss:null,mSide:"front",mStep:0,mPress:0,mEi:0,mEdone:{},mEbad:null,
+ mkPhase:"fteach",fmM:0,fmWhere:0,fmI:0,fmPick:null,fmMiss:null,mSide:"front",mStep:0,mPress:0,mEi:0,mEdone:{},mEbad:null,
   mSee:{},mSeeShow:false,mSpot:{},mSpotBad:null,mSpotEnd:"",mEphase:"see",mRound:1,
   lsPhase:"meet",lsSeen:{},lsSay:null,jobSel:null,jobSeen:{},jobW:0,lsI:0,lsPick:null,lsMiss:null,
   uStep:0,uRound:0,uPick:null,uMiss:null,
@@ -8394,12 +8841,12 @@ const WAYS=[
    {after:10,kind:"who",icon:"\ud83d\udcdc",t:"",todo:true,
     ful:"", who:"", eng:"", q:"", qen:"", a:"", aen:""} ],
 
- [ {after:4,kind:"tale",icon:"\ud83d\udc3a",t:"Fowru and the meat",
-    beats:[["\u00d1annde goore, fowru ittuno sadaka \u0253ay neene mayru maayii.",
+ [ {after:4,kind:"tale",icon:"\ud83d\udc3a",t:"Bonooru and the meat",
+    beats:[["\u00d1annde goore, bonooru ittuno sadaka \u0253ay neene mayru maayii.",
       "One day the hyena gave alms, because her mother had died."],
      ["Ndu hirsi dammol, ndu senndi dammol ngol pecce tati.",
       "She killed a goat and divided it into three parts."],
-     ["Ndee feccere \u0257oo ko min jeyi, ndee feccere \u0257aa ko fowru ndu neene mum maayi ndun jeyi, ndee feccere too ko adtii\u0257o \u01b4ettude on jeyi \u2014 \u0257um le mi \u01b4ettii\u2026",
+     ["Ndee feccere \u0257oo ko min jeyi, ndee feccere \u0257aa ko bonooru ndu neene mum maayi ndun jeyi, ndee feccere too ko adtii\u0257o \u01b4ettude on jeyi \u2014 \u0257um le mi \u01b4ettii\u2026",
       "This part is mine. This part belongs to the hyena whose mother died. And this part goes to whoever takes it first \u2014 so I took that one too\u2026"]]},
    {after:7,kind:"say",icon:"\ud83d\udc18",t:"A saying",
     ful:"Si mawba naatii e saare, haray ko ndaaree da\u00f1aama.",
@@ -9475,9 +9922,12 @@ function handoff(){
    return `<span class="cf c${i%4}" style="--dx:${(Math.cos(ang)*dist).toFixed(0)}px;
      --dy:${(Math.sin(ang)*dist-14).toFixed(0)}px;--d:${(i*38)}ms"></span>`;
   }).join("");
- return `<div class="hand cheer"><div class="burst">${conf}<div class="big">\u2b50</div></div>
+ /* a resting place: the same screen, with its two doors the other way round */
+ const rest=isSeam(S.handFrom);
+ return `<div class="hand cheer${rest?" rest":""}"><div class="burst">${conf}<div class="big">\u2b50</div></div>
   <h2>${esc(from.t)} \u2014 done</h2>
-  <p>${leftHere?"Still walking "+esc(REGIONS[si].n):"Fouta finished"}</p></div>
+  <p>${rest?"A good place to stop"
+    :(leftHere?"Still walking "+esc(REGIONS[si].n):"Fouta finished")}</p></div>
  <div class="jbar">${JOURNEY[si].ids.map(function(id){
    return `<i class="${id===S.handFrom?'done just':S.done.has(id)?'done':id===nid?'now':''}"></i>`}).join("")}</div>
  ${wp?`<button class="storycard" data-isle="${wid}">
@@ -9486,9 +9936,14 @@ function handoff(){
     <small>${widBack?"the helicopter can go back for it"
       :"the helicopter can stop for it"}</small></span>
    <span class="sa">\u203a</span></button>`:""}
- <button class="nextcard" data-flyto="${nid}">
+ ${rest?`<button class="restcard" data-home>
+   <span class="rb">\ud83c\udf19</span>
+   <span class="rx"><em>Four stops walked</em><b>Stop here for today</b>
+     <small>it will keep the place</small></span>
+   <span class="ra">\u203a</span></button>`:""}
+ <button class="nextcard${rest?" quietcard":""}" data-flyto="${nid}">
    <span class="bub" style="background:${u.b};color:${u.c}">${a.em}</span>
-   <span class="nx"><em>${goingBack?"The one you missed":wp?"Or straight on":"Next on this road"}</em><b>${esc(a.t)}</b><small>${esc(a.n)} \u00b7 ${esc(REGIONS[nsi].n)}</small></span>
+   <span class="nx"><em>${rest?"Or one more":goingBack?"The one you missed":wp?"Or straight on":"Next on this road"}</em><b>${esc(a.t)}</b><small>${esc(a.n)} \u00b7 ${esc(REGIONS[nsi].n)}</small></span>
    <span style="font-size:24px;color:var(--muted)">\u203a</span></button>
  ${owed.length>1?`<div class="owed">
    <p class="owedh">still to pick up in ${esc(REGIONS[si].n)}</p>
@@ -9498,7 +9953,7 @@ function handoff(){
        <span class="ot"><b>${esc(o.place||o.t)}</b><small>${esc(o.t)}</small></span>
        <span class="oa">\u203a</span></button>`}).join("")}
   </div>`:""}
- <button class="stopnow" data-home>Stop for now</button>`;
+ ${rest?"":`<button class="stopnow" data-home>Stop for now</button>`}`;
 }
 
 /* The first unmet stop of this region whose place on the road has been passed.
@@ -9934,28 +10389,68 @@ const GREET=[
   reply:"On jaaraama", ren:"Hello to you all"}
 ];
 
+/* ---- v237: the same card, twice, doing two jobs ----
+   This stop now opens the course, before a single letter has been taught, so
+   on the first visit it cannot ask a child to pick a written reply out of
+   three \u2014 they would be choosing between shapes. So it listens instead: the
+   greeting arrives, then the answer arrives with it, and the only thing asked
+   is that the child says it out loud. Once the seven letter stops are behind
+   them the card starts asking, which is the version that was here before. */
+const LETTER_STOPS=["hf0","hf1","hf2","hf3","hf4","hf5","hf6"];
+function canReadYet(){ return LETTER_STOPS.every(function(x){ return S.done.has(x) }) }
+
 function greet(){
  const i=Math.min(S.gi||0,GREET.length-1), g=GREET[i];
- if((S.gi||0)>=GREET.length) return done("\ud83d\udc4b","Four greetings");
+ const asking=canReadYet();
+ if((S.gi||0)>=GREET.length) return `<div class="finish"><div class="big">\ud83d\udc4b</div>
+   <h2>${GREET.length} greetings</h2>
+   <p class="sayto"><b class="ff">${esc(GREET[0].say)}</b>
+     <span>say it to someone today</span></p>
+   <button class="ctl" style="width:100%;margin-top:10px" data-finish>done \u2713</button></div>`;
  const opts=[g.reply].concat(GREET.filter(function(x){return x.reply!==g.reply})
    .slice(0,2).map(function(x){return x.reply}));
  const order=opts.slice().sort(function(a,b){return (a+i).length-(b+i).length||a.localeCompare(b)});
+ /* v243: the reply is chosen on both passes. It used to be handed over on the
+    first visit, before the letters, on the grounds that a child who cannot
+    read cannot pick between three written words — but a greeting handed over
+    is a greeting watched, and the thing being taught here is a turn the child
+    takes. Each choice says itself, so the pick is answerable by ear. */
  const got=S.gpick===g.reply;
- ACTS.greet.say=got?"Now say it out loud." : "Someone greets you. What do you say back?";
- return wrap(`<div class="greet">
-   <div class="gbubble"><span class="gwho">${g.who}</span>
-    <button class="gsay gtext" data-clip="greet/${pad(i,2)}-say.mp3">
-     <b class="ff">${esc(g.say)}</b><small>${esc(g.en)}</small></button>
-    ${g.reg?`<span class="regchip">${esc(g.reg)}</span>`:""}</div>
-   <button class="hearbtn big" data-clip="greet/${pad(i,2)}-say.mp3">
-     <span class="bars"><i></i><i></i><i></i></span>listen</button>
-   ${got?`<div class="gback">
-      <button class="gword ff" data-clip="greet/${pad(i,2)}-reply.mp3">${esc(g.reply)}</button>
-      <small>${esc(g.ren)}</small>
+ ACTS.greet.say=got?"Press what you said, to hear it. Then say it out loud."
+  :"Someone greets you. Which of these three do you say back?";
+ /* ---- v243: a message thread ----
+    The greeting arrives on its own — a wave that settles into the person
+    waving, and the bubble says itself. Nothing else is on the screen except
+    the three things that could be said back. Choosing one puts it in the
+    child's own bubble, under the first, where it asks to be pressed: the
+    reply is not read to them, it is theirs to sound. */
+ const wave=!(S.gWaved&&S.gWaved[i]);
+ if(wave){ if(!S.gWaved) S.gWaved={}; S.gWaved[i]=1 }
+ const said=S.gsaid===i;
+ return wrap(`<div class="greet thread">
+   <div class="gline${wave?" new":""}">
+    <div class="gbub" data-clip="greet/${pad(i,2)}-say.mp3" data-autoplay>
+     <span class="gsay gtext">
+      <b class="ff">${esc(g.say)}</b><small>${esc(g.en)}</small></span>
+     ${g.reg?`<span class="regchip">${esc(g.reg)}</span>`:""}</div>
+    <span class="gwho${wave?" arrive":""}">${wave
+      ?`<i class="w">\ud83d\udc4b</i><i class="f">${g.who}</i>`:g.who}</span>
+   </div>
+   ${got?`<div class="gline you new">
+      <div class="gbub mine${said?"":" nudge"}" data-clip="greet/${pad(i,2)}-reply.mp3" data-gsaid>
+       <span class="gword ff">${esc(g.reply)}</span>
+       <small>${esc(g.ren)}</small></div>
+      <span class="gwho me">${avaHTML("")}</span>
      </div>
      <button class="wallbtn" data-gnext>next \u203a</button>`
-    :`<div class="hfrow">${order.map(function(o){
-      return `<button class="hfk wide${S.gpick===o?" miss":""}" data-greply="${esc(o)}">${esc(o)}</button>`
+    :`<div class="gline you">
+       <div class="gbub empty"><span class="gq">?</span></div>
+       <span class="gwho me">${avaHTML("")}</span>
+      </div>
+      <div class="gopts">${order.map(function(o){
+      return `<button class="gopt${S.gpick===o?" no":""}" data-greply="${esc(o)}">
+        <b class="ff">${esc(o)}</b>
+        <span class="gob"><i></i><i></i><i></i></span></button>`
      }).join("")}</div>`}
   </div>`,i,GREET.length,true);
 }
@@ -10066,7 +10561,7 @@ const ONEMANY=[
  {sg:"gorko",pl:"wor\u0253e",ens:"one man",enp:"men",a:"g",b:"w",
   more:[["gujjo","wuy\u0253e","thief"],["wullaandu","gullaali","a cry"]]},
  {sg:"debbo",pl:"rew\u0253e",ens:"one woman",enp:"women",a:"d",b:"r",
-  more:[["rawaandu","dawaa\u0257i","dog"],["reedu","deedi","belly"]]},
+  more:[["reedu","deedi","belly"],["riggere","digge","a roll of thunder"]]},
  {sg:"\u0253i\u0257\u0257o",pl:"\u0253i\u0253\u0253e",ens:"one child",enp:"children",a:"\u0253",b:"\u0253",
   more:[["\u00f1aawoowo","\u00f1aawoo\u0253e","judge"],["aaden","aaden\u0253e","a person"]]}
 ];
@@ -10107,6 +10602,115 @@ function onemany(){
      <button class="wallbtn" data-onext>next \u203a</button>`
     :`<button class="ctl" style="width:100%;margin-top:14px" data-omany>make it many \u203a</button>`}
   </div>`,i,ONEMANY.length,true);
+}
+
+
+/* ==========================================================================
+   DOING WORDS \u2014 Gaawal
+   Six verbs, each met inside the primer sentence it comes from, so the
+   recording that already exists is the recording the child hears. Nothing new
+   was written for this stop and nothing new needs recording: the sentences are
+   Bah's, the clips are the ones the sentence unit already uses, and the verb
+   is simply lifted out of one and put back by the child.
+   The subject and the object of each sentence may be words the child has not
+   met \u2014 comci, kummbele. That is deliberate. A verb is learnt in a sentence
+   or it is learnt as a label, and the gloss underneath carries the rest.
+   ========================================================================== */
+const VERBS=[
+ {si:2, g:"\ud83e\udd64", v:"yarii",    en:"drank"},
+ {si:1, g:"\ud83e\ude91", v:"joo\u0257ike",  en:"has sat down"},
+ {si:5, g:"\u270f\ufe0f", v:"natude",   en:"drawing"},
+ {si:6, g:"\ud83e\uddfa", v:"wuppude",  en:"washing"},
+ {si:7, g:"\ud83d\udc83", v:"amude",    en:"dancing"},
+ {si:9, g:"\ud83d\udcd6", v:"winndude", en:"writing"}];
+
+function verbs(){
+ const i=Math.min(S.vbI||0,VERBS.length-1);
+ if((S.vbI||0)>=VERBS.length) return done("\ud83c\udfc3","Six doing words");
+ const q=VERBS[i], full=SENT[q.si][0], got=S.vbPick===q.v;
+ const words=full.replace(/\./g,"").split(" ");
+ /* three real verbs, never invented ones: the decoys are other doing words
+    from this same stop, so a wrong tap is still a word worth having seen */
+ const others=VERBS.filter(function(x){return x.v!==q.v})
+   .map(function(x){return x.v});
+ const opts=[q.v,others[(i*2)%others.length],others[(i*2+1)%others.length]]
+   .sort(function(a,b){return (a+i).length-(b+i).length||a.localeCompare(b)});
+ ACTS.verbs.say=got?"That is the doing word.":"What is she doing? Choose the word.";
+ return wrap(`<div class="vbwrap">
+   <div class="vbpic">${q.g}</div>
+   <div class="sentline vbline">${words.map(function(w){
+     if(w!==q.v) return `<span class="sw plain">${esc(w)}</span>`;
+     return got?`<span class="sw doing">${esc(w)}</span>`
+       :`<span class="sw hole"></span>`}).join("")}${got?`<span class="sw stop">.</span>`:""}</div>
+   ${got?`<button class="hearbtn" data-clip="sent/s${pad(q.si,2)}.mp3">
+      <span class="bars"><i></i><i></i><i></i></span>hear it</button>
+     <div class="gloss2">${esc(SENT[q.si][1])}</div>
+     <button class="wallbtn good" data-vbnext>next \u203a</button>`
+    :`<div class="hfrow">${opts.map(function(o){
+      return `<button class="hfk wide${S.vbMiss===o?" miss":""}"
+        data-vbp="${esc(o)}">${esc(o)}</button>`}).join("")}</div>`}
+  </div>`,i,VERBS.length,true);
+}
+
+/* ==========================================================================
+   DESCRIBING WORDS \u2014 Timbi Tuunni
+   This is where the noun classes finally do something. Peeral cannot print a
+   Fulfulde adjective as a word: every one of them is a stem with a hyphen \u2014
+   famar-, ra\u0253\u0253-, hecc-, melen-, moolanaa-, hormante- \u2014 because it is not a
+   word until it has taken the ending of the noun it describes.
+   Every one of the six below is an attested phrase from the Saggitorde, quoted
+   with his own gloss. Nothing here is derived, because deriving it is exactly
+   what I could not do honestly: the endings for ngal, ngol, \u0257ee and koy \u2014 the
+   classes this course leans on hardest \u2014 have no worked example in the book,
+   and the check sheet handed over with this build asks a speaker for them.
+   Two of the six also change their first letter (ra\u0253\u0253- \u2192 da\u0253\u0253o after gorko,
+   famar- \u2192 pamarel after cukalel), which is the same swap taught at Dugun,
+   arriving here as a consequence rather than a drill. And ra\u0253\u0253- is shown
+   twice, once against a man and once against a bull, because one adjective
+   wearing two shapes is the whole lesson in one card.
+   NO CLIPS EXIST for these six phrases. There is no listen button on purpose.
+   If you record them they want to be adj/a00.mp3 .. adj/a05.mp3.
+   ========================================================================== */
+const ADJS=[
+ {n:"gorko",  g:"\ud83e\uddcd", stem:"ra\u0253\u0253-", full:"da\u0253\u0253o",
+  end:"-o", opts:["-o","-ri","-el"], sw:"d", en:"a man of small stature"},
+ {n:"ngaari", g:"\ud83d\udc02", stem:"ra\u0253\u0253-", full:"ra\u0253\u0253iri",
+  end:"-ri", opts:["-ri","-o","-el"], sw:"", en:"a bull of small stature"},
+ {n:"cukalel",g:"\ud83e\uddd2", stem:"famar-", full:"pamarel",
+  end:"-el", opts:["-el","-o","-ru"], sw:"p", en:"a small boy"},
+ {n:"suudu",  g:"\ud83c\udfe0", stem:"moolanaa-", full:"moolanaandu",
+  end:"-ndu", opts:["-ndu","-re","-el"], sw:"", en:"a giant house"},
+ {n:"la\u0253i",   g:"\ud83d\udd2a", stem:"melen-", full:"melenhi",
+  end:"-hi", opts:["-hi","-o","-ndu"], sw:"", en:"a plain knife"},
+ {n:"haako",  g:"\ud83c\udf3f", stem:"hecc-", full:"hecco",
+  end:"-o", opts:["-o","-ri","-ndu"], sw:"", en:"fresh leaves"}];
+
+function adjs(){
+ const i=Math.min(S.ajI||0,ADJS.length-1);
+ if((S.ajI||0)>=ADJS.length) return done("\ud83c\udfa8","Six describing words");
+ const q=ADJS[i], got=S.ajPick===q.end;
+ /* the first letter changes too, on the ones where the book says it does */
+ const shown=q.sw
+   ? `<em>${esc(q.full.slice(0,q.sw.length))}</em>${esc(q.full.slice(q.sw.length))}`
+   : esc(q.full);
+ ACTS.adjs.say=got?"The describing word took the word's own ending."
+   :"Which ending does this one take?";
+ return wrap(`<div class="ajwrap">
+   <div class="ajpic">${q.g}</div>
+   <div class="ajphrase"><b class="ff">${esc(q.n)}</b>
+    ${got?`<span class="ajfull ff">${shown}</span>`
+      :`<span class="ajstem ff">${esc(q.stem)}</span>`}</div>
+   ${got?`<div class="ajsay">
+      <p class="ajen">${esc(q.en)}</p>
+      ${q.sw?`<p class="ajsw"><b class="ff">${esc(q.stem)}</b> \u2192
+        <b class="ff">${esc(q.full)}</b><span>the front changed too</span></p>`:""}
+     </div>
+     <button class="wallbtn good" data-ajnext>next \u203a</button>`
+    :`<div class="hfrow">${q.opts.slice().sort(function(a,b){
+       return (a+i).length-(b+i).length||a.localeCompare(b)}).map(function(o){
+      return `<button class="hfk${S.ajMiss===o?" miss":""}"
+        data-ajp="${esc(o)}">${esc(o)}</button>`}).join("")}</div>`}
+  </div>`,i,ADJS.length,true);
 }
 
 /* ==========================================================================
@@ -10259,7 +10863,7 @@ function finishBar(){return `<div class="controls" style="margin-top:11px">
    and that door appears on its own — a second "I've finished this" underneath
    offered a child a way out of a lesson they had not had yet */
 const OPEN_ENDED=["parade","sylmac","nummac","days","sentread"];
-const VIEWS={parade,hearfind,greet,kinfolk,onemany,gpens,sylmac,pairs,gemin,littleset,jobset,wordmac,wordmac2,wordmac3,makeword,masswords,mpens,swap,nummac,numq,days,seasons,splitter,shapes,names,sentbuild,sentmark,sentread};
+const VIEWS={parade,hearfind,greet,kinfolk,onemany,verbs,adjs,gpens,sylmac,pairs,gemin,littleset,jobset,wordmac,wordmac2,wordmac3,makeword,masswords,mpens,swap,nummac,numq,days,seasons,splitter,shapes,names,sentbuild,sentmark,sentread};
 
 /* one stop per letter group — they share the activity, each carrying its own
    group, so a child can finish the vowels and stop without losing anything */
@@ -10562,6 +11166,12 @@ function render(){
   if(S.view==="home") requestAnimationFrame(function(){ try{homeSettle()}catch(e){} });
  }
  paintWorld(); paintDrawer();
+ /* v243: the page is held still only while the drawer is actually up. Any
+    path that closed it without going through closeDrawer used to leave this
+    class standing, and main stayed unscrollable for the rest of the session
+    — which looked like a frozen screen with its lower half out of reach. */
+ try{ document.body.classList.toggle("drawered",
+   !!(drawer&&drawer.classList.contains("open"))) }catch(e){}
  /* v180: the vowel sheet is a screen of its own while it is up, so the docked
     strip stands down and stops printing itself over the long vowels */
  document.body.classList.toggle("sheetopen",
@@ -10609,6 +11219,9 @@ function render(){
   clearTimeout(shieldT);
   shieldT=setTimeout(function(){ scrim.classList.remove("shield") },450);
  }
+ /* v243: shutting it from outside has to go through the same door as opening
+    it, or the page keeps the hold-still class and cannot be scrolled again */
+ window.closeSettings=closeDrawer;
  function begin(x,y){
   if(S.drawer){ closeDrawer(); return; }
   held=false; x0=x; y0=y;
@@ -10675,9 +11288,9 @@ const PKEYS=["gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "viI","viGot","viDone","viDoneSet",
  "made","chal","symReady","vjust","lwG","lwPhase","lwM","lwI","lwPick","lwMiss",
  "lwSeen","cons","vow","long","pi","ptar","pans","wi","form","ci","chint","cpick",
- "si","spick","nq","nqa","di","wmPhase","wmM","wmI","wmG","wmPick","wmMiss",
+ "si","spick","gpI","gpPick","gpMiss","vbI","vbPick","vbMiss","ajI","ajPick","ajMiss","nq","nqa","di","wmPhase","wmM","wmI","wmG","wmPick","wmMiss",
  "gsI","gsGot","gsMiss",
- "mkI","mkPick","msI","msPick","msBad","mkPhase","fmM","fmI","fmPick","fmMiss",
+ "mkI","mkPick","msI","msPick","msBad","mkPhase","fmM","fmWhere","fmI","fmPick","fmMiss",
  "mSide","mStep","mPress","mEi","mEdone","mEbad","mSee","mSpot","mSpotBad",
  "mSeeShow","mSpotEnd","mEphase","mRound","lsPhase","lsSeen","lsSay","jobSel","jobSeen","jobW","lsI","lsPick","lsMiss","uStep","uRound","uPick","uMiss","dStep","pI","pSide","pDone","lI","lPick","lMiss","cmpOpen","mSeen","mBoth","mo","moput",
  "sbi","sbp","smi","smCap","smStop","sri","srShow","spi","scuts","sdone",
@@ -10693,7 +11306,9 @@ const PKEYS=["gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
    screen changed; v155 changes only the drawer, so a v153 place still resumes
    onto exactly the screen it was written from. Bump it the next time an
    activity's stages move. */
-const PLACE_BUILD=234;   /* v232 changes what each word stop teaches */
+const PLACE_BUILD=247;   /* v243 inserts a screen in the greeting and one
+                            between the asking and the machine, so a place
+                            written by an older build would resume past them */
 function placeKeep(){
  try{
   if(S.view!=="act"||!S.act) return;
@@ -11025,7 +11640,7 @@ function openAct(id,force){ S.world=stopOf(id); S.startAt=null;
   cons:null,vow:null,long:false,pi:0,ptar:null,pans:null,
   gi:0,gpick:null,wi:0,form:"sg",ci:0,chint:false,cpick:null,si:0,spick:null,nq:0,nqa:null,di:0,
   wmPhase:"meet",wmM:0,wmI:0,wmPick:null,wmMiss:null,mkI:0,mkPick:null,msI:0,msPick:null,msBad:null,
-  mkPhase:"fteach",fmM:0,fmI:0,fmPick:null,fmMiss:null,mSide:"front",mStep:0,mPress:0,mEi:0,mEdone:{},mEbad:null,
+  mkPhase:"fteach",fmM:0,fmWhere:0,fmI:0,fmPick:null,fmMiss:null,mSide:"front",mStep:0,mPress:0,mEi:0,mEdone:{},mEbad:null,
   mSee:{},mSeeShow:false,mSpot:{},mSpotBad:null,mSpotEnd:"",mEphase:"see",mRound:1,
   lsPhase:"meet",lsSeen:{},lsSay:null,jobSel:null,jobSeen:{},jobW:0,lsI:0,lsPick:null,lsMiss:null,
   uStep:0,uRound:0,uPick:null,uMiss:null,
@@ -11196,10 +11811,14 @@ document.body.addEventListener("click",function(e){
   S.world=0; S.view="dash";
   S.drawer=false;
   try{
-   if(typeof closeDrawer==="function") closeDrawer();
+   if(window.closeSettings) window.closeSettings();
    else{
     if(drawer&&drawer.classList) drawer.classList.remove("open");
     const sc=document.querySelector(".dscrim"); if(sc) sc.classList.remove("on");
+    /* v243: and the class on <body> that holds the page still. Without it
+       main keeps overflow:hidden and touch-action:none and the screen is
+       frozen for the rest of the session. */
+    document.body.classList.remove("drawered");
    }
   }catch(e){}
   sMove(); render(); return; }
@@ -11226,7 +11845,8 @@ document.body.addEventListener("click",function(e){
     answer first and return, which is how the four cards at Tolo played their
     word and never counted as pressed — leaving a stop with no door out of it */
  if(d.clip!==undefined&&d.mpress===undefined&&d.mstep===undefined
-    &&d.lsmeet===undefined&&d.jobpick===undefined&&d.esee===undefined&&d.ehear===undefined){play(t,d.clip);return}
+    &&d.lsmeet===undefined&&d.jobpick===undefined&&d.esee===undefined&&d.ehear===undefined
+    &&d.gsaid===undefined){play(t,d.clip);return}
  if(d.act){openAct(d.act);return}
  if(d.goto){openAct(d.goto,true);return}
  if(d.force){openAct(d.force,true);return}
@@ -11243,14 +11863,20 @@ document.body.addEventListener("click",function(e){
  if(d.refl!==undefined){ S.ref={tab:"letters",letter:+d.refl}; sTap(); render();
    const hb=document.querySelector('.refsheet [data-clip]'); if(hb) play(hb,hb.dataset.clip); return }
  if(d.refback!==undefined){ S.ref={tab:"letters",letter:null}; sTap(); render(); return }
+ if(d.gsaid!==undefined){ S.gsaid=Math.min(S.gi||0,GREET.length-1);
+  play(t,t.dataset.clip); render(); return}
  if(d.greply!==undefined){
   const g=GREET[S.gi];
-  if(S.gpick===g.reply) return;
-  if(d.greply===g.reply){ S.gpick=g.reply; sGood(); render(); }
+  const ok=[g.reply].concat(g.alt||[]);
+  if(ok.indexOf(S.gpick)>=0) return;
+  if(ok.indexOf(d.greply)>=0){ S.gpick=g.reply; S.gsaid=null; sGood(); render();
+   /* it is theirs the moment they choose it, so it says itself once */
+   setTimeout(function(){ const b=document.querySelector(".gbub.mine[data-clip]");
+    if(b) play(b,b.dataset.clip) },320); }
   else { S.gpick=d.greply; sOops(); render();
     setTimeout(function(){ S.gpick=null; render() },600); }
   return}
- if(d.gnext!==undefined){ S.gi++; S.gpick=null; sMove(); render();
+ if(d.gnext!==undefined){ S.gi++; S.gpick=null; S.gsaid=null; sMove(); render();
    if(S.gi>=GREET.length) finishAct(); return}
  if(d.kin!==undefined){
   const t=KIN[S.ki];
@@ -11429,7 +12055,37 @@ document.body.addEventListener("click",function(e){
  if(d.pair!==undefined){S.pans=+d.pair;(S.pans===S.ptar?sGood:sOops)();render();return}
  if(d.pnext!==undefined){S.pi++;S.ptar=null;S.pans=null;render();return}
  if(d.gp){S.gpick=d.gp;(d.gp===GEM[S.gi][1]?sGood:sOops)();render();return}
- if(d.gnext!==undefined){S.gi=S.gi+1;if(S.gi>=GEM.length){finishAct();return}S.gpick=null;render();return}
+ if(d.gnext!==undefined){S.gi=S.gi+1;S.gpick=null;
+  /* v240: the spotting ends into the pairs, not out of the stop */
+  sMove();render();return}
+ if(d.vbp){const q=VERBS[Math.min(S.vbI||0,VERBS.length-1)];
+  if(S.vbPick===q.v) return;
+  if(d.vbp===q.v){S.vbPick=q.v;S.vbMiss=null;sGood();render()}
+  else{S.vbMiss=d.vbp;sOops();render();
+   setTimeout(function(){S.vbMiss=null;render()},420)}
+  return}
+ if(d.vbnext!==undefined){S.vbI=(S.vbI||0)+1;S.vbPick=null;S.vbMiss=null;
+  if(S.vbI>=VERBS.length){finishAct();return}
+  sMove();render();return}
+ if(d.ajp){const q=ADJS[Math.min(S.ajI||0,ADJS.length-1)];
+  if(S.ajPick===q.end) return;
+  if(d.ajp===q.end){S.ajPick=q.end;S.ajMiss=null;sGood();render()}
+  else{S.ajMiss=d.ajp;sOops();render();
+   setTimeout(function(){S.ajMiss=null;render()},420)}
+  return}
+ if(d.ajnext!==undefined){S.ajI=(S.ajI||0)+1;S.ajPick=null;S.ajMiss=null;
+  if(S.ajI>=ADJS.length){finishAct();return}
+  sMove();render();return}
+ if(d.gpp){const q=GEMPAIR[Math.min(S.gpI||0,GEMPAIR.length-1)];
+  const want=(q.ask==="b")?q.b:q.a;
+  if(S.gpPick===want) return;
+  if(d.gpp===want){S.gpPick=want;S.gpMiss=null;sGood();render()}
+  else{S.gpMiss=d.gpp;sOops();render();
+   setTimeout(function(){S.gpMiss=null;render()},420)}
+  return}
+ if(d.gpnext!==undefined){S.gpI=(S.gpI||0)+1;S.gpPick=null;S.gpMiss=null;
+  if(S.gpI>=GEMPAIR.length){finishAct();return}
+  sMove();render();return}
  if(d.wmnext!==undefined){const g=WGROUPS[S.wmG];
   if(S.wmM>=g.length-1){S.wmPhase="find";S.wmI=0;S.wmPick=null;S.wmMiss=null}
   else S.wmM++;
@@ -11470,7 +12126,8 @@ document.body.addEventListener("click",function(e){
   else if(b==="tcheck"){ if(S.wmI>0){S.wmI--;S.wmPick=null;S.wmMiss=null} }
   else if(b==="fcheck"){ if(S.fmI>0){S.fmI--;S.fmPick=null;S.fmMiss=null}
    else {S.mkPhase="fteach";S.fmM=FAMS.length-1;S.fmPick=null;S.fmMiss=null} }
-  else if(b==="mk"){ if(S.mkI>0){S.mkI--;S.mkPick=null}
+  else if(b==="mk"){ if((S.fmWhere||0)===1){ S.fmWhere=0 }
+   else if(S.mkI>0){S.mkI--;S.mkPick=null}
    else {S.mkPhase="fcheck";S.fmI=FQ.length-1;S.fmPick=null;S.fmMiss=null} }
   else if(b==="ms"){ if(S.msI>0){S.msI--;S.msPick=null;S.msBad=null} }
   sMove();render();return}
@@ -11523,8 +12180,15 @@ document.body.addEventListener("click",function(e){
    setTimeout(function(){S.wmMiss=null;render()},420)}
   return}
  if(d.tgo!==undefined){
-  if(S.wmI>=TQ.length-1){S.wmPhase="forms";S.wi=0;S.form="sg";S.touched=false}
+  /* v243: the last answer used to hand straight over to the machine, which
+     opens on a whole four-form pattern — so the card the child had just
+     finished was replaced before they had looked at it. There is a beat in
+     between now, and they leave it when they are ready. */
+  if(S.wmI>=TQ.length-1){S.wmPhase="tdone"}
   else{S.wmI++;S.wmPick=null;S.wmMiss=null}
+  sMove();render();return}
+ if(d.tdone!==undefined){
+  S.wmPhase="forms";S.wi=0;S.form="sg";S.touched=false;
   sMove();render();return}
  /* v234: a wrong group costs nothing and says so where the finger landed \u2014
     the bin shakes, the thing stays at the top, and the child tries the other */
@@ -11539,6 +12203,7 @@ document.body.addEventListener("click",function(e){
      two full families close it */
   if(S.msI>MASSQ.length+1){finishAct();return}
   sMove();render();return}
+ if(d.fwhere!==undefined){ S.fmWhere=1; S.mSide="front"; S.mTurned=false; sMove(); render(); return}
  if(d.mgo){ const set=(S.act==="wordmac")?LITTLE.map(function(x){return x.k}):FAMS.map(function(f){return f.k});
   const i=set.indexOf(d.mgo); if(i<0) return;
   /* the little word is the sound button too: going to it says it */
@@ -11548,7 +12213,7 @@ document.body.addEventListener("click",function(e){
   if(S.act==="wordmac"||S.act==="wordmac2"){ S.wmM=i; S.mStep=0; S.mPress=0; S.mEi=0; S.mEdone={};
    S.mEbad=null; S.mSee={}; S.mSeeShow=false; S.mSpot={}; S.mSpotBad=null; S.mEphase="see";
    S.mRound=1; S.dStep=0; S.pI=0; S.pSide="front"; S.pDone={};
-   S.lI=0; S.lPick=null; S.lMiss=null } else S.fmM=i;
+   S.lI=0; S.lPick=null; S.lMiss=null } else { S.fmM=i; S.fmWhere=0 }
   S.mSide="front"; S.mTurned=false; sMove(); render(); return}
  if(d.gt!==undefined){
   if(!S.gTP) S.gTP={};
