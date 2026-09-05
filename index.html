@@ -4617,6 +4617,46 @@ body{min-height:0}
 .tenrung span{font-size:12.5px;color:var(--muted)}
 .tenrung.hun{grid-column:1 / -1;background:var(--gold-bg);border-color:rgba(184,138,42,.35)}
 
+
+/* ================= v252: four sizing faults, all of them mine =================
+
+   1. Tolo, the matching question. The stage holding the door was min-height:96px
+      with the picture at 1.15x, which is far too small for the one screen whose
+      whole job is to make koy and ɗee tellable apart — two little ones against
+      two big ones. The size difference IS the lesson, so the stage is now tall
+      and the picture is drawn at 2.1x, which keeps the ratios (ngal 54, ngel and
+      koy 26, ɗee 50) and simply makes all of them big enough to compare.
+
+   2. .lset was min-height:64vh with justify-content:center, so the card was a
+      tall centred block: on the four-card screen the way on was flung to the
+      bottom with a screenful of nothing above it, and on the question screen the
+      arrival of the way on re-centred everything and shrank the door the child
+      was looking at. The card hugs its content now and a fixed gap sits under
+      the options, so the way on appears in that gap without a single thing above
+      it moving.
+
+   3. Pita. The picture sat at the top of a card with a third of it empty below.
+      Picture and answers both come down, and the picture is bigger — it is the
+      question, and it was the smallest thing on the screen.
+
+   4. Dalaba. The three -al words on the ending screen were thin rows while the
+      phrase cards on the very next screen were big soft blocks. Same activity,
+      two sizes, no reason. They match now. */
+
+.lset{min-height:0;justify-content:flex-start}
+.lset .lsstage{min-height:300px;display:flex;flex-direction:column;
+ align-items:center;justify-content:center;padding:20px 10px}
+.lset .lsstage .lsobjs{min-height:210px}
+.lset .lsgap{height:34px;flex:0 0 auto}
+.lset > .wallbtn.cardway{flex:0 0 auto!important;min-height:56px;margin:0!important}
+
+.wmcard .wmpic{padding:52px 0 10px!important;font-size:132px!important}
+.wmcard .hfrow{margin-top:64px!important}
+
+.seerow{padding:26px 14px!important}
+.seerow b{font-size:31px!important}
+.seelist{gap:13px}
+
 </style>
 </head>
 <body>
@@ -4915,7 +4955,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v251 · 5 September 2026";
+const BUILD="v252 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -6577,13 +6617,14 @@ function lsCards(){
    :"Which little word goes with this picture?");
  return `<div class="lset">
    <p class="estep">${i+1} of ${LSQ.length}</p>
-   <div class="lsstage" style="${mvars(L.k)}">${lsPic(L.k,w0.g,1.15)}
+   <div class="lsstage" style="${mvars(L.k)}">${lsPic(L.k,w0.g,2.1)}
      ${got?`<p class="lsans"><b class="ff">${esc(w0[L.f])}</b>
        <b class="ff mk">${esc(L.k)}</b></p>`:""}</div>
    <div class="lsopts">${LITTLE.map(function(x){
      return `<button class="lsopt${got&&x.k===L.k?" yes":""}${S.lsMiss===x.k?" no":""}"
        style="${mvars(x.k)}" data-lspick="${esc(x.k)}">
        <b class="ff">${esc(x.k)}</b><small>${esc(x.l)}</small></button>`}).join("")}</div>
+   <div class="lsgap"></div>
    ${S.lsMiss?`<p class="ehint"><b class="ff">${esc(S.lsMiss)}</b> is
      ${esc((LITTLE.filter(function(x){return x.k===S.lsMiss})[0]||{}).l||"")} \u2014 look again</p>`:""}
    ${got?`<button class="wallbtn good" data-lsnext>next \u203a</button>`:""}
