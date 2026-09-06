@@ -4785,6 +4785,22 @@ body{min-height:0}
    were left with their last card unreachable under the step strip. main scrolls
    again, everywhere, with room at the foot for the bar to sit over. */
 main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
+
+/* v260: the arrival card. Quiet, centred, one way out. */
+.introarea{padding:20px 12px}
+.introcard{align-items:center;text-align:center;gap:0;padding:8px 10px 6px;
+ justify-content:center;min-height:0}
+.intolab{margin:0 0 22px;font-size:12px;font-weight:700;letter-spacing:.09em;
+ text-transform:uppercase;color:var(--gold-deep)}
+.intoyou{margin:0;font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;
+ color:var(--muted)}
+.intoplace{margin:4px 0 14px;font-size:clamp(30px,8.6vw,46px);line-height:1.1;
+ color:var(--unit)}
+.intowhat{margin:0 0 16px;font-size:16px;color:var(--ink)}
+.intowhat b{font-family:'FulSerif',serif;font-size:19px}
+.intosay{margin:0 8px 14px;font-size:15.5px;line-height:1.55;color:var(--ink)}
+.intowhy{margin:0 10px 26px;font-size:13px;line-height:1.6;color:var(--muted)}
+.introcard .wallbtn{width:100%;max-width:340px}
 </style>
 </head>
 <body>
@@ -5083,7 +5099,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v259 · 5 September 2026";
+const BUILD="v260 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -8168,6 +8184,36 @@ const NEIGH={
    way on says "try again". Nothing is lost, nothing is scored, no streak
    breaks. The only thing that changes is that the child sees the answer before
    being asked for it a third time, which is what a teacher would do. */
+
+/* ================= v260: nobody walks into a room unannounced =================
+   Every stop opened straight onto its first question. A child finished counting
+   at one town and the next screen was a long vowel, with nothing in between to
+   say what had changed or why. The activity's own description already exists —
+   it is the line under the town name and the first paragraph of the grown-ups
+   drawer — and it was being shown to the adult and withheld from the child.
+
+   So each stop now opens on one card: where you are, what you are about to
+   learn, and one way in. It is deliberately short. It is not a lesson and it
+   must not become one; it is the sentence a teacher says while the class sits
+   down. It appears once per stop per session — a child who leaves and comes
+   back mid-stop does not get told twice. */
+function introCard(){
+ const a=ACTS[S.act], u=JOURNEY[stopOf(S.act)];
+ const done=(S.done&&S.done.size)||0;
+ const hello=done===0?"Let\u2019s begin."
+   :done<6?"You have made a good start."
+   :done<20?"You are doing well.":"You have come a long way.";
+ return `<div class="doarea clean introarea"><div class="meet introcard">
+   <p class="intolab">${esc(hello)}</p>
+   <p class="intoyou">You have reached</p>
+   <h2 class="intoplace">${esc(a.place||a.t)}</h2>
+   <p class="intowhat"><b>${esc(a.t)}</b>${a.n?` \u00b7 ${esc(a.n)}`:""}</p>
+   <p class="intosay">${esc(a.say||"")}</p>
+   <p class="intowhy">${a.ad&&a.ad[1]?esc(String(a.ad[1]).split(". ")[0])+".":esc(u.why)}</p>
+   <button class="wallbtn good" data-introgo>start \u203a</button>
+  </div></div>`;
+}
+
 function rtKey(a,k){ return a+"|"+k }
 function rtMiss(a,k,teach){
  S.rtN=S.rtN||{};
@@ -9036,7 +9082,29 @@ const JALOO_ROAD=["Maamu","Telimile","Pita","Tolo","Dalaba","Ditinn","Mombeya",
    visit the card only listens and answers itself, and once the seven letter
    stops are behind them the same card starts asking for the reply in writing.
    The same stop, met twice, doing a different job each time. */
-JOURNEY[0].ids=["greet","hf0","hf1","hf2","hf3","hf4","hf5","hf6","gpens","sylmac","hand","jee","pairs","gemin"];
+/* ---- v260: the order of the letters Fouta ----
+   It was: letters, sort them, build 280 syllables, count to nine, THEN long
+   vowels, THEN doubled letters. Two faults in one line.
+
+   The syllable machine built two hundred and eighty syllables in which no vowel
+   was ever long, and only afterwards did a child meet the fact that a vowel can
+   be held. In Fulfulde length is phonemic and it is spelled by doubling, so
+   that is not a refinement taught later, it is half the vowel system withheld
+   until after the machine has drilled its absence. pairs now comes first and
+   the machine — which has always had a long row, unused at that point in the
+   road — builds both.
+
+   And counting sat in the middle of the phonics, between the machine and the
+   vowel work, breaking a chain mid-link. That is the join you felt at Kanel:
+   numbers do not lead into vowel length because they were never meant to be
+   next to it. They close the Fouta now. Everything before them is about what a
+   letter is worth; counting is the first thing built out of that, and it is the
+   thing a child can carry to a grandparent the same evening.
+
+   Reading it now: meet the letters, sort them, learn that a vowel can be held,
+   build every syllable both ways, learn that a consonant can be doubled, then
+   count. */
+JOURNEY[0].ids=["greet","hf0","hf1","hf2","hf3","hf4","hf5","hf6","gpens","pairs","sylmac","gemin","hand","jee"];
 /* a greeting belongs to nobody's town */
 if(ACTS.greet) ACTS.greet.home=true;
 /* one town per group of nouns, then the machine, then the rest of the Fouta:
@@ -11629,7 +11697,7 @@ function render(){
    ${headTools()}`;
   /* v256: the re-teach card stands in front of whatever the activity would
      have drawn, inside the same stop, with the same header and progress. */
-  let body=S.rt?rtCard():VIEWS[S.act]();
+  let body=S.intro2?introCard():(S.rt?rtCard():VIEWS[S.act]());
   if(OPEN_ENDED.indexOf(S.act)>=0 && body.indexOf('data-finish')<0
    && !(S.act==="parade"&&S.lopen!==null)) body+=finishBar();
   /* the reference is reachable from inside every activity, and opens over it */
@@ -11817,7 +11885,7 @@ function render(){
    reach the seventh. Every activity writes its own place as it goes now, and
    picks it up again on the way back in. A finished stop starts from the top;
    a half-done one resumes exactly where it was left. */
-const PKEYS=["rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
+const PKEYS=["intro2","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "sqPhase","sqM","sqStep","sqPress","sqChunk","li","lopen","gsel","gput","gRound",
  "gmiss","gfed","gno","gheard","gPhase","gT","gTP","brP","brAsk","brRight","eCel",
  "diI","diPhase","diFound","diMiss",
@@ -11843,7 +11911,7 @@ const PKEYS=["rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","
    screen changed; v155 changes only the drawer, so a v153 place still resumes
    onto exactly the screen it was written from. Bump it the next time an
    activity's stages move. */
-const PLACE_BUILD=251;   /* v243 inserts a screen in the greeting and one
+const PLACE_BUILD=260;   /* v243 inserts a screen in the greeting and one
                             between the asking and the machine, so a place
                             written by an older build would resume past them */
 function placeKeep(){
@@ -12178,6 +12246,7 @@ function openAct(id,force){ S.world=stopOf(id); S.startAt=null;
      activity instead of back through its cards, and why start-over was greyed:
      there was no earlier screen recorded to go back to. */
   rt:null,rtN:{},
+  intro2:!S.done.has(id),
   hnI:0,hnSaid:null,hnPhase:"meet",hqI:0,hqPick:null,
   jmI:0,jmSaid:null,jePhase:"meet",jeI:0,jePick:null,
   tnI:0,tnPhase:"meet",tqI:0,tqPick:null,
@@ -12637,7 +12706,8 @@ document.body.addEventListener("click",function(e){
   if((S.vlI||0)>=VPAIRS.length-1){ S.vlDone=true }
   else { S.vlI=(S.vlI||0)+1 }
   sMove(); render(); return}
- if(d.cnt!==undefined){ /* v259: touch each one as you count it */
+ if(d.introgo!==undefined){ S.intro2=false; sMove(); render(); return}
+   if(d.cnt!==undefined){ /* v259: touch each one as you count it */
     t.classList.toggle("counted"); sTap(); return}
    if(d.rtback!==undefined){ S.rt=null; sMove(); render(); return}
    /* v258: the look-again letter swells while its clip runs, so the sound is
