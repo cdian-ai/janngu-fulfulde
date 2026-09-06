@@ -4682,6 +4682,10 @@ body{min-height:0}
 .meet.endrill .ecmk{font-size:21px}
 .meet.endrill .ecen{margin-top:7px}
 
+
+/* v254: when one option is long they all take the full row, so no single
+   option can be identified by the shape of its cell */
+.spotgrid.allwide{grid-template-columns:1fr}
 </style>
 </head>
 <body>
@@ -4980,7 +4984,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v253 · 5 September 2026";
+const BUILD="v254 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -6914,6 +6918,7 @@ function wmTeach(){
    chips2.push({id:"d"+r[0],g:r[1].g,w:r[1][of],ok:false,end:endTail(r[1][of],sfx)}) });
   chips2.sort(function(a,b){ return (a.w.length*7+a.w.charCodeAt(0)+rnd*3)%5
     -(b.w.length*7+b.w.charCodeAt(0)+rnd*3)%5 });
+  const anyWide=chips2.some(function(c){ return c.w.length>9 });
   const found=chips2.filter(function(c){ return c.ok&&S.mSpot[c.id] }).length;
   const allFound=found>=targ.length;
   ACTS[S.act].say = allFound
@@ -6923,11 +6928,16 @@ function wmTeach(){
   return wrap(`<div class="meet endspot" style="${mvars(L.k)}">
     <p class="estep"><b class="ff">-${esc(sfx)}</b> \u00b7 ${
       rnd===1?"words you have met":"words you have not met"}</p>
-    <div class="spotgrid">${chips2.map(function(c){
+    <div class="spotgrid${anyWide?" allwide":""}">${chips2.map(function(c){
       const got=!!S.mSpot[c.id], bad=(S.mSpotBad===c.id);
       /* v210: a twelve-letter word broken across two lines in a half-width
          cell is unreadable. It takes the full row instead. */
-      return `<button class="spotc${c.w.length>9?" wide":""}${got?(c.ok?" yes":" no"):""}${bad?" shake":""}"
+      /* v254: the wide cell was a tell. A word longer than nine letters took
+         the full row, so ƴuruƴukkuwal was shaped unlike every other option on
+         every card it appeared on — a child could learn "the wide one" without
+         reading it. One long word now widens ALL of them, so the shape of the
+         grid says nothing about which word is which. */
+      return `<button class="spotc${anyWide?" wide":""}${got?(c.ok?" yes":" no"):""}${bad?" shake":""}"
         data-espick="${esc(c.id)}"${c.ok?' data-eok="1"':` data-eend="${esc(c.end||"")}"`}>
         ${""/* v204: the picture and the little dial are both gone. A child
              asked to find an ending should be reading the word, and a picture
