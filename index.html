@@ -4907,6 +4907,36 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 .warmcard{padding-top:4px}
 .warmlab{margin:0 0 18px;font-size:11.5px;font-weight:700;letter-spacing:.08em;
  text-transform:uppercase;color:var(--muted);text-align:center}
+
+/* v267: the visiting stop */
+.visit{align-items:center;text-align:center;gap:0;justify-content:center;padding:6px 8px}
+.vsg{font-size:clamp(54px,15vw,82px);line-height:1;margin-bottom:12px}
+.vsword{font-size:clamp(30px,8.4vw,46px);color:var(--ink)}
+.vsend{font-style:normal;color:var(--coral);border-bottom:4px solid var(--coral)}
+.vsen{margin:4px 0 18px;font-size:13.5px;color:var(--muted)}
+.vsrow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.vsrule{font-size:14px;color:var(--muted);text-decoration:line-through;opacity:.75}
+.vsx{color:var(--coral);font-size:17px}
+.vstake{font-size:15px;color:var(--ink)}
+.vstake .mk{font-size:21px;color:var(--mk-deep)}
+.vsfrom{margin:16px 6px 0;font-size:13.5px;line-height:1.5;color:var(--ink);
+ background:var(--gold-bg);border-radius:14px;padding:10px 13px}
+.visit .hearbtn{margin-top:16px}
+
+.sortv .vslab{margin:0 0 14px;font-size:11.5px;font-weight:700;letter-spacing:.08em;
+ text-transform:uppercase;color:var(--muted)}
+.vschip{font-size:clamp(28px,7.8vw,40px);color:var(--unit);padding:10px 22px;
+ border-radius:18px;background:var(--gold-bg);display:inline-block;margin-bottom:20px}
+.vschip.shake{animation:shake .32s}
+.vspens{display:flex;gap:10px;width:100%}
+.vspen{flex:1 1 0;min-height:150px;border-radius:20px;border:2px dashed var(--line);
+ background:#fff;display:flex;flex-direction:column;align-items:center;gap:8px;
+ padding:12px 8px;cursor:pointer;font-family:inherit}
+.vspen.visitpen{border-color:rgba(184,138,42,.45);background:var(--gold-bg)}
+.vspt{font-size:12.5px;font-weight:700;color:var(--muted);line-height:1.35}
+.vsps{display:flex;flex-direction:column;gap:5px}
+.vsps i{font-style:normal;font-size:15px;color:var(--ink)}
+.vsps i.wrongput{color:var(--coral)}
 </style>
 </head>
 <body>
@@ -5205,7 +5235,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v266 · 5 September 2026";
+const BUILD="v267 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -5410,6 +5440,10 @@ const ACTS={
  swap:{t:"Letter swap",em:"🔁",u:1,n:"7 swaps",say:"Which letter comes back? Tap it.",
   ad:["Mutations","f→p, s→c, r→d, y→g, and the three two-letter ones dropping their front. Seven swaps in the whole language — a closed list, learnable in a week.","v245: the drilled pairs were rebuilt from words Peeral actually prints for Guinea. fowru/pobbi, sehre/cehe, rawaandu/dawaaɗi, njambala/jambali and ngabbu/gabi all went — the first three are other-dialect or marked rare, the last two are not in the book at all, and the Guinea words that replace them (kemmba/kenɗi, gabbii/gabbi) show no mutation, so they could not carry the drill. The pairs now are fayannde/payanɗe (a clay pot), saare/ca'e (a town), debbo/rewɓe (a woman), mbabba/babbi (a donkey), njogaari/jogaaji (a tool) and ngaari/ga'i (a bull). Every one is mined from the dictionary's own singular-plural pairs. ngaari is deliberate: the child already met it learning the two-letter ng."]},
 
+ visiting:{t:"Words that came visiting",em:"🧳",u:3,n:"7 borrowed words",
+  say:"Some words came from somewhere else, and they keep their own little word.",
+  ad:["Borrowed words take oo",
+   "The ending tells you the little word — for native nouns. Of the roughly 460 borrowed words Peeral gives a class to, 425 take oo whatever they end in: aada from Arabic, lekkol from French, bareeru from Susu. It waits until Adamawa because an exception taught while the rule is still settling teaches a child that the rule does not hold. And it is a sort rather than a card, because a category you separate with your own hands is one you have found rather than been told."]},
  hand:{t:"One hand",em:"🖐️",u:0,n:"1 to 5 · 5 asked",say:"Press the number. Say it. Hold up that many fingers.",
   ad:["Counting to five","Five words, and every one of them is two syllables built from letters just met — go-’o, ɗi-ɗi, ta-ti, na-yi, jo-wi. It sits in the letters Fouta because it is reading practice that happens to be counting, and because counting to five is the second thing after a greeting that a child can carry to a grandparent the same evening."]},
  jee:{t:"The other hand",em:"🖐️🖐️",u:0,n:"6 to 9 · shown, then asked",say:"Five, and how many more? Tap the word that finishes it.",
@@ -8209,6 +8243,34 @@ function findOrder(g,gi){
    dictionary marks coarse, and — the trap here — words that mean the same as the
    answer. yitere is one letter from yiitere and is the same word spelled the other
    way, so a child choosing it would have been marked wrong for being right. */
+/* ---- v267: one real neighbour is enough ----
+   NEIGH holds the sixteen nouns with TWO safe neighbours in the dictionary.
+   Thirteen more have exactly one, and one is enough: answer, its neighbour, and
+   a length-matched group-mate. Two of the three options are then one letter
+   apart, so the picture cannot be used to eliminate and the word has to be
+   read. That takes the cards a child must read from fifteen to twenty-eight of
+   fifty-two, with nothing invented.
+
+   alluwal is deliberately NOT in this list although it has a neighbour. Its
+   neighbour is alluwel, which this course teaches as alluwal's own little form.
+   Putting them on one card as answer and wrong answer is either the sharpest
+   moment in unit 2 or a straight muddle, and that is a decision to take on
+   purpose rather than one to inherit from a mining script. */
+const NEIGH1={
+"eda": "edda",
+"kaakol": "kaakal",
+"laɓi": "baɓi",
+"mbabba": "mbarba",
+"naakoore": "haakoore",
+"ŋannawol": "ŋannagol",
+"sehre": "seere",
+"waado": "waaño",
+"yeendu": "weendu",
+"nagge": "jagge",
+"danki": "banki",
+"booliwal": "kooliwal",
+"mbeewa": "mbeesa"
+};
 const NEIGH={
 "paɗal": [
 "puɗal",
@@ -8470,6 +8532,98 @@ function warmCard(){
   </div>`,i,list.length,true);
 }
 
+
+/* ================= v267: words that came visiting =================
+   The course teaches that a noun's ending tells you its little word, and that
+   rule is sound for native nouns and fails almost completely for borrowed ones:
+   of the roughly 460 loanwords Peeral gives a class to, 425 take oo whatever
+   they end in. lekkol ends -ol and does not take ngol.
+
+   Two things had to be true before this could be taught. The seven classes have
+   to be secure, which is why it sits in Adamawa and not in Fuuta Jaloo. And
+   there has to be a PILE — the fifty-two nouns on the road contained exactly
+   three borrowed words, and a sort with three cards against forty-nine teaches
+   only that the category is rare, which is false. So seven borrowed words join
+   the course as ordinary vocabulary, chosen for a child and chosen to spread
+   across the languages Pular has borrowed from: French, English, Arabic and
+   Songhay. Every one is a real headword taking class o in the dictionary.
+
+   lekkol comes back here. It was taken off the road in v246 precisely because
+   it broke the -ol rhyme; in this stop breaking the rhyme is the entire point,
+   and the word that was a bug becomes the exhibit.
+
+   The lesson is a sort, not a card. Sorting is the right interaction for a
+   rule-governed category, and a child who separates the pile with their own
+   hands and finds that one side all came from somewhere else has learnt
+   something a sentence could only have told them. */
+const LOANW=[
+ {w:"lekkol",  g:"\ud83c\udfeb", en:"school",     src:"French",  from:"école",
+  ends:"-ol", rhyme:"ngol"},
+ {w:"saaku",   g:"\ud83d\uddd1\ufe0f", en:"a sack", src:"French", from:"sac",
+  ends:"-u",  rhyme:"nguu"},
+ {w:"ataaya",  g:"\ud83e\uded6", en:"tea",        src:"Arabic",  from:"at-tāy",
+  ends:"-a",  rhyme:"mbaa"},
+ {w:"balon",   g:"\u26bd", en:"a ball",           src:"French",  from:"ballon", ends:"", rhyme:""},
+ {w:"welo",    g:"\ud83d\udeb2", en:"a bicycle",  src:"French",  from:"vélo",   ends:"", rhyme:""},
+ {w:"maakiti", g:"\ud83d\uded2", en:"market",     src:"English", from:"market", ends:"", rhyme:""},
+ {w:"kufune",  g:"\ud83e\udde2", en:"a cap",      src:"Songhay", from:"kufune", ends:"", rhyme:""}
+];
+/* the three that contradict the rhyme most plainly do the teaching */
+const LOANTEACH=[0,1,2];
+/* four borrowed against four native, and the native four are words met at the
+   very first word stops so nothing here is new except the idea */
+const LOANSORT=[
+ {w:"lekkol", loan:true},  {w:"baafal", loan:false},
+ {w:"ataaya", loan:true},  {w:"paɗal",  loan:false},
+ {w:"saaku",  loan:true},  {w:"ɓoggol", loan:false},
+ {w:"maakiti",loan:true},  {w:"suudu",  loan:false}
+];
+function loanOf(w){ return LOANW.filter(function(x){return x.w===w})[0] }
+
+function visiting(){
+ if(S.vsPhase!=="sort"){
+  const m=S.vsM||0;
+  if(m>=LOANTEACH.length){ }
+  else {
+   const c=LOANW[LOANTEACH[m]], said=S.vsSaid;
+   return wrap(`<div class="meet visit">
+     <div class="vsg">${c.g}</div>
+     <div class="vsword ff">${esc(c.w.slice(0,c.w.length-(c.ends?c.ends.length-1:0)))}<i class="vsend">${esc(c.ends?c.ends.slice(1):"")}</i></div>
+     <p class="vsen">${esc(c.en)}</p>
+     <div class="vsrow">
+      <span class="vsrule">the rhyme says <b class="ff">${esc(c.rhyme)}</b></span>
+      <span class="vsx">\u2717</span>
+      <span class="vstake">it takes <b class="ff mk">oo</b></span>
+     </div>
+     <p class="vsfrom">it came from <b>${esc(c.src)}</b> \u2014 ${esc(c.from)}</p>
+     <button class="hearbtn" data-clip="words/loan${LOANTEACH[m]}.mp3" data-vssaid
+       ><span class="bars"><i></i><i></i><i></i></span>listen</button>
+    </div>`,m,LOANTEACH.length+LOANSORT.length)
+   +(said?`<button class="wallbtn" data-vsnext>next \u203a</button>`
+     :face("\ud83e\uddf3","A word that came from somewhere else keeps its own little word. Press it."));
+  }
+ }
+ const put=S.vsPut||{}, doneN=Object.keys(put).length;
+ if(doneN>=LOANSORT.length) return done("\ud83e\uddf3","You can tell them apart");
+ const left=LOANSORT.filter(function(x){ return put[x.w]===undefined });
+ const cur=left[0];
+ return wrap(`<div class="meet visit sortv">
+   <p class="vslab">which pile does it go in?</p>
+   <div class="vschip ff${S.vsBad?" shake":""}">${esc(cur.w)}</div>
+   <div class="vspens">
+    <button class="vspen native" data-vsput="0">
+     <span class="vspt">the ending tells you</span>
+     <span class="vsps">${LOANSORT.filter(function(x){return put[x.w]===0}).map(function(x){
+       return `<i class="ff${x.loan?" wrongput":""}">${esc(x.w)}</i>`}).join("")}</span></button>
+    <button class="vspen visitpen" data-vsput="1">
+     <span class="vspt">it came visiting</span>
+     <span class="vsps">${LOANSORT.filter(function(x){return put[x.w]===1}).map(function(x){
+       return `<i class="ff${!x.loan?" wrongput":""}">${esc(x.w)}</i>`}).join("")}</span></button>
+   </div>
+   <p class="meetsay">${doneN} of ${LOANSORT.length} sorted</p>
+  </div>`,LOANTEACH.length+doneN,LOANTEACH.length+LOANSORT.length);
+}
+
 function introCard(){
  const a=ACTS[S.act], u=JOURNEY[stopOf(S.act)];
  const done=(S.done&&S.done.size)||0;
@@ -8535,9 +8689,12 @@ function wmFind(){
  const ranked=grp.filter(function(i){return i!==idx}).map(function(i){
    return {i:i, d:Math.abs(W2[i].sg.length-tlen), h:(i*13+S.wmI*7)%97};
   }).sort(function(a,b){ return a.d-b.d || a.h-b.h });
- const near=NEIGH[w.sg];
+ const near=NEIGH[w.sg], near1=NEIGH1[w.sg];
  const trio=near
    ? [{k:String(idx),t:w.sg},{k:"x0",t:near[0]},{k:"x1",t:near[1]}]
+   : near1
+   ? [{k:String(idx),t:w.sg},{k:"x0",t:near1},
+      {k:String(ranked[0].i),t:W2[ranked[0].i].sg}]
    : [{k:String(idx),t:w.sg}].concat(ranked.slice(0,2).map(function(x){
        return {k:String(x.i),t:W2[x.i].sg} }));
  const rot=optPos(grp,S.wmG,S.wmI)%trio.length;
@@ -9315,7 +9472,7 @@ const JOURNEY=[
      and I cannot see which num/nNN.mp3 clips you actually have. */
   ids:["tens","nummac","numq","days","seasons"]},
  {stop:"Splitting words",  lm:"\ud83c\udfc1", why:"Break any word \u2014 even your own name.",
-  ids:["splitter","shapes","names"]},
+  ids:["visiting","splitter","shapes","names"]},
  {stop:"Sentences",       lm:"\u2712\ufe0f", why:"Words together, with a big letter and a full stop.",
   ids:["sentbuild","sentmark","sentread"]}
 ];
@@ -11812,7 +11969,7 @@ function tens(){
 }
 
 const OPEN_ENDED=["parade","sylmac","nummac","days","sentread"];
-const VIEWS={hand,jee,tens,parade,hearfind,greet,kinfolk,onemany,verbs,adjs,gpens,sylmac,pairs,gemin,littleset,jobset,wordmac,wordmac2,wordmac3,makeword,masswords,mpens,swap,nummac,numq,days,seasons,splitter,shapes,names,sentbuild,sentmark,sentread};
+const VIEWS={visiting,hand,jee,tens,parade,hearfind,greet,kinfolk,onemany,verbs,adjs,gpens,sylmac,pairs,gemin,littleset,jobset,wordmac,wordmac2,wordmac3,makeword,masswords,mpens,swap,nummac,numq,days,seasons,splitter,shapes,names,sentbuild,sentmark,sentread};
 
 /* one stop per letter group — they share the activity, each carrying its own
    group, so a child can finish the vowels and stop without losing anything */
@@ -12251,7 +12408,7 @@ function render(){
    reach the seventh. Every activity writes its own place as it goes now, and
    picks it up again on the way back in. A finished stop starts from the top;
    a half-done one resumes exactly where it was left. */
-const PKEYS=["fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
+const PKEYS=["vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "sqPhase","sqM","sqStep","sqPress","sqChunk","li","lopen","gsel","gput","gRound",
  "gmiss","gfed","gno","gheard","gPhase","gT","gTP","brP","brAsk","brRight","eCel",
  "diI","diPhase","diFound","diMiss",
@@ -12277,7 +12434,7 @@ const PKEYS=["fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP",
    screen changed; v155 changes only the drawer, so a v153 place still resumes
    onto exactly the screen it was written from. Bump it the next time an
    activity's stages move. */
-const PLACE_BUILD=262;   /* v243 inserts a screen in the greeting and one
+const PLACE_BUILD=267;   /* v243 inserts a screen in the greeting and one
                             between the asking and the machine, so a place
                             written by an older build would resume past them */
 function placeKeep(){
@@ -12612,6 +12769,7 @@ function openAct(id,force){ S.world=stopOf(id); S.startAt=null;
      activity instead of back through its cards, and why start-over was greyed:
      there was no earlier screen recorded to go back to. */
   rt:null,rtN:{},
+  vsM:0,vsSaid:null,vsPhase:"meet",vsPut:{},vsBad:null,
   intro2:!S.done.has(id),
   warmList:(!S.done.has(id)&&warmOK(id))?warmDraw(id):null, warmI:0, warmPick:null,
   swM:0,swSaid:null,swPhase:"meet",
@@ -12847,7 +13005,7 @@ document.body.addEventListener("click",function(e){
     word and never counted as pressed — leaving a stop with no door out of it */
  if(d.clip!==undefined&&d.mpress===undefined&&d.mstep===undefined
     &&d.lsmeet===undefined&&d.jobpick===undefined&&d.esee===undefined&&d.ehear===undefined
-    &&d.gsaid===undefined&&d.hsaid===undefined&&d.jmsaid===undefined&&d.swsaid===undefined){play(t,d.clip);return}
+    &&d.gsaid===undefined&&d.hsaid===undefined&&d.jmsaid===undefined&&d.swsaid===undefined&&d.vssaid===undefined){play(t,d.clip);return}
  if(d.act){openAct(d.act);return}
  if(d.goto){openAct(d.goto,true);return}
  if(d.force){openAct(d.force,true);return}
@@ -13075,6 +13233,16 @@ document.body.addEventListener("click",function(e){
   else { S.vlI=(S.vlI||0)+1 }
   sMove(); render(); return}
  if(d.introgo!==undefined){ S.intro2=false; sMove(); render(); return}
+   if(d.vssaid!==undefined){ if(d.clip) play(t,d.clip); S.vsSaid=true; render(); return}
+   if(d.vsnext!==undefined){ S.vsM=(S.vsM||0)+1; S.vsSaid=null;
+     if(S.vsM>=LOANTEACH.length) S.vsPhase="sort"; sMove(); render(); return}
+   if(d.vsput!==undefined){
+     const put=S.vsPut||{}, left=LOANSORT.filter(function(x){ return put[x.w]===undefined });
+     const cur=left[0]; if(!cur) return;
+     const wantPen=cur.loan?1:0;
+     if(+d.vsput===wantPen){ put[cur.w]=+d.vsput; S.vsPut=put; S.vsBad=null; sGood() }
+     else { S.vsBad=1; sOops(); setTimeout(function(){ S.vsBad=null; render() },420) }
+     render(); return}
    if(d.warm){ const list=S.warmList||[], it=list[S.warmI||0];
     if(!it||String(S.warmPick)===String(rvAns(it))) return;
     S.warmPick=d.warm;
