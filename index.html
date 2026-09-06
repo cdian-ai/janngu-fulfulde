@@ -3858,7 +3858,10 @@ body.sheetopen .stepnav{display:none}
 .spotc{min-width:0;max-width:100%;overflow:hidden}
 .hgrid .tk,.tgrid .tk{max-width:100%}
 .lrow .lopt,.lrow .lp{min-width:0;max-width:100%}
-.doarea,.doarea.clean{overflow-x:hidden}
+.doarea,.doarea.clean{overflow-x:hidden;overflow-y:visible}
+/* v264: .doarea clipped its own overflow, so a card taller than the screen —
+   the ladder of tens is the worst of them — lost its way on under the edge with
+   nothing to scroll. The card grows now and main carries it. */
 .spotc b i{font-style:normal;color:var(--end-ink);background:transparent;
   border-bottom:3px solid var(--end-line);border-radius:0;padding:0 1px 1px;font-weight:700}
 .spotc.yes{border-color:var(--leaf-deep);background:#F3F9F1}
@@ -4857,6 +4860,31 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
    with two digits is wider than any letter in the alphabet */
 .numtile{font-size:40px!important;letter-spacing:0}
 .meet .cntrow{margin-top:14px}
+
+/* v264 */
+.fieldword{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:14px;
+ animation:wordIn .3s cubic-bezier(.2,1.2,.4,1) both}
+.fieldword b.ff{font-size:clamp(28px,7.6vw,42px);color:var(--unit)}
+.cntrow.small{gap:8px;margin:0}
+.cntrow.small .coin{width:clamp(16px,4.4vw,24px);height:clamp(16px,4.4vw,24px)}
+.cntrow.small .coin::after{inset:4px}
+
+.jeesplit{gap:14px}
+.numword.big{font-size:clamp(34px,9.4vw,54px)}
+.jeeunder{display:flex;justify-content:center;gap:clamp(14px,5vw,34px);width:100%;flex-wrap:wrap}
+.jeehalf{display:flex;flex-direction:column;align-items:center;gap:6px}
+.jeelab{font-size:12px;font-weight:700;letter-spacing:.05em}
+.jeelab.green{color:#3C6B4C}
+.jeelab.gold{color:#8A5A12}
+
+.tenlad.compact{gap:6px}
+.tenlad.compact .tenrung{padding:7px 5px}
+.tenlad.compact .tenrung b{font-size:17px}
+.tenlad.compact .tenrung span{font-size:11.5px}
+
+.machinesay{margin:0 6px 12px;font-size:14px;line-height:1.5;color:var(--gold-deep);
+ background:var(--gold-bg);border-radius:14px;padding:10px 13px;text-align:center}
+.machinesay b{font-size:17px}
 </style>
 </head>
 <body>
@@ -5155,7 +5183,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v263 · 5 September 2026";
+const BUILD="v264 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -8661,7 +8689,8 @@ function nummac(){
     <div class="numword">${esc(numName(S.tens,S.ones))}</div>
     <button class="hearbtn" data-clip="num/n${pad(n,3)}.mp3"><span class="bars"><i></i><i></i><i></i></span>listen</button>
    </div>
-   <div class="mat">
+   ${(S.tens===0&&S.ones===0)?`<p class="machinesay">\ud83d\udc47 press the <b>+</b> under a column to put something in it</p>`:""}
+  <div class="mat">
     <div class="col tens${hundred?" full":""}">
      <span class="cname"><span class="sw" style="background:#6E9C7C"></span>${hundred?`<b>Teemedere</b>hundred`:`<b>Cappanɗe</b>tens`}</span>
      <div class="bay${hundred?" sq":""}">${hundred?square:(rods||'<span class="ghost">empty</span>')}</div>
@@ -11522,7 +11551,8 @@ function hand(){
  if(!doneP||!S.hnSaid) return wrap(`<div class="meet">
    <p class="grownup">grown-up: it says <b class="ff">${esc(c.w)}</b></p>
    ${numField(c.n,c.n,p)}
-   ${p>0?`<div class="cntrow">${ndots(c.n)}</div>`:""}
+   ${p>0?`<div class="fieldword"><b class="ff">${esc(c.w)}</b>
+     <span class="cntrow small">${ndots(c.n)}</span></div>`:""}
    ${doneP?`<div class="twoway">
       <button class="tw again" data-npress aria-label="hear it again">
        <span class="bars"><i></i><i></i><i></i></span></button>
@@ -11548,6 +11578,17 @@ function jee(){
     and only then does it ask. Teaching before testing, as everywhere else. */
  if(S.jePhase!=="q"&&(S.jmI||0)<JEE.length){
   const m=S.jmI||0;
+  /* ---- v264: this card was teaching two things at once ----
+     The number was being met AND taken apart in the same breath: a numeral, two
+     columns of counters with their own names and colours, a word in two tints,
+     and a line of instruction. Four things saying "six", none of them finished
+     before the next arrived.
+     It is one idea per screen now. First the number is met the way every other
+     number and letter in this course is met — it lands, you press it, you hear
+     it, it moves. Only then is it taken apart, and the taking apart is done in
+     the word itself: jee in one colour, the tail in another, with the counters
+     beneath the half they belong to. The two columns are gone; they were a
+     second diagram of a thing the word already shows. */
   const c=JEE[m], small=c.n-5, said=S.jmSaid;
   const jp=S.jmP||0, jdone=jp>=PRESSES;
   if(!jdone) { sayNow(jp===0?`This is ${c.n}. Press it to hear its name.`:`Again — press ${c.n}.`);
@@ -11556,20 +11597,18 @@ function jee(){
     ${numField(100+c.n,c.n,jp)}
     <p class="meetsay">${jp===0?"press the number":`${PRESSES-jp} more`}</p>
    </div>`,m,JEE.length*2,true) }
-  return wrap(`<div class="nhead">
-    <div class="numeral">${c.n}</div>
-    <div class="mat" style="gap:8px">
-     <div class="col"><span class="cname"><span class="sw" style="background:#6E9C7C"></span><b>jowi</b>five</span>
-      <div class="cntrow">${ndots(5)}</div></div>
-     <div class="col"><span class="cname"><span class="sw" style="background:#F0B54A"></span><b>${esc(HAND[small-1].w)}</b>${small} more</span>
-      <div class="cntrow">${ndots(small,"gold")}</div></div>
+  return wrap(`<div class="nhead jeesplit">
+    <div class="numword big"><span class="jeepre">jee</span><span class="jeetail ok">${esc(c.tail)}</span></div>
+    <div class="jeeunder">
+     <div class="jeehalf"><span class="cntrow small">${ndots(5)}</span>
+      <span class="jeelab green">jowi \u2014 five</span></div>
+     <div class="jeehalf"><span class="cntrow small">${ndots(small,"gold")}</span>
+      <span class="jeelab gold">${esc(HAND[small-1].w)} \u2014 ${small} more</span></div>
     </div>
-    <div class="numword"><span class="jeepre">jee</span><span class="jeetail ok">${esc(c.tail)}</span></div>
     <button class="hearbtn" data-clip="num/n${pad(c.n,3)}.mp3" data-jmsaid><span class="bars"><i></i><i></i><i></i></span>listen</button>
    </div>`,m,JEE.length*2)
-  +(said?face("🖐️",`<b class="ff">jee</b> is jowi — five. After it comes <b class="ff">${esc(c.tail)}</b>, the number you added.`)
-        +`<button class="wallbtn" data-jmnext>next ›</button>`
-   :face("👀","Five on one hand, and this many on the other. Press the word."));
+  +(said?`<button class="wallbtn" data-jmnext>next ›</button>`
+   :face("👀",`<b class="ff">jee</b> is five. What comes after it is the number you added.`));
  }
  const i=S.jeI||0;
  if(i>=JEE.length) return done("🖐️🖐️","The other hand");
@@ -11616,7 +11655,7 @@ function tens(){
  const i=S.tnI||0;
  if(i>=TENSTEP.length){
   return wrap(`<div class="nhead"><div class="numword">the whole ladder</div></div>
-   <div class="tenlad">${[1,2,3,4,5,6,7,8,9].map(function(k){
+   <div class="tenlad compact">${[1,2,3,4,5,6,7,8,9].map(function(k){
      return `<button class="tenrung" data-clip="num/n${pad(k*10,3)}.mp3"><b>${k*10}</b><span class="ff">${esc(TENSW[k])}</span></button>`}).join("")}
     <button class="tenrung hun" data-clip="num/n100.mp3"><b>100</b><span class="ff">teemedere</span></button></div>`,TENSTEP.length,N)
    +`<button class="wallbtn" data-tqgo>now check ›</button>`;
