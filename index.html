@@ -4889,8 +4889,8 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 /* v265: the arrival card announces itself and leaves */
 .introskip{width:auto!important;min-width:64px;align-self:center;opacity:.5;
  font-size:20px;padding:6px 22px}
-.introcard{animation:introFade 1.6s ease both}
-@keyframes introFade{0%{opacity:0}12%{opacity:1}82%{opacity:1}100%{opacity:.25}}
+.introcard{animation:introFade 4.2s ease both}
+@keyframes introFade{0%{opacity:0}6%{opacity:1}90%{opacity:1}100%{opacity:.3}}
 @media (prefers-reduced-motion:reduce){.introcard{animation:none}}
 
 .fwhint{font-size:12px;color:var(--muted);letter-spacing:.04em}
@@ -4942,6 +4942,39 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 .didi{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);width:100%}
 .didq{margin:0 0 10px;font-size:13px;color:var(--muted);text-align:center}
 .wcount b{color:var(--gold-deep)}
+
+/* v269 */
+.joinrow{display:flex;align-items:center;justify-content:center;gap:clamp(8px,3vw,18px);margin:6px 0 10px}
+.jpart{display:flex;flex-direction:column;align-items:center;font-family:'FulSerif',serif;
+ font-size:clamp(19px,5.2vw,27px);line-height:1.15}
+.jpart i{font-style:normal;font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--muted)}
+.jpart.ten{color:#3C6B4C}
+.jpart.one{color:#8A5A12}
+.jplus{font-family:'FulSerif',serif;font-size:22px;color:var(--muted)}
+.ladlab{margin:0 0 10px;font-size:12px;color:var(--muted);text-align:center}
+
+/* the dials ask to be pressed until one is */
+.mat .ctl.dial,.mat button.pm{animation:dialpulse 1.8s ease-in-out infinite}
+.mat.touched .ctl.dial,.mat.touched button.pm{animation:none}
+@keyframes dialpulse{0%,100%{box-shadow:0 0 0 0 rgba(184,138,42,0)}
+ 50%{box-shadow:0 0 0 6px rgba(184,138,42,.20)}}
+
+/* the seven days as a week */
+.weekrow{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;width:100%;margin-top:14px}
+.wkday{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 2px;
+ border:1.5px solid var(--line);border-radius:13px;background:#fff;cursor:pointer;font-family:inherit}
+.wkday b{font-family:'FulSerif',serif;font-size:13px;color:var(--unit);line-height:1.1}
+.wkday span{font-size:9.5px;color:var(--muted)}
+.wkday.been{border-color:rgba(110,156,124,.5)}
+.wkday.on{background:var(--unit);border-color:var(--unit)}
+.wkday.on b{color:#fff}
+.wkday.on span{color:rgba(255,255,255,.8)}
+.nmcard{position:relative}
+.nmtap{position:absolute;right:9px;bottom:8px;opacity:.5}
+
+/* the way on must not be hunted for */
+.controls .ctl[data-finish]{position:sticky;bottom:6px;z-index:3;
+ background:var(--gold-bg);border-color:rgba(184,138,42,.45);box-shadow:0 4px 14px rgba(27,46,107,.10)}
 </style>
 </head>
 <body>
@@ -5243,7 +5276,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v268 · 6 September 2026";
+const BUILD="v269 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -8985,6 +9018,9 @@ function nummac(){
     <button class="hearbtn" data-clip="num/n${pad(n,3)}.mp3"><span class="bars"><i></i><i></i><i></i></span>listen</button>
    </div>
    ${(S.tens===0&&S.ones===0)?`<p class="machinesay">\ud83d\udc47 press the <b>+</b> under a column to put something in it</p>`:""}
+  ${""/* v269: the dials now pulse until the child touches one, the same way the
+     first letter of a group pulses. An unlabelled control that does not move is
+     a control a six-year-old does not know is a control. */}
   <div class="mat">
     <div class="col tens${hundred?" full":""}">
      <span class="cname"><span class="sw" style="background:#6E9C7C"></span>${hundred?`<b>Teemedere</b>hundred`:`<b>Cappanɗe</b>tens`}</span>
@@ -9046,16 +9082,22 @@ function numq(){
    Which one a child's own family says is the question the grown-ups' drawer
    asks them to answer, because it differs house to house. */
 function days(){const[a,b]=DAYS[S.di];
+ /* v269: hear both said one file for two names and taught nothing about which
+    was which. Each name says itself now, and the seven days are a week rather
+    than seven numbered buttons — a child looking for Wednesday should be looking
+    at a row of days, not at the digit 3. */
  return wrap(`<div class="twoname">
-   <button class="nmcard own" data-clip="days/d${S.di}.mp3">
-    <b class="ff">${esc(b)}</b><span>our own word</span></button>
-   <button class="nmcard lent" data-clip="days/d${S.di}.mp3">
-    <b class="ff">${esc(a)}</b><span>came with Arabic</span></button>
+   <button class="nmcard own" data-clip="days/d${S.di}-own.mp3">
+    <b class="ff">${esc(b)}</b><span>our own word</span>
+    <span class="nmtap"><span class="bars"><i></i><i></i><i></i></span></span></button>
+   <button class="nmcard lent" data-clip="days/d${S.di}-lent.mp3">
+    <b class="ff">${esc(a)}</b><span>came with Arabic</span>
+    <span class="nmtap"><span class="bars"><i></i><i></i><i></i></span></span></button>
   </div>
-  <p class="nmsame">one day · two names</p>
-  <button class="hearbtn" data-clip="days/d${S.di}.mp3"><span class="bars"><i></i><i></i><i></i></span>hear both</button>`,S.di,7)
- +`<div class="controls c4" style="margin-top:11px">${DAYS.map((d,i)=>`<button class="ctl sm ${S.di===i?'on':''}"
-   data-d="${i}">${i+1}</button>`).join("")}</div>`}
+  <p class="nmsame">one day · two names · press either to hear it</p>`,S.di,7)
+ +`<div class="weekrow">${DAYS.map(function(d,i){
+    return `<button class="wkday${S.di===i?" on":""}${S.dSeen&&S.dSeen[i]?" been":""}"
+      data-d="${i}"><b>${esc(d[1].slice(0,3))}</b><span>${esc(d[0].slice(0,3))}</span></button>`}).join("")}</div>`}
 
 function seasons(){const left=MONTHS.filter(m=>!(m in S.moput));
  if(!left.length) return done("🌦️","A whole year sorted");
@@ -11820,10 +11862,35 @@ const JEE=[
  {n:8,w:"jeetati", tail:"tati", o:["nayi","go’o","tati"]},
  {n:9,w:"jeenayi", tail:"nayi", o:["nayi","ɗiɗi","tati"]}
 ];
+/* ================= v269: the tens are built, not listed =================
+   Three cards and a ladder of ten answers. The ladder showed a child every tens
+   word at once and asked nothing of them, and the three cards told them a rule
+   rather than walking them into it. Nothing between ten and thirty was taught at
+   all, so the form a Guinean child hears most — sappo e ɗiɗi, twelve — never
+   appeared.
+
+   It goes in the order the language builds it. Meet ten the way every number and
+   letter in this course is met: it lands, you press it, you hear it, it moves.
+   Then ten and something: sappo e ɗiɗi, sappo e tati, sappo e jowi — the child
+   already owns both halves, so this is a joining, not a new word. Then twenty on
+   its own card, because it is its own word and cannot be built. Then noogay e
+   jowi, the same joining on a different ten, which is what shows the pattern is
+   a pattern. Only then cappanɗe, and by that point cappanɗe tati is the only new
+   thing on the screen. */
 const TENSTEP=[
- {n:10,w:"sappo",         why:"Ten has a word of its own. Nothing to build."},
- {n:20,w:"noogay",        why:"So does twenty. These two you simply know."},
- {n:30,w:"cappanɗe tati", why:"From thirty on, it is cappanɗe and a number you already have. Three tens."}
+ {k:"meet", n:10, w:"sappo",
+  why:"Ten has a word of its own. Nothing to build."},
+ {k:"join", n:12, base:10, bw:"sappo", add:2,
+  why:"Ten, and two more. You have both halves already."},
+ {k:"join", n:13, base:10, bw:"sappo", add:3, why:""},
+ {k:"join", n:15, base:10, bw:"sappo", add:5, why:""},
+ {k:"meet", n:20, w:"noogay",
+  why:"Twenty has its own word too. These two you simply know."},
+ {k:"join", n:23, base:20, bw:"noogay", add:3,
+  why:"The same joining, on a different ten."},
+ {k:"join", n:25, base:20, bw:"noogay", add:5, why:""},
+ {k:"cap",  n:30, w:"cappanɗe tati",
+  why:"From thirty on it is cappanɗe and a number you already have. Three tens."}
 ];
 
 
@@ -12005,18 +12072,34 @@ function tens(){
  const i=S.tnI||0;
  if(i>=TENSTEP.length){
   return wrap(`<div class="nhead"><div class="numword">the whole ladder</div></div>
+   <p class="ladlab">every ten — press one to hear it</p>
    <div class="tenlad compact">${[1,2,3,4,5,6,7,8,9].map(function(k){
      return `<button class="tenrung" data-clip="num/n${pad(k*10,3)}.mp3"><b>${k*10}</b><span class="ff">${esc(TENSW[k])}</span></button>`}).join("")}
     <button class="tenrung hun" data-clip="num/n100.mp3"><b>100</b><span class="ff">teemedere</span></button></div>`,TENSTEP.length,N)
    +`<button class="wallbtn" data-tqgo>now check ›</button>`;
  }
  const c=TENSTEP[i];
+ if(c.k==="join"){
+  const word=c.bw+" e "+UNITSW[c.add];
+  return wrap(`<div class="nhead">
+    <div class="numeral">${c.n}</div>
+    <div class="joinrow">
+     <span class="jpart ten">${esc(c.bw)}<i>${c.base}</i></span>
+     <span class="jplus">e</span>
+     <span class="jpart one">${esc(UNITSW[c.add])}<i>${c.add}</i></span>
+    </div>
+    <div class="numword ff">${esc(word)}</div>
+    <button class="hearbtn" data-clip="num/n${pad(c.n,3)}.mp3"><span class="bars"><i></i><i></i><i></i></span>listen</button>
+   </div>`,i,N)
+  +(c.why?face("➕",esc(c.why)):"")
+  +`<button class="wallbtn" data-tnnext>next ›</button>`;
+ }
  return wrap(`<div class="nhead">
    <div class="numeral">${c.n}</div>
    <div class="numword ff">${esc(c.w)}</div>
    <button class="hearbtn" data-clip="num/n${pad(c.n,3)}.mp3"><span class="bars"><i></i><i></i><i></i></span>listen</button>
   </div>`,i,N)
- +face(i===2?"🪜":"🔟",esc(c.why))
+ +face(c.k==="cap"?"🪜":"🔟",esc(c.why))
  +`<button class="wallbtn" data-tnnext>next ›</button>`;
 }
 
@@ -12270,8 +12353,17 @@ function render(){
   /* v256: the re-teach card stands in front of whatever the activity would
      have drawn, inside the same stop, with the same header and progress. */
   let body=S.intro2?introCard():((S.warmList&&(S.warmI||0)<S.warmList.length&&warmCard())||(S.rt?rtCard():VIEWS[S.act]()));
+  /* ---- v269: two things arriving at once ----
+     The prize card flies in when a stop is finished and the arrival card opens
+     the next one, and nothing stopped them sharing a screen — a word card sat
+     over a Fouta introduction, both unreadable. The arrival card now waits for
+     any prize still in the air, and it stays up long enough to be read: it was
+     1.6 seconds for five lines, which is a card nobody finished. */
   if(S.intro2 && INTROT!==S.act){ INTROT=S.act;
-   setTimeout(function(){ if(S.intro2&&S.view==="act"){ S.intro2=false; render() } },1600); }
+   const wait=document.querySelector(".prizewrap,.prizecard")?2600:0;
+   setTimeout(function(){
+    if(S.intro2&&S.view==="act"){ S.intro2=false; render() }
+   },wait+4200); }
   if(!S.intro2) INTROT=null;
   if(OPEN_ENDED.indexOf(S.act)>=0 && body.indexOf('data-finish')<0
    && !(S.act==="parade"&&S.lopen!==null)) body+=finishBar();
@@ -12460,7 +12552,7 @@ function render(){
    reach the seventh. Every activity writes its own place as it goes now, and
    picks it up again on the way back in. A finished stop starts from the top;
    a half-done one resumes exactly where it was left. */
-const PKEYS=["srDid","vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
+const PKEYS=["dSeen","srDid","vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "sqPhase","sqM","sqStep","sqPress","sqChunk","li","lopen","gsel","gput","gRound",
  "gmiss","gfed","gno","gheard","gPhase","gT","gTP","brP","brAsk","brRight","eCel",
  "diI","diPhase","diFound","diMiss",
@@ -13285,6 +13377,7 @@ document.body.addEventListener("click",function(e){
   else { S.vlI=(S.vlI||0)+1 }
   sMove(); render(); return}
  if(d.introgo!==undefined){ S.intro2=false; sMove(); render(); return}
+   if(d.d!==undefined){ S.di=+d.d; if(!S.dSeen) S.dSeen={}; S.dSeen[S.di]=1; sMove(); render(); return}
    if(d.srdid!==undefined){ if(!S.srDid) S.srDid={}; S.srDid[S.sri]=+d.srdid;
      (+d.srdid?sGood:sTap)(); render(); return}
    if(d.vssaid!==undefined){ if(d.clip) play(t,d.clip); S.vsSaid=true; render(); return}
