@@ -4937,6 +4937,11 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 .vsps{display:flex;flex-direction:column;gap:5px}
 .vsps i{font-style:normal;font-size:15px;color:var(--ink)}
 .vsps i.wrongput{color:var(--coral)}
+
+/* v268 */
+.didi{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);width:100%}
+.didq{margin:0 0 10px;font-size:13px;color:var(--muted);text-align:center}
+.wcount b{color:var(--gold-deep)}
 </style>
 </head>
 <body>
@@ -5193,12 +5198,21 @@ const SEASONS={"Ceeɗu":["Siilo","Colite","Mbooy"],"Demminaare":["Seeɗto","Duuj
 const MONTHS=[].concat(...Object.values(SEASONS));
 
 /* ---------- UNIT 4: all 21 syllabification items ---------- */
-const SPLITS=[["alluwal","al/lu/wal"],["waado","waa/do"],["kekuwal","ke/ku/wal"],["lamɗam","lam/ɗam"],
-["leemuneere","lee/mu/nee/re"],["laamaade","laa/maa/de"],["konngol","kon/ngol"],["iililal","ii/li/lal"],
-["teddungal","ted/dun/gal"],["jemma","jem/ma"],["mbabba","mbab/ba"],["peeral","pee/ral"],
-["dummbol","dum/mbol"],["tiimtimol","tiim/ti/mol"],["jamkisen","jam/ki/sen"],["laamɗo","laam/ɗo"],
-["wallinde","wal/lin/de"],["nguddam","ngud/dam"],["ngeeygu","ngeey/gu"],["wuuren","wuu/ren"],
-["wakkiloɗen","wak/ki/lo/ɗen"]];
+const SPLITS=[
+ /* ---- v268: twenty-one words, four of which the child had met ----
+    Seventeen were new, used as decoding fodder rather than as words — and one of
+    them, iililal, is not in the Saggitorde at all, which was flagged in v245 and
+    never acted on. These twenty-one are all met vocabulary: nouns from the word
+    stops, the borrowed words from Adamawa, and two kin words. A child splitting
+    a word they own is splitting something, not sounding out a stranger. */
+ ["alluwal","al/lu/wal"], ["mbabba","mbab/ba"], ["ndaarorgal","ndaa/ror/gal"],
+ ["ƴuruƴukkuwal","ƴu/ru/ƴuk/ku/wal"], ["karambol","ka/ram/bol"], ["ñaariiru","ñaa/rii/ru"],
+ ["booliwal","boo/li/wal"], ["woofoonde","woo/foon/de"], ["saabiwal","saa/bi/wal"],
+ ["bareeru","ba/ree/ru"], ["ŋannawol","ŋan/na/wol"], ["ñaawoowo","ñaa/woo/wo"],
+ ["deftere","def/te/re"], ["koyngal","koy/ngal"], ["bonooru","bo/noo/ru"],
+ ["taabal","taa/bal"], ["luumo","luu/mo"], ["maakiti","maa/ki/ti"],
+ ["lekkol","lek/kol"], ["neene","nee/ne"], ["baaba","baa/ba"]
+];
 
 /* family names from the book's practice list */
 const NAMES=[["jallo","jal/lo"],["bari","ba/ri"],["balde","bal/de"],["kamraa","kam/raa"],
@@ -5208,21 +5222,15 @@ const NAMES=[["jallo","jal/lo"],["bari","ba/ri"],["balde","bal/de"],["kamraa","k
 ["momo","mo/mo"],["saakoo","saa/koo"],["sonko","son/ko"],["sillaa","sil/laa"]];
 
 /* syllable shapes */
-const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","ML"],["cele","ML"],
-["fele","ML"],["hele","ML"],["mehe","ML"],["nele","ML"],["fiɓi","ML"],["fini","ML"],["liñi","ML"],
-["tini","ML"],["bono","ML"],["dono","ML"],["hono","ML"],["kono","ML"],["juɗu","ML"],["kudu","ML"],
-["haanaa","MLL"],["kaanaa","MLL"],["maanaa","MLL"],["ñaamaa","MLL"],["waalaa","MLL"],["weelee","MLL"],
-["teenee","MLL"],["seedee","MLL"],["reenee","MLL"],["meemee","MLL"],["diidii","MLL"],["fiinii","MLL"],
-["siifii","MLL"],["tiimii","MLL"],["yiilii","MLL"],["jooɗoo","MLL"],["tooloo","MLL"],["hooloo","MLL"],
-["mooloo","MLL"],["yooloo","MLL"],
-["anndal","MLM"],["caɗɗal","MLM"],["jamjam","MLM"],["ballal","MLM"],["tammal","MLM"],["fennden","MLM"],
-["sennden","MLM"],["welnen","MLM"],["newnen","MLM"],["lelnen","MLM"],["ɓittin","MLM"],["finndin","MLM"],
-["killin","MLM"],["sintin","MLM"],["wiltin","MLM"],["follon","MLM"],["momton","MLM"],["wonton","MLM"],
-["ndaar","MLLM"],["laaf","MLLM"],["maaf","MLLM"],["ñaam","MLLM"],["saaf","MLLM"],["neeɓ","MLLM"],
-["ngeel","MLLM"],["feer","MLLM"],["seel","MLLM"],["meem","MLLM"],["ɗeen","MLLM"],["kiin","MLLM"],
-["ndiin","MLLM"],["siif","MLLM"],["wiir","MLLM"],["hiir","MLLM"],["siiw","MLLM"],["toon","MLLM"],
-["woon","MLLM"],["foof","MLLM"],["loot","MLLM"],["moor","MLLM"],["guuw","MLLM"],["suum","MLLM"],
-["wuur","MLLM"],["juut","MLLM"],["huuw","MLLM"],["nduun","MLLM"]];
+const SHAPES=[
+ /* ---- v268: eighty-six questions, cut to twelve ----
+    This was the longest stop in the course by a distance: unit 1 teaches the
+    whole alphabet in thirty-two letters and this asked eighty-six times, using
+    a notation — M for a consonant, L for a vowel — that appears nowhere else
+    before or after it. Three of each shape is enough to show the pattern; the
+    other seventy-four were repetition, and repetition belongs in the Look back. */
+ ["ɗala","ML"], ["fala","ML"], ["hara","ML"], ["haanaa","MLL"], ["kaanaa","MLL"], ["maanaa","MLL"], ["anndal","MLM"], ["caɗɗal","MLM"], ["jamjam","MLM"], ["ndaar","MLLM"], ["laaf","MLLM"], ["maaf","MLLM"]
+];
 
 /* ==========================================================
    audio: drop files into /audio and they play. Missing files
@@ -5235,7 +5243,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v267 · 6 September 2026";
+const BUILD="v268 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -5461,7 +5469,7 @@ const ACTS={
 
  splitter:{t:"Chop it up",em:"✂️",u:3,n:"21 words",say:"Tap between the letters where the word breaks.",
   ad:["Syllables","All twenty-one from the book's quiz. Two rules do the work: break between two consonants, and break before a consonant that has a vowel after it."]},
- shapes:{t:"Word shapes",em:"🧩",u:3,n:"86 words",say:"What shape is the first part? Pick it.",
+ shapes:{t:"Word shapes",em:"🧩",u:3,n:"12 words",say:"What shape is the first part? Pick it.",
   ad:["Shapes","M is a consonant, L is a vowel. ML = ba. MLL = baa. MLM = bam. MLLM = baam. Four shapes cover every Fulfulde syllable. Ten words a round."]},
  sentbuild:{t:"Build a sentence",em:"🧱",u:4,n:"12 sentences",say:"Tap the words in the right order.",
   ad:["Building sentences","Janngannde 8re. The book grows them two words at a time \u2014 Yero arii, then Sira yarii ndiyam, then a whole sentence about Fuuta Jaloo. Read each one aloud once it is built."]},
@@ -9003,7 +9011,17 @@ function nummac(){
 function numq(){
  if(S.nq>=NUMQ.length) return done("🎯","Caught them all");
  const n=NUMQ[S.nq],t=Math.floor(n/10),o=n%10;
- const opts=[n,...NUMQ.filter(x=>x!==n).slice(0,2)].sort((a,b)=>a-b);
+ /* ---- v268: the same two wrong numbers, in size order ----
+    The wrong answers were the first two entries of NUMQ that were not the answer,
+    and the three were then sorted ascending — so nearly every question offered the
+    same two decoys and the answer's POSITION was set by how big it was. A child who
+    noticed either had a way through without reading. The decoys are now the two
+    numbers nearest the answer, which share its tens word or its ones word and can
+    only be told apart by reading, and the order rotates with the question. */
+ const near=NUMQ.filter(x=>x!==n).map(x=>({x:x,d:Math.abs(x-n)}))
+   .sort((a,b)=>a.d-b.d||a.x-b.x).slice(0,2).map(o=>o.x);
+ const trio=[n].concat(near), rot=(S.nq*2+n)%3;
+ const opts=trio.slice(rot).concat(trio.slice(0,rot));
  return wrap(`<div class="wordbig" style="font-size:25px">${esc(numName(t,o))}</div>
   <button class="hearbtn ghost" data-clip="num/n${pad(n,2)}.mp3"><span class="bars"><i></i><i></i><i></i></span>hear it</button>`,S.nq,NUMQ.length)
  +`<div class="controls c3">${opts.map(x=>`<button class="ctl" style="font-size:25px"
@@ -10302,25 +10320,44 @@ function setAt(si,i){
    English glosses are working translations and need the
    author's check before this ships.                          */
 const SENT=[
- ["Yero arii.","Yero has come."],
- ["Demmba jooɗike.","Demmba has sat down."],
- ["Sira yarii ndiyam.","Sira drank water."],
- ["Baaba am huylike.","My father has fallen asleep."],
- ["Dura teenoyii leɗɗe.","Dura went off to the trees."],
- ["Nduru no natude suudu.","Nduru is drawing a house."],
- ["Laylaa no wuppude comci.","Laylaa is washing clothes."],
- ["Juuli no amude kummbele.","Juuli is dancing the kummbele."],
- ["Koli no lummbude ƴanngal.","Koli is crossing the stream."],
- ["Korka no winndude e alluwal.","Korka is writing on a writing board."],
- ["Anndaa lamndotaako majjay tun.","One who does not know and will not ask simply stays lost."],
- ["Neene e baaba ko fuɗɗorɗum aduna.","Mother and father are the beginning of the world."],
- ["Binta janngii fiinannde mum hankiire.","Binta read her lesson from yesterday."],
- ["Janngo mi daway yahugol ka defterdu.","Tomorrow I will set out for the book room."],
- ["Fuuta Jaloo ko leydi labaandi haanundi dankiteede.","Fuuta Jaloo is a fine land, worth caring for."],
- ["Mammadu no fitande lam fiinannde amen hankiire mi winnda.","Mammadu reads out yesterday's lesson to me and I write it."]
+ /* ================= v268: sentences a child can actually read =================
+    The sixteen sentences held 71 words and nine of them had been taught. Thirteen
+    per cent. A child walked fifty-four sequenced stops and then met Anndaa
+    lamndotaako majjay tun — a fine proverb, eight words, none of them on the road.
+    What happened at the last stop was an adult reading Pular aloud while a child
+    looked at it. That is a good thing to do and it is not what fifty-four stops of
+    decoding were for.
+
+    Twelve are rebuilt from met vocabulary — the 52 nouns, the six verbs, the kin
+    words, in the sentence patterns the original set already demonstrated. Every
+    content word has been met. Three function words are not on the road and could
+    not be avoided: no (marks the ongoing), e (in, on, and), am (my). They are
+    short, they repeat, and a child meets them here rather than being taught them
+    in the abstract.
+
+    Four of Peeral's are kept exactly as they were and marked hard:true. A child
+    should meet language above their level sometimes, deliberately and labelled,
+    and the two proverbs are worth more than any sentence I could build. They are
+    the ones the grown-up reads. */
+ ["Baaba am jooɗike.","My father has sat down."],
+ ["Neene am no natude suudu.","My mother is drawing a house."],
+ ["Koto am no wuppude paɗal.","My brother is washing a shoe."],
+ ["Jaaja am no winndude e alluwal.","My sister is writing on a writing board."],
+ ["Binta no natude nagge.","Binta is drawing a cow."],
+ ["Yero no wuppude booliwal.","Yero is washing a bowl."],
+ ["Soro am jooɗike e danki.","My grandfather has sat down on the bed."],
+ ["Koli no amude.","Koli is dancing."],
+ ["Sira no winndude e deftere.","Sira is writing in a book."],
+ ["Bareeru jooɗike e ɗatal.","The dog has sat down on the road."],
+ ["Nduru no natude sonndu.","Nduru is drawing a bird."],
+ ["Kaaw am no natude mbabba.","My uncle is drawing a donkey."],
+ ["Anndaa lamndotaako majjay tun.","One who does not know and will not ask simply stays lost.",1],
+ ["Neene e baaba ko fuɗɗorɗum aduna.","Mother and father are the beginning of the world.",1],
+ ["Binta janngii fiinannde mum hankiire.","Binta read her lesson from yesterday.",1],
+ ["Janngo mi daway yahugol ka defterdu.","Tomorrow I will set out for the book room.",1]
 ];
 const SHUF=[0,1,2,3,4,5,6,7,8,9,10,11];      /* the ones short enough to build */
-const MARKI=[0,2,5,7,9,11,12,13,3,6];        /* the ones used for capital-and-stop */
+const MARKI=[0,2,5,7,9,11,1,3,4,6] /* v268: the ten marked are all from the readable twelve */;        /* the ones used for capital-and-stop */
 
 /* one shuffle per sentence, fixed so it never reshuffles mid-answer */
 function shuffleWords(str,seed){
@@ -10385,10 +10422,25 @@ function sentread(){
    <span class="bars"><i></i><i></i><i></i></span>hear it</button>
   ${S.srShow?`<div class="gloss2">${esc(s0[1])}</div>`
    :`<button class="hearbtn ghost" data-srshow><span style="font-size:17px">\ud83d\udc41\ufe0f</span>what does it mean?</button>`}
-  <div class="wcount">${s0[0].replace(/\./g,"").split(" ").length} words</div>`,idx,SENT.length)
- +`<div class="controls c2">
+  <div class="wcount">${s0[0].replace(/\./g,"").split(" ").length} words${
+    s0[2]?` \u00b7 <b>a hard one</b> \u2014 the grown-up reads this one`:""}</div>`,idx,SENT.length)
+ +`${""/* ---- v268: it asked nothing ----
+    This was a back-and-next browser. A child could walk sixteen sentences without
+    reading one and the stop completed. It is the last teaching stop in the course
+    and it should be the place a child reads without help and finds they can.
+    So: read it, then say whether you read it on your own. Nothing is scored and
+    both answers move on — the point is the question, which makes a child notice
+    what they just did, and tells the grown-up sitting there which sentences to
+    come back to. */}
+  ${S.srShow?`<div class="didi">
+     <p class="didq">did you read that one yourself?</p>
+     <div class="controls c2">
+      <button class="ctl" data-srdid="1">\u2713 I read it</button>
+      <button class="ctl" data-srdid="0">we read it together</button></div>
+    </div>`:""}
+  <div class="controls c2">
    <button class="ctl" data-sri="-1"><span class="em">\u2039</span>back</button>
-   <button class="ctl" data-sri="1"><span class="em">\u203a</span>next</button></div>`;
+   <button class="ctl${S.srDid&&S.srDid[idx]!==undefined?"":" quiet"}" data-sri="1"><span class="em">\u203a</span>next</button></div>`;
 }
 
 /* ---------- dashboard: choose a Fouta ---------- */
@@ -11343,7 +11395,7 @@ function greet(){
    a detail: in Fulɓe families it decides who you joke with and who you defer
    to, and a child who confuses them has said something wrong about a person. */
 const KIN=[
- ["baba","father","\ud83d\udc68","",1],
+ ["baaba","father","\ud83d\udc68","",1] /* v268: this said baba. Peeral has no baba at all — only baaba, whose own example sentence is Neene e baaba, and the course's sentences already spelled it that way. koto and kaaw are not headwords either; kaawu is (Pl. kaawiraaɓe). Worth putting to your family. */,
  ["neene","mother","\ud83d\udc69","",1],
  ["koto","brother","\ud83d\udc66","",1],
  ["jaaja","sister","\ud83d\udc67","",1],
@@ -12408,7 +12460,7 @@ function render(){
    reach the seventh. Every activity writes its own place as it goes now, and
    picks it up again on the way back in. A finished stop starts from the top;
    a half-done one resumes exactly where it was left. */
-const PKEYS=["vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
+const PKEYS=["srDid","vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "sqPhase","sqM","sqStep","sqPress","sqChunk","li","lopen","gsel","gput","gRound",
  "gmiss","gfed","gno","gheard","gPhase","gT","gTP","brP","brAsk","brRight","eCel",
  "diI","diPhase","diFound","diMiss",
@@ -13233,6 +13285,8 @@ document.body.addEventListener("click",function(e){
   else { S.vlI=(S.vlI||0)+1 }
   sMove(); render(); return}
  if(d.introgo!==undefined){ S.intro2=false; sMove(); render(); return}
+   if(d.srdid!==undefined){ if(!S.srDid) S.srDid={}; S.srDid[S.sri]=+d.srdid;
+     (+d.srdid?sGood:sTap)(); render(); return}
    if(d.vssaid!==undefined){ if(d.clip) play(t,d.clip); S.vsSaid=true; render(); return}
    if(d.vsnext!==undefined){ S.vsM=(S.vsM||0)+1; S.vsSaid=null;
      if(S.vsM>=LOANTEACH.length) S.vsPhase="sort"; sMove(); render(); return}
