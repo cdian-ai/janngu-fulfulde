@@ -5001,6 +5001,44 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 .daycard.lent{background:var(--gold-bg);border-color:rgba(184,138,42,.45)}
 .daycard.settled{margin-top:12px}
 .daycard .daynum{top:14px;right:12px;font-size:12px}
+
+/* v271: the year */
+.seasyear,.seasq{align-items:center;text-align:center;gap:0;width:100%}
+.seascard{display:flex;flex-direction:column;align-items:center;gap:5px;width:100%;
+ padding:18px 12px 14px;border-radius:22px;border:2px solid var(--sc);
+ background:color-mix(in srgb,var(--sc) 9%,#fff)}
+.seag{font-size:clamp(38px,10vw,54px);line-height:1}
+.seascard b.ff{font-size:clamp(26px,7vw,36px);color:var(--sc)}
+.seasalt{font-size:12px;color:var(--muted)}
+.seasalt i{font-style:normal;font-family:'FulSerif',serif;color:var(--ink)}
+.seaswhat{font-size:13.5px;color:var(--ink);line-height:1.45;margin-top:2px}
+.seaswhen{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.seasmonths{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;width:100%;margin-top:12px}
+.monthchip{position:relative;display:flex;flex-direction:column;align-items:center;gap:1px;
+ padding:10px 4px;border-radius:14px;border:1.5px solid rgba(27,46,107,.10);
+ background:#fff;cursor:pointer;font-family:inherit}
+.monthchip b.ff{font-size:14px;color:var(--ink);line-height:1.15}
+.monthchip span{font-size:10px;color:var(--muted)}
+.mflag{position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);white-space:nowrap;
+ font-style:normal;font-size:8.5px;font-weight:700;letter-spacing:.03em;
+ background:var(--gold-bg);color:var(--gold-deep);padding:1px 6px;border-radius:8px}
+.searow{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;width:100%;margin-top:16px}
+.seastile{display:flex;flex-direction:column;align-items:center;gap:3px;padding:11px 3px;
+ border-radius:15px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-family:inherit}
+.seastile .seag{font-size:22px}
+.seastile b.ff{font-size:11.5px;color:var(--ink);line-height:1.1}
+.seastile.been{border-color:var(--sc);background:color-mix(in srgb,var(--sc) 7%,#fff)}
+.seastile.on{border-color:var(--sc);border-width:2.5px;box-shadow:0 4px 12px rgba(27,46,107,.12)}
+.monthbig{display:flex;flex-direction:column;align-items:center;gap:2px;margin:8px 0 18px}
+.monthbig b.ff{font-size:clamp(30px,8.4vw,44px);color:var(--unit)}
+.monthbig span{font-size:12.5px;color:var(--muted)}
+.seasbtn{--sc:var(--unit)}
+.seasbtn .em{font-size:19px;margin-right:5px}
+.seasrev{display:flex;flex-direction:column;align-items:center;gap:3px;width:100%;
+ padding:14px;border-radius:18px;border:2px solid var(--sc);
+ background:color-mix(in srgb,var(--sc) 9%,#fff)}
+.seasrev b.ff{font-size:26px;color:var(--sc)}
+.seasrev span:last-child{font-size:13px;color:var(--ink)}
 </style>
 </head>
 <body>
@@ -5302,7 +5340,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v270 · 6 September 2026";
+const BUILD="v271 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -9183,19 +9221,89 @@ function dayTile(i,seen,open){
   </button>`;
 }
 
-function seasons(){const left=MONTHS.filter(m=>!(m in S.moput));
- if(!left.length) return done("🌦️","A whole year sorted");
- return wrap(`<div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">
-   ${left.map(m=>`<button class="key ff ${S.mo===m?'on':''}" style="padding:0 13px;min-width:auto"
-     data-mo="${esc(m)}">${esc(m)}</button>`).join("")}</div>`,12-left.length,12)
- +`<div class="controls c2">${Object.entries(SEASONS).map(([k,ms])=>{
-   const mine=Object.entries(S.moput).filter(([,v])=>v===k);
-   return `<button class="ctl" data-sb="${esc(k)}" style="align-items:flex-start;padding:10px">
-     <span class="ff" style="font-size:14px;color:var(--unit)">${esc(k)}</span>
-     <span style="display:flex;flex-wrap:wrap;gap:4px;margin-top:5px">
-      ${mine.map(([m])=>{const ok=ms.includes(m);
-        return `<span class="ff" style="background:${ok?'#E4F1E7':'#F8E6E1'};border-radius:6px;padding:2px 6px;font-size:12px">${esc(m)}</span>`}).join("")}
-     </span></button>`}).join("")}</div>`}
+/* ================= v271: four seasons, taught =================
+   Twelve month names in one grid with four season names under them and nothing
+   joining the two. A child could not tell which months belonged to which season,
+   was never asked, and the twelve words — more new vocabulary than any word stop
+   in unit 2 — went by in a single screen.
+
+   A season is now a card of its own: its colour, its sky, what it actually is,
+   the months it holds, and where it sits in the year a child already knows. All
+   four are opened, then eight questions ask which season a month belongs to.
+
+   Two corrections came out of checking the names against Peeral.
+
+   Demminaare is the Fuuta Tooro word. His entry for setto reads: automne;
+   saison des labours (de mai à juin, entre la fin de la saison sèche et les
+   premières pluies), tagged [A seeto; FT demminaare]. The Guinea word is SETTO,
+   and Demminaare is now shown beside it the way the borrowed day-names are —
+   ours, and the one they use downriver.
+
+   Silto for September is in no entry of the 10,761. Peeral gives settaambur,
+   a French loan. It is marked on the card as one to check with family rather
+   than quietly kept or quietly dropped. */
+const SEASONS4=[
+ {k:"Ceeɗu", alt:"", g:"\u2600\ufe0f", c:"#D99A2B",
+  what:"the dry season", when:"January to March",
+  months:[["Siilo","January"],["Colite","February"],["Mbooy","March"]]},
+ {k:"Setto", alt:"Demminaare", g:"\ud83c\udf31", c:"#6E9C7C",
+  what:"the ploughing season \u2014 the last of the dry, the first of the rain",
+  when:"April to June",
+  months:[["Seeɗto","April"],["Duujal","May"],["Korse","June"]]},
+ {k:"Ndunngu", alt:"", g:"\ud83c\udf27\ufe0f", c:"#4E7FA6",
+  what:"the rains", when:"July to September",
+  months:[["Morso","July"],["Juko","August"],["Silto","September",1]]},
+ {k:"Dabbunde", alt:"", g:"\ud83c\udf3e", c:"#B0703A",
+  what:"the harvest, and the cold", when:"October to December",
+  months:[["Yarkomaa","October"],["Jolal","November"],["Bowte","December"]]}
+];
+const SEAQ=[[0,0],[1,1],[2,2],[3,0],[0,2],[2,1],[1,0],[3,2]]; /* season, which of its months */
+
+function seasons(){
+ const seen=S.seSeen||{}, n=Object.keys(seen).length;
+ if(S.sePhase==="q"){
+  const qi=S.seqI||0;
+  if(qi>=SEAQ.length) return done("\ud83c\udf3e","You know the year");
+  const [si,mi]=SEAQ[qi], s=SEASONS4[si], m=s.months[mi];
+  const pick=S.seqPick, right=pick===s.k;
+  const opts=SEASONS4.map(function(x){return x.k});
+  return wrap(`<div class="meet seasq">
+    <p class="dqlab">which season is this month in?</p>
+    <div class="monthbig"><b class="ff">${esc(m[0])}</b><span>${esc(m[1])}</span></div>
+    ${right?`<div class="seasrev" style="--sc:${s.c}">
+      <span class="seag">${s.g}</span><b class="ff">${esc(s.k)}</b>
+      <span>${esc(s.what)}</span></div>`:""}
+   </div>`,SEASONS4.length+qi,SEASONS4.length+SEAQ.length)
+  +(right?`<button class="wallbtn good" data-seqnext>next \u203a</button>`
+   :`<div class="controls c2">${opts.map(function(o){
+      const sc=SEASONS4.filter(function(x){return x.k===o})[0];
+      return `<button class="ctl seasbtn${pick===o?" wrong":""}" style="--sc:${sc.c}"
+        data-seq="${esc(o)}"><span class="em">${sc.g}</span>${esc(o)}</button>`}).join("")}</div>`
+    +(pick?face("\ud83e\udd14","Not that one \u2014 open the year again if you need to."):""));
+ }
+ const open=S.seI;
+ return wrap(`<div class="meet seasyear">
+   ${open===null||open===undefined?`<p class="dqlab">open all four seasons</p>`
+    :(function(){ const s=SEASONS4[open];
+      return `<div class="seascard" style="--sc:${s.c}">
+        <span class="seag">${s.g}</span>
+        <b class="ff">${esc(s.k)}</b>
+        ${s.alt?`<span class="seasalt">ours \u00b7 <i>${esc(s.alt)}</i> downriver</span>`:""}
+        <span class="seaswhat">${esc(s.what)}</span>
+        <span class="seaswhen">${esc(s.when)}</span>
+        <div class="seasmonths">${s.months.map(function(m,mi){
+          return `<button class="monthchip" data-clip="mon/m${open}${mi}.mp3">
+            <b class="ff">${esc(m[0])}</b><span>${esc(m[1])}</span>
+            ${m[2]?`<i class="mflag">check this one</i>`:""}</button>`}).join("")}</div>
+       </div>`})()}
+   <div class="searow">${SEASONS4.map(function(s,i){
+     return `<button class="seastile${open===i?" on":""}${seen[i]?" been":""}"
+       style="--sc:${s.c}" data-se="${i}"><span class="seag">${s.g}</span>
+       <b class="ff">${esc(s.k)}</b></button>`}).join("")}</div>
+   <p class="calcount">${n} of 4 opened</p>
+  </div>`,n,SEASONS4.length+SEAQ.length)
+ +(n>=SEASONS4.length?`<button class="wallbtn good" data-seqgo>now check \u203a</button>`:"");
+}
 
 /* ---------- unit 4 ---------- */
 function splitLine(w,cuts,attr,cap){const t=tok(w);
@@ -12187,7 +12295,7 @@ function tens(){
  +`<button class="wallbtn" data-tnnext>next ›</button>`;
 }
 
-const OPEN_ENDED=["parade","sylmac","nummac","sentread"] /* v270: days earns its way on by opening all seven */;
+const OPEN_ENDED=["parade","sylmac","nummac","sentread"] /* seasons earns its way on too */ /* v270: days earns its way on by opening all seven */;
 const VIEWS={visiting,hand,jee,tens,parade,hearfind,greet,kinfolk,onemany,verbs,adjs,gpens,sylmac,pairs,gemin,littleset,jobset,wordmac,wordmac2,wordmac3,makeword,masswords,mpens,swap,nummac,numq,days,seasons,splitter,shapes,names,sentbuild,sentmark,sentread};
 
 /* one stop per letter group — they share the activity, each carrying its own
@@ -12636,7 +12744,7 @@ function render(){
    reach the seventh. Every activity writes its own place as it goes now, and
    picks it up again on the way back in. A finished stop starts from the top;
    a half-done one resumes exactly where it was left. */
-const PKEYS=["dSeen","dPhase","dqI","dqPick","srDid","vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
+const PKEYS=["seSeen","sePhase","seqI","seqPick","dSeen","dPhase","dqI","dqPick","srDid","vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "sqPhase","sqM","sqStep","sqPress","sqChunk","li","lopen","gsel","gput","gRound",
  "gmiss","gfed","gno","gheard","gPhase","gT","gTP","brP","brAsk","brRight","eCel",
  "diI","diPhase","diFound","diMiss",
@@ -12662,7 +12770,7 @@ const PKEYS=["dSeen","dPhase","dqI","dqPick","srDid","vsM","vsSaid","vsPhase","v
    screen changed; v155 changes only the drawer, so a v153 place still resumes
    onto exactly the screen it was written from. Bump it the next time an
    activity's stages move. */
-const PLACE_BUILD=270;   /* v243 inserts a screen in the greeting and one
+const PLACE_BUILD=271;   /* v243 inserts a screen in the greeting and one
                             between the asking and the machine, so a place
                             written by an older build would resume past them */
 function placeKeep(){
@@ -12998,6 +13106,7 @@ function openAct(id,force){ S.world=stopOf(id); S.startAt=null;
      there was no earlier screen recorded to go back to. */
   rt:null,rtN:{},
   di:null,dSeen:{},dPhase:"meet",dqI:0,dqPick:null,
+  seI:null,seSeen:{},sePhase:"meet",seqI:0,seqPick:null,
   vsM:0,vsSaid:null,vsPhase:"meet",vsPut:{},vsBad:null,
   intro2:!S.done.has(id),
   warmList:(!S.done.has(id)&&warmOK(id))?warmDraw(id):null, warmI:0, warmPick:null,
@@ -13465,6 +13574,12 @@ document.body.addEventListener("click",function(e){
    if(d.d!==undefined){ S.di=+d.d; if(!S.dSeen) S.dSeen={}; S.dSeen[S.di]=1; sTap(); render();
      setTimeout(function(){ const b=document.querySelector(".nmcard.own[data-clip]");
        if(b) play(b,b.dataset.clip) },260); return}
+   if(d.se!==undefined){ S.seI=+d.se; if(!S.seSeen) S.seSeen={}; S.seSeen[S.seI]=1; sTap(); render(); return}
+   if(d.seqgo!==undefined){ S.sePhase="q"; S.seqI=0; S.seqPick=null; sMove(); render(); return}
+   if(d.seq){ const [si]=SEAQ[S.seqI||0], want=SEASONS4[si].k;
+     if(S.seqPick===want) return;
+     S.seqPick=d.seq; (d.seq===want?sGood:sOops)(); render(); return}
+   if(d.seqnext!==undefined){ S.seqI=(S.seqI||0)+1; S.seqPick=null; sMove(); render(); return}
    if(d.dqgo!==undefined){ S.dPhase="q"; S.dqI=0; S.dqPick=null; sMove(); render(); return}
    if(d.dq){ const order=DAYS.map(function(_,i){return i}).sort(function(a,b){
        return (wordHash("dq|"+a)%97)-(wordHash("dq|"+b)%97) });
