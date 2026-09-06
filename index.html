@@ -4984,7 +4984,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v254 · 5 September 2026";
+const BUILD="v255 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -7966,6 +7966,89 @@ function findOrder(g,gi){
  if(out[0]===g[n-1]&&n>1){ const t=out[0]; out[0]=out[n-1]; out[n-1]=t }
  return out;
 }
+
+/* ================= v255: distractors that cost something to read =================
+   A picture of a nose over nowru / ñiire / kinal can be answered by recognising
+   the nose and knowing any one of the three by elimination. Length-matching the
+   options (v112) helped and did not fix it: three words that share nothing but a
+   letter count are still three shapes, and a child who has seen the pictures can
+   pair them off without reading.
+
+   Where Peeral's dictionary holds two real words one letter away from the answer,
+   those are the wrong options now. paɗal sits beside puɗal and daɗal; kinal beside
+   kinol and kinƴal. The first letter, the vowel or the ending has to be read,
+   because nothing else tells them apart — and every one is a real Pular word, so
+   nothing false is being shown to a child who is still learning which words exist.
+
+   Only 16 of the 52 nouns have two safe neighbours in 10,761 headwords; taabal,
+   suudu, deftere and the rest have none, and those keep the length-matched
+   group-mates. Excluded on the way: any form of a course word, anything the
+   dictionary marks coarse, and — the trap here — words that mean the same as the
+   answer. yitere is one letter from yiitere and is the same word spelled the other
+   way, so a child choosing it would have been marked wrong for being right. */
+const NEIGH={
+"paɗal": [
+"puɗal",
+"daɗal"
+],
+"baafal": [
+"caafal",
+"baasal"
+],
+"ɓoggol": [
+"doggol",
+"loggol"
+],
+"damal": [
+"demal",
+"dawal"
+],
+"ɗatal": [
+"gatal",
+"natal"
+],
+"gaawal": [
+"gaawol",
+"gaalal"
+],
+"jawre": [
+"awre",
+"jowre"
+],
+"kemmba": [
+"emmba",
+"kemmbu"
+],
+"nowru": [
+"ndowru",
+"sowru"
+],
+"kinal": [
+"kinol",
+"kinƴal"
+],
+"ñiire": [
+"ñiiri",
+"biire"
+],
+"junngo": [
+"janngo",
+"junngol"
+],
+"sonndu": [
+"honndu",
+"tonndu"
+],
+"duɗal": [
+"daɗal",
+"puɗal"
+],
+"luumo": [
+"luuro",
+"muumo"
+]
+};
+
 function wmFind(){
  const grp=findOrder(WGROUPS[S.wmG],S.wmG), idx=grp[S.wmI], w=W2[idx], got=S.wmPick===idx;
  /* ---- distractors that cost something to tell apart ----
@@ -7980,7 +8063,11 @@ function wmFind(){
  const ranked=grp.filter(function(i){return i!==idx}).map(function(i){
    return {i:i, d:Math.abs(W2[i].sg.length-tlen), h:(i*13+S.wmI*7)%97};
   }).sort(function(a,b){ return a.d-b.d || a.h-b.h });
- const trio=[idx].concat(ranked.slice(0,2).map(function(x){return x.i}));
+ const near=NEIGH[w.sg];
+ const trio=near
+   ? [{k:String(idx),t:w.sg},{k:"x0",t:near[0]},{k:"x1",t:near[1]}]
+   : [{k:String(idx),t:w.sg}].concat(ranked.slice(0,2).map(function(x){
+       return {k:String(x.i),t:W2[x.i].sg} }));
  const rot=optPos(grp,S.wmG,S.wmI)%trio.length;
  const opts=trio.slice(rot).concat(trio.slice(0,rot));
  if(ACTS[S.act]) ACTS[S.act].say="Which word is this one? Tap the picture to hear it again.";
@@ -8015,8 +8102,8 @@ function wmFind(){
        </div>`
      :`<div class="hfrow${fresh?" reveal":""}"
         style="margin-top:34px;${fresh?`animation-delay:${ms+130}ms;`:""}">${opts.map(function(o){
-        const cls=(S.wmMiss===o?" miss":"");
-        return `<button class="hfk word${cls} wait" data-wmpick="${o}">${esc(W2[o].sg)}</button>`}).join("")}</div>`}
+        const cls=(S.wmMiss===o.k?" miss":"");
+        return `<button class="hfk word${cls} wait" data-wmpick="${esc(o.k)}">${esc(o.t)}</button>`}).join("")}</div>`}
    ${got?`<button class="wallbtn good" data-wmgo>next \u203a</button>`:""}
    <div class="posline">${backStrip("find",S.wmI,grp.length)}</div>
   </div>`,S.wmI,grp.length,true);
@@ -12405,7 +12492,7 @@ document.body.addEventListener("click",function(e){
      try{ play(null,p2.getAttribute("data-clip")) }catch(e2){} }
    },260);
   }
-  else{S.wmMiss=+d.wmpick;sOops();render();  /* wrong shakes, clears, costs nothing */
+  else{S.wmMiss=d.wmpick;sOops();render();  /* wrong shakes, clears, costs nothing */
    setTimeout(function(){S.wmMiss=null;render()},420)}
   return}
  if(d.wmgo!==undefined){const g=WGROUPS[S.wmG];
