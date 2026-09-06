@@ -4901,6 +4901,12 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
    more room and a little more weight so the hook is doing visible work. */
 .key.ck{font-size:23px}
 .key.ck.hooked{font-size:27px;font-weight:600}
+
+/* v266: the warm-up wears its own quiet label so nobody mistakes it for the
+   lesson they came for */
+.warmcard{padding-top:4px}
+.warmlab{margin:0 0 18px;font-size:11.5px;font-weight:700;letter-spacing:.08em;
+ text-transform:uppercase;color:var(--muted);text-align:center}
 </style>
 </head>
 <body>
@@ -5199,7 +5205,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v265 · 5 September 2026";
+const BUILD="v266 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -8363,6 +8369,105 @@ function catchBox(o){
       : `<div class="catchcell"></div>` }).join("")}</div>
   <div class="catchdots">${[0,1,2].map(function(i){
     return `<i class="${i<o.round+(o.got?1:0)?"on":""}"></i>` }).join("")}</div>`;
+}
+
+
+/* ================= v266: two things you already knew =================
+   The Look backs are good and there are five of them, all at Fouta boundaries.
+   Thirty-two letters, fifty-two nouns and sixteen markers met once each, then
+   revisited five times in fifty-six steps, is not enough spacing to hold them —
+   by the sentence unit the letters of Fuuta Tooro are weeks old and have been
+   asked for twice.
+
+   More Look backs is the wrong answer, because a Look back is a stop and stops
+   are already the thing running long. So two questions go at the HEAD of every
+   ordinary stop instead, drawn from what was passed more than a few stops ago,
+   and then the stop proceeds as normal. Thirty seconds, fifty-odd times, is one
+   Fouta's worth of review spread along the whole road rather than dumped at
+   five boundaries.
+
+   The draw is weighted by what the child got wrong FIRST TIME, not by what they
+   eventually got right. That number was already being thrown away, and it is
+   the only honest signal here: on three options a guesser is right first time
+   in a third of cases, so "answered correctly" tells you very little and
+   "answered correctly at the first attempt" tells you almost everything. It
+   also closes the hole in the re-teach branch — a child who guesses their way
+   past an item is no longer simply lost, they meet it again three stops later. */
+function faKey(k,v){ return k+":"+v }
+function faMiss(k,v){
+ if(!S.fa) S.fa={};
+ const key=faKey(k,v);
+ if(S.fa[key]===undefined) S.fa[key]=0;   /* seen */
+ S.fa[key]=S.fa[key]+1;                    /* and missed */
+}
+function faSeen(k,v){
+ if(!S.fa) S.fa={};
+ const key=faKey(k,v);
+ if(S.fa[key]===undefined) S.fa[key]=0;
+}
+/* a stop only warms up once the child has something behind them, and never in
+   front of a Look back, a greeting or the first letters */
+function warmOK(id){
+ if(!id||id.indexOf("rv")===0||id==="greet") return false;
+ const at=ORDER.indexOf(id);
+ return at>=6;
+}
+function warmDraw(id){
+ const at=ORDER.indexOf(id), si=stopOf(id);
+ /* v266.1: a missed item outranks everything, which meant the same two came
+    back at every stop until they were fixed — the child would meet ɗ and c and
+    nothing else for six towns. The last four asked are held out, so the draw
+    rotates through what is weak instead of drilling the weakest two. */
+ const recent=S.warmLast||[];
+ let pool=rvPool(si).filter(function(p){
+  const key=faKey(p.k,p.v);
+  return S.fa && S.fa[key]!==undefined && recent.indexOf(key)<0;
+ });
+ if(pool.length<2) pool=rvPool(si).filter(function(p){
+  return S.fa && S.fa[faKey(p.k,p.v)]!==undefined;
+ });
+ if(pool.length<2) return null;
+ const scored=pool.map(function(p,i){
+  const misses=S.fa[faKey(p.k,p.v)]||0;
+  return {p:p, s:misses*500 + (1-i/pool.length)*120 + (wordHash("warm|"+id+"|"+p.v)%200)};
+ }).sort(function(a,b){ return b.s-a.s });
+ const out=[scored[0].p, scored[1].p];
+ S.warmLast=(out.map(function(p){return faKey(p.k,p.v)}))
+   .concat(S.warmLast||[]).slice(0,4);
+ return out;
+}
+function warmCard(){
+ const list=S.warmList||[], i=S.warmI||0;
+ if(i>=list.length) return null;
+ const it=list[i], si=stopOf(S.act), opts=rvOptions(si,it,i);
+ const picked=S.warmPick, got=picked!=null&&String(picked)===String(rvAns(it));
+ let head="";
+ if(it.k==="L"){
+  head=`<button class="hearbtn big${picked==null?" pulse":""}" data-autoplay
+     data-clip="letters/sound-${pad(it.v,2)}.mp3">
+     <span class="bars"><i></i><i></i><i></i></span>listen</button>
+   <p class="grownup">grown-up: say <b class="ff">${esc(LETTERS[it.v][1])}</b></p>`;
+ } else if(it.k==="W"){
+  head=`<div class="wmpic"><span>${W2[it.v].g}</span></div>
+   <div class="gloss">${esc(W2[it.v].en)}</div>`;
+ } else {
+  head=`<div class="wmpic"><span>${W2[it.v].g}</span></div>
+   <div class="wordbig" style="margin-top:2px">${esc(W2[it.v].sg)}</div>
+   <div class="gloss">one of it</div>`;
+ }
+ return wrap(`<div class="hf warmcard">
+   <p class="warmlab">something you already know \u00b7 ${i+1} of ${list.length}</p>
+   ${head}
+   <div class="hfrow" style="margin-top:15px">${opts.map(function(o){
+     const val=it.k==="L"?LETTERS[o][1]:it.k==="W"?W2[o].sg:o;
+     const right=String(val)===String(rvAns(it));
+     const cls=(picked!=null&&right&&got)?" hit"
+       :(String(picked)===String(val)&&!right)?" miss":"";
+     return `<button class="hfk${it.k==="W"?" word":""}${cls}${picked==null?" wait":""}"
+       data-warm="${esc(String(val))}">${esc(String(val))}</button>`}).join("")}</div>
+   ${got?`<button class="wallbtn good" data-warmgo>on we go \u203a</button>`
+    :picked!=null?`<p class="meetsay">not that one \u2014 try again</p>`:""}
+  </div>`,i,list.length,true);
 }
 
 function introCard(){
@@ -11955,7 +12060,7 @@ function render(){
    ${headTools()}`;
   /* v256: the re-teach card stands in front of whatever the activity would
      have drawn, inside the same stop, with the same header and progress. */
-  let body=S.intro2?introCard():(S.rt?rtCard():VIEWS[S.act]());
+  let body=S.intro2?introCard():((S.warmList&&(S.warmI||0)<S.warmList.length&&warmCard())||(S.rt?rtCard():VIEWS[S.act]()));
   if(S.intro2 && INTROT!==S.act){ INTROT=S.act;
    setTimeout(function(){ if(S.intro2&&S.view==="act"){ S.intro2=false; render() } },1600); }
   if(!S.intro2) INTROT=null;
@@ -12146,7 +12251,7 @@ function render(){
    reach the seventh. Every activity writes its own place as it goes now, and
    picks it up again on the way back in. A finished stop starts from the top;
    a half-done one resumes exactly where it was left. */
-const PKEYS=["intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
+const PKEYS=["fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "sqPhase","sqM","sqStep","sqPress","sqChunk","li","lopen","gsel","gput","gRound",
  "gmiss","gfed","gno","gheard","gPhase","gT","gTP","brP","brAsk","brRight","eCel",
  "diI","diPhase","diFound","diMiss",
@@ -12508,6 +12613,7 @@ function openAct(id,force){ S.world=stopOf(id); S.startAt=null;
      there was no earlier screen recorded to go back to. */
   rt:null,rtN:{},
   intro2:!S.done.has(id),
+  warmList:(!S.done.has(id)&&warmOK(id))?warmDraw(id):null, warmI:0, warmPick:null,
   swM:0,swSaid:null,swPhase:"meet",
   hnI:0,hnSaid:null,hnPhase:"meet",hqI:0,hqPick:null,hnP:0,jmP:0,
   jmI:0,jmSaid:null,jePhase:"meet",jeI:0,jePick:null,
@@ -12817,11 +12923,11 @@ document.body.addEventListener("click",function(e){
  if(d.sq!==undefined){
   const c=SQ[S.sqChunk], items=sqItems(S.sqChunk), tgt=items[S.sqI][0];
   if(S.sqPick===tgt) return;                 /* already found it */
-  if(d.sq===tgt){ S.sqPick=tgt; sGood(); render();
+  if(d.sq===tgt){ S.sqPick=tgt; faSeen("L",LIX[tgt]); sGood(); render();
    const hb=document.querySelector('[data-clip^="letters/sound-"]');
    if(hb) play(hb,hb.dataset.clip);
   } else {
-   S.sqWrong++; S.sqPick=d.sq; sOops();
+   S.sqWrong++; S.sqPick=d.sq; sOops(); faMiss("L",LIX[tgt]);
    if(rtMiss("sq",S.sqChunk+"|"+S.sqI,{
      big:`<b class="ff rtletter">${esc(tgt)}</b>`,
      clip:"letters/sound-"+pad(LIX[tgt],2)+".mp3",
@@ -12969,6 +13075,17 @@ document.body.addEventListener("click",function(e){
   else { S.vlI=(S.vlI||0)+1 }
   sMove(); render(); return}
  if(d.introgo!==undefined){ S.intro2=false; sMove(); render(); return}
+   if(d.warm){ const list=S.warmList||[], it=list[S.warmI||0];
+    if(!it||String(S.warmPick)===String(rvAns(it))) return;
+    S.warmPick=d.warm;
+    if(String(d.warm)===String(rvAns(it))){
+     /* got it back — it needs asking for less often now, not never */
+     const key=faKey(it.k,it.v);
+     S.fa[key]=Math.max(0,(S.fa[key]||0)-1);
+     sGood();
+    } else { sOops(); faMiss(it.k,it.v) }
+    render(); return}
+   if(d.warmgo!==undefined){ S.warmI=(S.warmI||0)+1; S.warmPick=null; sMove(); render(); return}
    if(d.npress!==undefined){ /* v263: same beat as a letter — press, hear, it moves */
     const num=(S.act==="jee")?JEE[S.jmI||0].n:HAND[S.hnI||0].n;
     if(S.act==="jee"){ if((S.jmP||0)<PRESSES) S.jmP=(S.jmP||0)+1 }
@@ -13095,7 +13212,7 @@ document.body.addEventListener("click",function(e){
      correct. Same list, same order, both sides. */
   const g=findOrder(WGROUPS[S.wmG],S.wmG),tgt=g[S.wmI];
   if(S.wmPick===tgt) return;                 /* already found — taps do nothing */
-  if(+d.wmpick===tgt){S.wmPick=tgt;S.wmMiss=null;rtOK("wm",tgt);sGood();render();
+  if(+d.wmpick===tgt){S.wmPick=tgt;S.wmMiss=null;rtOK("wm",tgt);faSeen("W",tgt);sGood();render();
    /* v207: say it once more with the picture, now that they are together */
    setTimeout(function(){
     const p2=document.querySelector(".wmcard .wmpic");
@@ -13103,7 +13220,7 @@ document.body.addEventListener("click",function(e){
      try{ play(null,p2.getAttribute("data-clip")) }catch(e2){} }
    },260);
   }
-  else{S.wmMiss=d.wmpick;sOops();
+  else{S.wmMiss=d.wmpick;sOops(); faMiss("W",tgt);
      const tw=W2[tgt];
      if(rtMiss("wm",tgt,{big:`<span class="rtg">${tw.g}</span><b class="ff">${esc(tw.sg)}</b>`,
        en:tw.en, clip:"words/w"+pad(tgt,2)+"-sg.mp3",
@@ -13189,8 +13306,8 @@ document.body.addEventListener("click",function(e){
  if(d.tpick!==undefined){const q=TQ[Math.min(S.wmI||0,TQ.length-1)],
    want=W2[q.i].m[MIX[q.f]];
   if(S.wmPick===want) return;
-  if(d.tpick===want){S.wmPick=want;S.wmMiss=null;sGood();render()}
-  else{S.wmMiss=d.tpick;sOops();
+  if(d.tpick===want){S.wmPick=want;S.wmMiss=null;faSeen("M",q.i);sGood();render()}
+  else{S.wmMiss=d.tpick;sOops(); faMiss("M",q.i);
    if(rtMiss("tp",(S.wmI||0),{big:`<span class="rtg">${W2[q.i].g}</span>
      <b class="ff">${esc(W2[q.i][q.f])}</b> <b class="ff mk">${esc(want)}</b>`,
      en:W2[q.i].en, say:W2[q.i][q.f]+" takes "+want+"."})){ S.wmMiss=null; render(); return }
