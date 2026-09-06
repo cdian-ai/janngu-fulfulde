@@ -4686,6 +4686,21 @@ body{min-height:0}
 /* v254: when one option is long they all take the full row, so no single
    option can be identified by the shape of its cell */
 .spotgrid.allwide{grid-template-columns:1fr}
+
+/* v256: the look-again card. Same shape as a teaching card on purpose — it is
+   one — so a child does not read it as a penalty box. */
+.rtcard{display:flex;flex-direction:column;align-items:center;text-align:center;
+ padding:14px 8px 4px}
+.rtlab{margin:0 0 18px;font-size:11px;font-weight:700;letter-spacing:.1em;
+ text-transform:uppercase;color:var(--muted)}
+.rtbig{display:flex;flex-direction:column;align-items:center;gap:10px;
+ min-height:190px;justify-content:center;width:100%}
+.rtbig .rtg{font-size:96px;line-height:1}
+.rtbig b.ff{font-size:34px;color:var(--ink)}
+.rten{margin:10px 0 0;font-size:13.5px;color:var(--muted)}
+.rtnote{margin:14px 6px 0;font-size:13.5px;line-height:1.5;color:var(--ink);
+ background:var(--gold-bg);border-radius:14px;padding:11px 13px}
+.rtcard .hearbtn{margin-top:18px}
 </style>
 </head>
 <body>
@@ -4984,7 +4999,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v255 · 5 September 2026";
+const BUILD="v256 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -8048,6 +8063,48 @@ const NEIGH={
 "muumo"
 ]
 };
+
+
+/* ================= v256: a second miss goes back to the teaching =================
+   A wrong answer produced a hint and another go at the same question. A child
+   who does not know the answer arrives at it by elimination — on three options
+   the second guess is right half the time — and the app records that as
+   success. That is the most expensive thing wrong with this course: it quietly
+   turns teaching into guessing, and it corrupts every other measure, because a
+   pass tells you nothing about whether anything was learnt.
+
+   Now: first miss hints, as before. Second miss on the SAME item stops asking
+   and shows that item's teaching card again — the picture, the word, the sound
+   — and only then re-asks. The counter is per item and clears when the item is
+   answered, so a child who stumbles once on a word and gets it later is not
+   carrying a mark around.
+
+   It is deliberately not a punishment and does not look like one. The label
+   says "look again", the card is the same card they were taught from, and the
+   way on says "try again". Nothing is lost, nothing is scored, no streak
+   breaks. The only thing that changes is that the child sees the answer before
+   being asked for it a third time, which is what a teacher would do. */
+function rtKey(a,k){ return a+"|"+k }
+function rtMiss(a,k,teach){
+ S.rtN=S.rtN||{};
+ const key=rtKey(a,k);
+ S.rtN[key]=(S.rtN[key]||0)+1;
+ if(S.rtN[key]>=2){ S.rt=teach; S.rtN[key]=0; return true }
+ return false;
+}
+function rtOK(a,k){ if(S.rtN) delete S.rtN[rtKey(a,k)] }
+function rtCard(){
+ const o=S.rt||{};
+ sayNow(o.say||"Look at it again, then have another go.");
+ return `<div class="meet rtcard">
+   <p class="rtlab">look again</p>
+   <div class="rtbig">${o.big||""}</div>
+   ${o.en?`<p class="rten">${esc(o.en)}</p>`:""}
+   ${o.note?`<p class="rtnote">${o.note}</p>`:""}
+   ${o.clip?`<button class="hearbtn" data-clip="${esc(o.clip)}"><span class="bars"><i></i><i></i><i></i></span>listen</button>`:""}
+   <button class="wallbtn good" data-rtback>try again \u203a</button>
+  </div>`;
+}
 
 function wmFind(){
  const grp=findOrder(WGROUPS[S.wmG],S.wmG), idx=grp[S.wmI], w=W2[idx], got=S.wmPick===idx;
@@ -11452,7 +11509,9 @@ function render(){
    <div class="tname">${esc(a.place||a.t)}<small>${a.home?"our village \u00b7 "+esc(a.n)
      :esc(a.place?a.n:UNITS[stopOf(S.act)].t)}</small></div>
    ${headTools()}`;
-  let body=VIEWS[S.act]();
+  /* v256: the re-teach card stands in front of whatever the activity would
+     have drawn, inside the same stop, with the same header and progress. */
+  let body=S.rt?rtCard():VIEWS[S.act]();
   if(OPEN_ENDED.indexOf(S.act)>=0 && body.indexOf('data-finish')<0
    && !(S.act==="parade"&&S.lopen!==null)) body+=finishBar();
   /* the reference is reachable from inside every activity, and opens over it */
@@ -11640,7 +11699,7 @@ function render(){
    reach the seventh. Every activity writes its own place as it goes now, and
    picks it up again on the way back in. A finished stop starts from the top;
    a half-done one resumes exactly where it was left. */
-const PKEYS=["hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
+const PKEYS=["rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "sqPhase","sqM","sqStep","sqPress","sqChunk","li","lopen","gsel","gput","gRound",
  "gmiss","gfed","gno","gheard","gPhase","gT","gTP","brP","brAsk","brRight","eCel",
  "diI","diPhase","diFound","diMiss",
@@ -12000,6 +12059,7 @@ function openAct(id,force){ S.world=stopOf(id); S.startAt=null;
      single history entry, which is why the step-back arrow walked out of the
      activity instead of back through its cards, and why start-over was greyed:
      there was no earlier screen recorded to go back to. */
+  rt:null,rtN:{},
   hnI:0,hnSaid:null,hnPhase:"meet",hqI:0,hqPick:null,
   jmI:0,jmSaid:null,jePhase:"meet",jeI:0,jePick:null,
   tnI:0,tnPhase:"meet",tqI:0,tqPick:null,
@@ -12424,20 +12484,51 @@ document.body.addEventListener("click",function(e){
   if((S.vlI||0)>=VPAIRS.length-1){ S.vlDone=true }
   else { S.vlI=(S.vlI||0)+1 }
   sMove(); render(); return}
- if(d.hsaid!==undefined){ if(d.clip) play(t,d.clip); S.hnSaid=true; render(); return}
+ if(d.rtback!==undefined){ S.rt=null; sMove(); render(); return}
+   if(d.hsaid!==undefined){ if(d.clip) play(t,d.clip); S.hnSaid=true; render(); return}
    if(d.hnext!==undefined){ S.hnI=(S.hnI||0)+1; S.hnSaid=null; if(S.hnI>=HAND.length) S.hnPhase="q"; sMove(); render(); return}
-   if(d.hq){ const q=HANDQ[S.hqI||0], ans=HAND[q.n-1].w; if(S.hqPick===ans) return;
-     S.hqPick=d.hq; (d.hq===ans?sGood:sOops)(); render(); return}
+   if(d.hq){ const q=HANDQ[S.hqI||0], c=HAND[q.n-1], ans=c.w; if(S.hqPick===ans) return;
+     S.hqPick=d.hq;
+     if(d.hq===ans){ rtOK("hq",q.n); sGood() }
+     else { sOops();
+      if(rtMiss("hq",q.n,{big:`<div class="numeral">${c.n}</div>
+        <div class="bay" style="justify-content:center">${ndots(c.n)}</div>
+        <div class="numword">${c.syl.map(function(s){return `<span class="syl">${esc(s)}</span>`}).join("")}</div>`,
+        clip:"num/n"+pad(c.n,3)+".mp3",
+        say:"Count them together, then say "+c.w+"."})){ S.hqPick=null; render(); return } }
+     render(); return}
    if(d.hqnext!==undefined){ S.hqI=(S.hqI||0)+1; S.hqPick=null; sMove(); render(); return}
    if(d.jmsaid!==undefined){ if(d.clip) play(t,d.clip); S.jmSaid=true; render(); return}
    if(d.jmnext!==undefined){ S.jmI=(S.jmI||0)+1; S.jmSaid=null; if(S.jmI>=JEE.length) S.jePhase="q"; sMove(); render(); return}
-   if(d.je){ const c=JEE[S.jeI||0]; if(S.jePick===c.tail) return;
-     S.jePick=d.je; (d.je===c.tail?sGood:sOops)(); render(); return}
+   if(d.je){ const c=JEE[S.jeI||0], small=c.n-5; if(S.jePick===c.tail) return;
+     S.jePick=d.je;
+     if(d.je===c.tail){ rtOK("je",c.n); sGood() }
+     else { sOops();
+      if(rtMiss("je",c.n,{big:`<div class="numeral">${c.n}</div>
+        <div class="mat" style="gap:8px">
+         <div class="col"><span class="cname"><span class="sw" style="background:#6E9C7C"></span><b>jowi</b>five</span>
+          <div class="bay">${ndots(5)}</div></div>
+         <div class="col"><span class="cname"><span class="sw" style="background:#F0B54A"></span><b>${esc(HAND[small-1].w)}</b>${small} more</span>
+          <div class="bay">${ndots(small,"gold")}</div></div></div>
+        <div class="numword"><span class="jeepre">jee</span><span class="jeetail ok">${esc(c.tail)}</span></div>`,
+        clip:"num/n"+pad(c.n,3)+".mp3",
+        note:`<b class="ff">jee</b> is jowi \u2014 five. What comes after it is the number you added.`,
+        say:"Five and "+small+" more. That makes "+c.w+"."})){ S.jePick=null; render(); return } }
+     render(); return}
    if(d.jenext!==undefined){ S.jeI=(S.jeI||0)+1; S.jePick=null; sMove(); render(); return}
    if(d.tnnext!==undefined){ S.tnI=(S.tnI||0)+1; sMove(); render(); return}
    if(d.tqgo!==undefined){ S.tnPhase="q"; sMove(); render(); return}
    if(d.tq){ const q=TENQ[S.tqI||0]; if(S.tqPick===q.a) return;
-     S.tqPick=d.tq; (d.tq===q.a?sGood:sOops)(); render(); return}
+     S.tqPick=d.tq;
+     if(d.tq===q.a){ rtOK("tq",q.n); sGood() }
+     else { sOops();
+      if(rtMiss("tq",q.n,{big:`<div class="numeral">${q.n}</div>
+        <div class="numword ff">${esc(q.a)}</div>`,
+        clip:"num/n"+pad(q.n,3)+".mp3",
+        note:q.n<30?"This one is not built from anything \u2014 it has its own word."
+          :"cappan\u0257e, and then how many tens: "+Math.floor(q.n/10)+".",
+        say:q.n+" is "+q.a+"."})){ S.tqPick=null; render(); return } }
+     render(); return}
    if(d.tqnext!==undefined){ S.tqI=(S.tqI||0)+1; S.tqPick=null; sMove(); render(); return}
    if(d.pair!==undefined){S.pans=+d.pair;(S.pans===S.ptar?sGood:sOops)();render();return}
  if(d.pnext!==undefined){S.pi++;S.ptar=null;S.pans=null;render();return}
@@ -12484,7 +12575,7 @@ document.body.addEventListener("click",function(e){
      correct. Same list, same order, both sides. */
   const g=findOrder(WGROUPS[S.wmG],S.wmG),tgt=g[S.wmI];
   if(S.wmPick===tgt) return;                 /* already found — taps do nothing */
-  if(+d.wmpick===tgt){S.wmPick=tgt;S.wmMiss=null;sGood();render();
+  if(+d.wmpick===tgt){S.wmPick=tgt;S.wmMiss=null;rtOK("wm",tgt);sGood();render();
    /* v207: say it once more with the picture, now that they are together */
    setTimeout(function(){
     const p2=document.querySelector(".wmcard .wmpic");
@@ -12492,7 +12583,13 @@ document.body.addEventListener("click",function(e){
      try{ play(null,p2.getAttribute("data-clip")) }catch(e2){} }
    },260);
   }
-  else{S.wmMiss=d.wmpick;sOops();render();  /* wrong shakes, clears, costs nothing */
+  else{S.wmMiss=d.wmpick;sOops();
+     const tw=W2[tgt];
+     if(rtMiss("wm",tgt,{big:`<span class="rtg">${tw.g}</span><b class="ff">${esc(tw.sg)}</b>`,
+       en:tw.en, clip:"words/w"+pad(tgt,2)+"-sg.mp3",
+       say:"This is "+tw.sg+". Say it, then find it again."})){
+      S.wmMiss=null; render(); return }
+     render();  /* wrong shakes, clears, costs nothing */
    setTimeout(function(){S.wmMiss=null;render()},420)}
   return}
  if(d.wmgo!==undefined){const g=WGROUPS[S.wmG];
