@@ -4832,6 +4832,26 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 .jeeq .mat{display:none}
 .jeeq .numeral{margin-bottom:2px}
 .jeeq .numword{margin-top:0}
+
+/* v262: the catching box */
+.catchhead{gap:10px}
+.catchtop{min-height:clamp(46px,11vh,72px);display:flex;align-items:center;justify-content:center}
+.catchword{font-size:clamp(32px,9vw,52px);color:var(--unit);
+ animation:wordIn .34s cubic-bezier(.2,1.2,.4,1) both}
+.catchdim{font-size:26px;letter-spacing:.3em;color:var(--sunk);opacity:.5}
+.catchgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(6px,2vw,12px);
+ width:100%;max-width:420px;margin:0 auto}
+.catchcell{aspect-ratio:1;border-radius:18px;background:rgba(27,46,107,.035);
+ border:none;display:flex;align-items:center;justify-content:center;padding:0}
+.catchcell.live{background:var(--gold-bg);box-shadow:0 3px 0 rgba(184,138,42,.28);
+ cursor:pointer;animation:catchIn .3s cubic-bezier(.2,1.3,.4,1) both}
+.catchnum{font-family:'FulSerif',serif;font-size:clamp(38px,11vw,62px);
+ color:var(--gold-deep);line-height:1}
+@keyframes catchIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:none}}
+.catchdots{display:flex;gap:9px;justify-content:center;margin-top:12px}
+.catchdots i{width:9px;height:9px;border-radius:50%;background:rgba(27,46,107,.16)}
+.catchdots i.on{background:var(--unit)}
+@media (prefers-reduced-motion:reduce){.catchcell.live,.catchword{animation:none}}
 </style>
 </head>
 <body>
@@ -5130,7 +5150,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v261 · 5 September 2026";
+const BUILD="v262 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -8230,6 +8250,46 @@ const NEIGH={
    must not become one; it is the sentence a teacher says while the class sits
    down. It appears once per stop per session — a child who leaves and comes
    back mid-stop does not get told twice. */
+
+/* ================= v262: the number is caught, not watched =================
+   The counting cards showed a number and asked a child to press a button. The
+   letter stops never did that — there the child hears a sound and has to FIND
+   the letter, and finding is the whole reason those stops work. A number that
+   arrives, sits still and waits to be acknowledged is being watched.
+
+   So the number moves. It lands in one of nine places, the child taps it, and
+   the word appears at the top and says itself. Then it goes somewhere else and
+   does it again, three times in all. Three because that is enough to make the
+   word arrive with the number rather than beside it, and few enough that the
+   third catch is still wanted.
+
+   The cell is chosen from a hash of the number and the round, not at random, so
+   it is the same on a re-render — a target that moves under a thumb between the
+   press starting and the press landing is a target that punishes accuracy.
+   Never twice in the same place, and never in the middle, which is where a
+   thumb already rests. */
+const CATCHN=3;
+function catchCell(seed,round,prev){
+ const cells=[0,1,2,3,5,6,7,8]; /* 4 is the middle — left empty on purpose */
+ let c=cells[wordHash("cat|"+seed+"|"+round)%cells.length];
+ if(c===prev) c=cells[(cells.indexOf(c)+3)%cells.length];
+ return c;
+}
+function catchBox(o){
+ /* o: {seed, n, word, got, round, clip, hint} */
+ const prev=o.round>0?catchCell(o.seed,o.round-1,-1):-1;
+ const at=catchCell(o.seed,o.round,prev);
+ return `<div class="catchtop">${o.got
+   ? `<b class="ff catchword">${esc(o.word)}</b>`
+   : `<span class="catchdim">\u00b7 \u00b7 \u00b7</span>`}</div>
+  <div class="catchgrid">${[0,1,2,3,4,5,6,7,8].map(function(i){
+    return i===at&&!o.got
+      ? `<button class="catchcell live" data-catch="1"><span class="catchnum">${o.n}</span></button>`
+      : `<div class="catchcell"></div>` }).join("")}</div>
+  <div class="catchdots">${[0,1,2].map(function(i){
+    return `<i class="${i<o.round+(o.got?1:0)?"on":""}"></i>` }).join("")}</div>`;
+}
+
 function introCard(){
  const a=ACTS[S.act], u=JOURNEY[stopOf(S.act)];
  const done=(S.done&&S.done.size)||0;
@@ -11425,14 +11485,22 @@ function hand(){
            :face("👆","Count the dots. Tap the word.")));
  }
  const i=S.hnI||0;
- const c=HAND[i], said=S.hnSaid;
+ const c=HAND[i], round=S.hnR||0, got=!!S.hnGot, done=round>=CATCHN;
+ if(!done) return wrap(`<div class="nhead catchhead">
+   ${catchBox({seed:c.n,n:c.n,word:c.w,got:got,round:round})}
+  </div>`,i,HAND.length+HANDQ.length)
+  +(got?`<div class="cntrow">${ndots(c.n)}</div>
+    <button class="hearbtn" data-clip="num/n${pad(c.n,3)}.mp3" data-autoplay data-wait="360"
+      ><span class="bars"><i></i><i></i><i></i></span>listen</button>
+    <button class="wallbtn" data-hcatch>${round+1>=CATCHN?"next ›":"again ›"}</button>`
+   :face("👆","Catch the number. Tap it."));
  return wrap(`<div class="nhead">
    <div class="numeral">${c.n}</div>
    <div class="cntrow">${ndots(c.n)}</div>
    <div class="numword staged">${c.syl.map(function(s){return `<span class="syl">${esc(s)}</span>`}).join("")}</div>
    <button class="hearbtn staged" data-clip="num/n${pad(c.n,3)}.mp3" data-autoplay data-wait="1250" data-hsaid><span class="bars"><i></i><i></i><i></i></span>listen</button>
   </div>`,i,HAND.length+HANDQ.length)
- +(said?`<button class="wallbtn" data-hnext>next ›</button>`
+ +(S.hnSaid?`<button class="wallbtn" data-hnext>next ›</button>`
        :face("👆","Press it, then say it. Hold up that many fingers while you do."));
 }
 
@@ -11445,6 +11513,14 @@ function jee(){
  if(S.jePhase!=="q"&&(S.jmI||0)<JEE.length){
   const m=S.jmI||0;
   const c=JEE[m], small=c.n-5, said=S.jmSaid;
+  const jr=S.jmR||0, jg=!!S.jmGot;
+  if(jr<CATCHN) return wrap(`<div class="nhead catchhead">
+    ${catchBox({seed:100+c.n,n:c.n,word:c.w,got:jg,round:jr})}
+   </div>`,m,JEE.length*2)
+   +(jg?`<button class="hearbtn" data-clip="num/n${pad(c.n,3)}.mp3" data-autoplay data-wait="360"
+       ><span class="bars"><i></i><i></i><i></i></span>listen</button>
+     <button class="wallbtn" data-jcatch>${jr+1>=CATCHN?"next ›":"again ›"}</button>`
+    :face("👆","Catch the number. Tap it."));
   return wrap(`<div class="nhead">
     <div class="numeral">${c.n}</div>
     <div class="mat" style="gap:8px">
@@ -11957,7 +12033,7 @@ function render(){
    reach the seventh. Every activity writes its own place as it goes now, and
    picks it up again on the way back in. A finished stop starts from the top;
    a half-done one resumes exactly where it was left. */
-const PKEYS=["intro2","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
+const PKEYS=["intro2","hnR","hnGot","jmR","jmGot","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "sqPhase","sqM","sqStep","sqPress","sqChunk","li","lopen","gsel","gput","gRound",
  "gmiss","gfed","gno","gheard","gPhase","gT","gTP","brP","brAsk","brRight","eCel",
  "diI","diPhase","diFound","diMiss",
@@ -11983,7 +12059,7 @@ const PKEYS=["intro2","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhas
    screen changed; v155 changes only the drawer, so a v153 place still resumes
    onto exactly the screen it was written from. Bump it the next time an
    activity's stages move. */
-const PLACE_BUILD=261;   /* v243 inserts a screen in the greeting and one
+const PLACE_BUILD=262;   /* v243 inserts a screen in the greeting and one
                             between the asking and the machine, so a place
                             written by an older build would resume past them */
 function placeKeep(){
@@ -12320,7 +12396,8 @@ function openAct(id,force){ S.world=stopOf(id); S.startAt=null;
   rt:null,rtN:{},
   intro2:!S.done.has(id),
   swM:0,swSaid:null,swPhase:"meet",
-  hnI:0,hnSaid:null,hnPhase:"meet",hqI:0,hqPick:null,
+  hnI:0,hnSaid:null,hnPhase:"meet",hqI:0,hqPick:null,hnR:0,hnGot:false,
+  jmR:0,jmGot:false,
   jmI:0,jmSaid:null,jePhase:"meet",jeI:0,jePick:null,
   tnI:0,tnPhase:"meet",tqI:0,tqPick:null,
   gi:0,gpick:null,ki:0,kpick:null,oi:0,omany:false,
@@ -12780,6 +12857,11 @@ document.body.addEventListener("click",function(e){
   else { S.vlI=(S.vlI||0)+1 }
   sMove(); render(); return}
  if(d.introgo!==undefined){ S.intro2=false; sMove(); render(); return}
+   if(d.catch!==undefined){ /* v262: caught it — the word arrives and says itself */
+    if(S.act==="jee"){ S.jmGot=true } else { S.hnGot=true }
+    sGood(); render(); return}
+   if(d.hcatch!==undefined){ S.hnR=(S.hnR||0)+1; S.hnGot=false; sMove(); render(); return}
+   if(d.jcatch!==undefined){ S.jmR=(S.jmR||0)+1; S.jmGot=false; sMove(); render(); return}
    if(d.swsaid!==undefined){ if(d.clip) play(t,d.clip); S.swSaid=true; render(); return}
    if(d.swnext!==undefined){ S.swM=(S.swM||0)+1; S.swSaid=null;
      if(S.swM>=SWAP.length) S.swPhase="q"; sMove(); render(); return}
@@ -12794,7 +12876,7 @@ document.body.addEventListener("click",function(e){
     setTimeout(function(){ card.classList.remove("saying") },900);
    }
    if(d.hsaid!==undefined){ if(d.clip) play(t,d.clip); S.hnSaid=true; render(); return}
-   if(d.hnext!==undefined){ S.hnI=(S.hnI||0)+1; S.hnSaid=null; if(S.hnI>=HAND.length) S.hnPhase="q"; sMove(); render(); return}
+   if(d.hnext!==undefined){ S.hnI=(S.hnI||0)+1; S.hnSaid=null; S.hnR=0; S.hnGot=false; if(S.hnI>=HAND.length) S.hnPhase="q"; sMove(); render(); return}
    if(d.hq){ const q=HANDQ[S.hqI||0], c=HAND[q.n-1], ans=c.w; if(S.hqPick===ans) return;
      S.hqPick=d.hq;
      if(d.hq===ans){ rtOK("hq",q.n); sGood() }
@@ -12807,7 +12889,7 @@ document.body.addEventListener("click",function(e){
      render(); return}
    if(d.hqnext!==undefined){ S.hqI=(S.hqI||0)+1; S.hqPick=null; sMove(); render(); return}
    if(d.jmsaid!==undefined){ if(d.clip) play(t,d.clip); S.jmSaid=true; render(); return}
-   if(d.jmnext!==undefined){ S.jmI=(S.jmI||0)+1; S.jmSaid=null; if(S.jmI>=JEE.length) S.jePhase="q"; sMove(); render(); return}
+   if(d.jmnext!==undefined){ S.jmI=(S.jmI||0)+1; S.jmSaid=null; S.jmR=0; S.jmGot=false; if(S.jmI>=JEE.length) S.jePhase="q"; sMove(); render(); return}
    if(d.je){ const c=JEE[S.jeI||0], small=c.n-5; if(S.jePick===c.tail) return;
      S.jePick=d.je;
      if(d.je===c.tail){ rtOK("je",c.n); sGood() }
