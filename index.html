@@ -4701,6 +4701,14 @@ body{min-height:0}
 .rtnote{margin:14px 6px 0;font-size:13.5px;line-height:1.5;color:var(--ink);
  background:var(--gold-bg);border-radius:14px;padding:11px 13px}
 .rtcard .hearbtn{margin-top:18px}
+
+/* v256/257: extra pieces the look-again card uses */
+.rtbig .rtletter{font-size:112px;line-height:1}
+.rtbig .rtmk{font-size:44px;color:var(--mk-deep)}
+.rtbig .rtarrow{font-size:26px;color:var(--muted);line-height:1}
+.rtbig .rthit{font-style:normal;color:var(--end-ink);
+ border-bottom:4px solid var(--end-line);padding:0 2px 2px}
+.rtbig b.ff{max-width:100%;overflow-wrap:break-word}
 </style>
 </head>
 <body>
@@ -4999,7 +5007,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v256 · 5 September 2026";
+const BUILD="v257 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -12305,7 +12313,12 @@ document.body.addEventListener("click",function(e){
    /* it is theirs the moment they choose it, so it says itself once */
    setTimeout(function(){ const b=document.querySelector(".gbub.mine[data-clip]");
     if(b) play(b,b.dataset.clip) },320); }
-  else { S.gpick=d.greply; sOops(); render();
+  else { S.gpick=d.greply; sOops();
+    if(rtMiss("gr",S.gi,{
+      big:`<b class="ff">${esc(g.say)}</b><span class="rtarrow">\u2193</span><b class="ff mk">${esc(g.reply)}</b>`,
+      en:g.ren||"", say:"They say "+g.say+". You answer "+g.reply+"."})){
+     S.gpick=null; render(); return }
+    render();
     setTimeout(function(){ S.gpick=null; render() },600); }
   return}
  if(d.gnext!==undefined){ S.gi++; S.gpick=null; S.gsaid=null; sMove(); render();
@@ -12314,7 +12327,11 @@ document.body.addEventListener("click",function(e){
   const t=KIN[S.ki];
   if(S.kpick===t[0]) return;
   if(d.kin===t[0]){ S.kpick=t[0]; sGood(); render(); }
-  else { S.kpick=d.kin; sOops(); render();
+  else { S.kpick=d.kin; sOops();
+    if(rtMiss("kin",S.ki,{big:`<span class="rtg">${t[2]}</span><b class="ff">${esc(t[0])}</b>`,
+      en:t[1]+(t[3]?" \u2014 "+t[3]:""), say:t[1]+" is "+t[0]+"."})){
+     S.kpick=null; render(); return }
+    render();
     setTimeout(function(){ S.kpick=null; render() },600); }
   return}
  if(d.knext!==undefined){ S.ki++; S.kpick=null; sMove(); render();
@@ -12349,7 +12366,13 @@ document.body.addEventListener("click",function(e){
    const hb=document.querySelector('[data-clip^="letters/sound-"]');
    if(hb) play(hb,hb.dataset.clip);
   } else {
-   S.sqWrong++; S.sqPick=d.sq; sOops(); render();
+   S.sqWrong++; S.sqPick=d.sq; sOops();
+   if(rtMiss("sq",S.sqChunk+"|"+S.sqI,{
+     big:`<b class="ff rtletter">${esc(tgt)}</b>`,
+     clip:"letters/sound-"+pad(LIX[tgt],2)+".mp3",
+     say:"This is the one. Listen to it, then find it again."})){
+    S.sqPick=null; render(); return }
+   render();
    /* it clears itself and plays again — nothing is lost by being wrong */
    setTimeout(function(){ S.sqPick=null; render();
      const hb=document.querySelector('[data-clip^="letters/sound-"]');
@@ -12462,7 +12485,13 @@ document.body.addEventListener("click",function(e){
   if(S.viGot===i) return;
   if(t[+d.viw]===Q.v){ S.viGot=i; S.viMiss=null;
    if(!S.viDoneSet) S.viDoneSet={}; S.viDoneSet[i]=1; sGood(); render() }
-  else{ S.viMiss=+d.viw; sOops(); render();
+  else{ S.viMiss=+d.viw; sOops();
+   if(rtMiss("vi",i,{big:`<b class="ff">${t.map(function(x){
+     return x===Q.v?`<i class="rthit">${esc(x)}</i>`:esc(x) }).join("")}</b>`,
+     note:`the <b class="ff">${esc(Q.v)}</b> is the one lit up`,
+     say:"Look where the "+Q.v+" is, then find it again."})){
+    S.viMiss=null; render(); return }
+   render();
    setTimeout(function(){ S.viMiss=null; render() },420) }
   return}
  if(d.viwnext!==undefined){
@@ -12539,7 +12568,10 @@ document.body.addEventListener("click",function(e){
  if(d.vbp){const q=VERBS[Math.min(S.vbI||0,VERBS.length-1)];
   if(S.vbPick===q.v) return;
   if(d.vbp===q.v){S.vbPick=q.v;S.vbMiss=null;sGood();render()}
-  else{S.vbMiss=d.vbp;sOops();render();
+  else{S.vbMiss=d.vbp;sOops();
+   if(rtMiss("vb",S.vbI||0,{big:`<span class="rtg">${q.g}</span><b class="ff">${esc(q.v)}</b>`,
+     en:q.en, say:q.en+" is "+q.v+"."})){ S.vbMiss=null; render(); return }
+   render();
    setTimeout(function(){S.vbMiss=null;render()},420)}
   return}
  if(d.vbnext!==undefined){S.vbI=(S.vbI||0)+1;S.vbPick=null;S.vbMiss=null;
@@ -12548,7 +12580,12 @@ document.body.addEventListener("click",function(e){
  if(d.ajp){const q=ADJS[Math.min(S.ajI||0,ADJS.length-1)];
   if(S.ajPick===q.end) return;
   if(d.ajp===q.end){S.ajPick=q.end;S.ajMiss=null;sGood();render()}
-  else{S.ajMiss=d.ajp;sOops();render();
+  else{S.ajMiss=d.ajp;sOops();
+   if(rtMiss("aj",S.ajI||0,{big:`<span class="rtg">${q.g}</span>
+     <b class="ff">${esc(q.n)} ${esc(q.full)}</b>`,
+     en:q.en, note:`<b class="ff">${esc(q.n)}</b> takes <b class="ff">${esc(q.end)}</b>`,
+     say:"With "+q.n+" it is "+q.full+"."})){ S.ajMiss=null; render(); return }
+   render();
    setTimeout(function(){S.ajMiss=null;render()},420)}
   return}
  if(d.ajnext!==undefined){S.ajI=(S.ajI||0)+1;S.ajPick=null;S.ajMiss=null;
@@ -12558,7 +12595,14 @@ document.body.addEventListener("click",function(e){
   const want=(q.ask==="b")?q.b:q.a;
   if(S.gpPick===want) return;
   if(d.gpp===want){S.gpPick=want;S.gpMiss=null;sGood();render()}
-  else{S.gpMiss=d.gpp;sOops();render();
+  else{S.gpMiss=d.gpp;sOops();
+   if(rtMiss("gp",S.gpI||0,{big:`<span class="rtg">${q.ask==="b"?q.bg:q.ag}</span>
+     <b class="ff">${esc(want)}</b>`,
+     en:(q.ask==="b"?q.be:q.ae),
+     note:`the other one is <b class="ff">${esc(q.ask==="b"?q.a:q.b)}</b>, ${esc(q.ask==="b"?q.ae:q.be)}
+       \u2014 one <b class="ff">${esc(q.d)}</b> or two`,
+     say:want+" is "+(q.ask==="b"?q.be:q.ae)+"."})){ S.gpMiss=null; render(); return }
+   render();
    setTimeout(function(){S.gpMiss=null;render()},420)}
   return}
  if(d.gpnext!==undefined){S.gpI=(S.gpI||0)+1;S.gpPick=null;S.gpMiss=null;
@@ -12624,7 +12668,12 @@ document.body.addEventListener("click",function(e){
   const qs=lwQs(S.lwG||0), q=qs[Math.min(S.lwI||0,qs.length-1)];
   if(!q || S.lwPick===q.k) return;
   if(d.lwpick===q.k){ S.lwPick=q.k; S.lwMiss=null; sGood(); render() }
-  else { S.lwMiss=d.lwpick; sOops(); render();
+  else { S.lwMiss=d.lwpick; sOops();
+   if(rtMiss("lw",(S.lwG||0)+"|"+(S.lwI||0),{
+     big:`<b class="ff mk rtmk">${esc(q.k)}</b>`,
+     note:q.o?`<b class="ff">${esc(q.o)}</b> takes <b class="ff mk">${esc(q.k)}</b>`:"",
+     say:"It takes "+q.k+"."})){ S.lwMiss=null; render(); return }
+   render();
    setTimeout(function(){ S.lwMiss=null; render() },420) }
   return}
  if(d.lwdone!==undefined){
@@ -12650,7 +12699,12 @@ document.body.addEventListener("click",function(e){
   const i=Math.min(S.gsI||0,USESENT.length-1), Q=USESENT[i];
   if(S.gsGot===i) return;                       /* already found */
   if(+d.usw===Q.i){ S.gsGot=i; S.gsMiss=null; sGood(); render() }
-  else{ S.gsMiss=+d.usw; sOops(); render();      /* wrong costs nothing */
+  else{ S.gsMiss=+d.usw; sOops();
+   if(rtMiss("us",i,{big:`<b class="ff">${Q.s.split(" ").map(function(x,j){
+     return j===Q.i?`<i class="rthit">${esc(x)}</i>`:esc(x) }).join(" ")}</b>`,
+     note:"the little word is the one lit up",
+     say:"There it is. Now find it again."})){ S.gsMiss=null; render(); return }
+   render();
    setTimeout(function(){ S.gsMiss=null; render() },420) }
   return}
  if(d.usnext!==undefined){
@@ -12660,7 +12714,11 @@ document.body.addEventListener("click",function(e){
    want=W2[q.i].m[MIX[q.f]];
   if(S.wmPick===want) return;
   if(d.tpick===want){S.wmPick=want;S.wmMiss=null;sGood();render()}
-  else{S.wmMiss=d.tpick;sOops();render();
+  else{S.wmMiss=d.tpick;sOops();
+   if(rtMiss("tp",(S.wmI||0),{big:`<span class="rtg">${W2[q.i].g}</span>
+     <b class="ff">${esc(W2[q.i][q.f])}</b> <b class="ff mk">${esc(want)}</b>`,
+     en:W2[q.i].en, say:W2[q.i][q.f]+" takes "+want+"."})){ S.wmMiss=null; render(); return }
+   render();
    setTimeout(function(){S.wmMiss=null;render()},420)}
   return}
  if(d.tgo!==undefined){
@@ -12679,7 +12737,13 @@ document.body.addEventListener("click",function(e){
  if(d.msput!==undefined){const q=MASSQ[(S.msI||1)-1];
   if(!q||S.msBad) return;
   if((d.msput==="1")===q.mass){ S.msBad=null; S.msI=(S.msI||1)+1; sGood(); render() }
-  else { S.msBad=d.msput; sOops(); render();
+  else { S.msBad=d.msput; sOops();
+   if(rtMiss("ms",(S.msI||1),{big:`<span class="rtg">${q.g}</span><b class="ff">${esc(q.w)}</b>`,
+     en:q.en, note:q.mass?"you cannot count this one \u2014 there is no \u201ctwo\u201d of it"
+       :"you can count this one",
+     say:q.w+" is "+(q.mass?"one you cannot count":"one you can count")+"."})){
+    S.msBad=null; render(); return }
+   render();
    setTimeout(function(){ S.msBad=null; render() },420) }
   return}
  if(d.msnext!==undefined){S.msI=(S.msI||0)+1;S.msBad=null;
@@ -12843,7 +12907,12 @@ document.body.addEventListener("click",function(e){
   const q=LSQ[Math.min(S.lsI||0,LSQ.length-1)], want=LITTLE[q[0]].k;
   if(S.lsPick===want) return;
   if(d.lspick===want){ S.lsPick=want; S.lsMiss=null; sGood(); render() }
-  else { S.lsMiss=d.lspick; sOops(); render() }
+  else { S.lsMiss=d.lspick; sOops();
+   if(rtMiss("ls",(S.lsI||0),{big:`${lsPic(want,W2[q[1]].g,1.6)}
+     <b class="ff mk rtmk">${esc(want)}</b>`,
+     en:(LITTLE.filter(function(x){return x.k===want})[0]||{}).l||"",
+     say:"This one is "+want+"."})){ S.lsMiss=null; render(); return }
+   render() }
   return}
  if(d.lsnext!==undefined){
   if((S.lsI||0)>=LSQ.length-1){ finishAct(); return }
@@ -12883,7 +12952,16 @@ document.body.addEventListener("click",function(e){
   if(d.lpick===want){ S.lPick=want; S.lMiss=null; sGood(); render();
    setTimeout(function(){ const b=document.querySelector(".listenc .hearbtn");
     if(b) try{ play(null,b.getAttribute("data-clip")) }catch(e2){} },300) }
-  else { S.lMiss=d.lpick; sOops(); render();
+  else { S.lMiss=d.lpick; sOops();
+   {const Lc=mCard(S.wmM)||LITTLE[0], wf=W2[q[0]][Lc.f]||W2[q[0]].sg;
+    if(rtMiss("lp",(S.lI||0),{big:`<span class="rtg">${W2[q[0]].g}</span>
+     <b class="ff">${q[1]==="front"?`<b class="mk">${esc(Lc.k)}</b> ${esc(wf)}`
+       :`${esc(wf)} <b class="mk">${esc(Lc.k)}</b>`}</b>`,
+     en:W2[q[0]].en,
+     note:q[1]==="front"?"in FRONT is <i>this one</i>":"BEHIND is <i>the one</i>",
+     say:"Listen once more, then choose again."})){
+    S.lMiss=null; render(); return }}
+   render();
    setTimeout(function(){ S.lMiss=null; render() },420) }
   return}
  if(d.lnext!==undefined){
@@ -12995,7 +13073,12 @@ document.body.addEventListener("click",function(e){
  if(d.fpick!==undefined){const want=W2[FQ[Math.min(S.fmI||0,FQ.length-1)]].m[0];
   if(S.fmPick===want) return;
   if(d.fpick===want){S.fmPick=want;S.fmMiss=null;sGood();render()}
-  else{S.fmMiss=d.fpick;sOops();render();
+  else{S.fmMiss=d.fpick;sOops();
+   {const fw=W2[FQ[Math.min(S.fmI||0,FQ.length-1)]];
+    if(rtMiss("fm",(S.fmI||0),{big:`<span class="rtg">${fw.g}</span>
+      <b class="ff">${esc(fw.sg)}</b> <b class="ff mk">${esc(want)}</b>`,
+      en:fw.en, say:fw.sg+" takes "+want+"."})){ S.fmMiss=null; render(); return }}
+   render();
    setTimeout(function(){S.fmMiss=null;render()},420)}
   return}
  if(d.fgo!==undefined){
@@ -13024,7 +13107,13 @@ document.body.addEventListener("click",function(e){
      full is the whole screen given away before it is opened */
   S.wmSeenF={}; S.form="sg"; render(); return}
  if(d.cq!==undefined){const q=CQ[S.ci];S.cpick=+d.cq;
-  if(S.cpick!==q.a){S.chint=true;sOops()}else sGood(); render();return}
+  if(S.cpick!==q.a){S.chint=true;sOops();
+   if(rtMiss("cq",S.ci,{big:`<b class="ff">${esc(q.w)}</b>
+     <b class="ff mk rtmk">${esc(q.o[q.a])}</b>`,
+     note:`<b class="ff">${esc(q.w)}</b> takes <b class="ff mk">${esc(q.o[q.a])}</b>`,
+     say:q.w+" takes "+q.o[q.a]+"."})){ S.cpick=null; S.chint=false; render(); return }
+  } else { rtOK("cq",S.ci); sGood() }
+  render();return}
  if(d.cnext!==undefined){S.ci++;S.cpick=null;S.chint=false;render();return}
  if(d.lt){S.spick=d.lt;(d.lt===SWAP[S.si].b?sGood:sOops)();render();return}
  if(d.snext!==undefined){S.si=S.si+1;if(S.si>=SWAP.length){finishAct();return}S.spick=null;render();return}
