@@ -4750,6 +4750,41 @@ body{min-height:0}
    are looking at rather than to the button they pressed */
 .rtbig .rtletter,.rtbig b.ff{transition:transform .18s ease}
 .rtcard.saying .rtbig .rtletter,.rtcard.saying .rtbig b.ff{transform:scale(1.08)}
+
+/* ================= v259 ================= */
+.coin{--cn:#6E9C7C;--cnd:#3C6B4C}
+.coin.gold{--cn:#F0B54A;--cnd:#C07A16;background:radial-gradient(circle at 34% 30%,
+ #FFEFC4 0%,var(--cn) 58%,var(--cnd) 100%)}
+.coin.tapc{border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.coin.tapc.counted{box-shadow:0 0 0 4px rgba(27,46,107,.22),
+ inset 0 -1px 0 rgba(0,0,0,.18)}
+
+/* a row of counters reads across the page, the way a child counts */
+.cntrow{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+ gap:clamp(9px,2.6vw,15px);width:100%;min-height:0;margin:6px 0 4px}
+.cntrow .coin{width:clamp(26px,7.4vw,40px);height:clamp(26px,7.4vw,40px)}
+.cntrow .coin::after{inset:6px}
+
+/* the counting cards were small in a big card — the number is the subject */
+.numeral{font-size:clamp(64px,17vw,104px);line-height:1.02}
+.numword{font-size:clamp(30px,8vw,46px);margin-top:6px}
+.nhead{display:flex;flex-direction:column;align-items:center;gap:clamp(8px,2.4vh,20px);width:100%}
+.syl{padding:3px 13px;margin:0 4px}
+
+/* six-to-nine: the number and the word belong together, and the two hands
+   need to be seen, not implied by two empty grey boxes */
+.meet .mat,.rtbig .mat{align-items:stretch;justify-content:center;width:100%}
+.mat .col{background:transparent;border:none;padding:0;min-height:0;
+ display:flex;flex-direction:column;align-items:center;gap:8px}
+.mat .col .cntrow{min-height:0}
+.jeepre,.jeetail,.jeeblank{font-size:clamp(30px,8.4vw,50px)}
+
+/* v248 locked html and body to stop the page sliding under the settings bar.
+   That was right for the activity screens, which scroll inside main — and
+   wrong for the arrival and world screens, which are taller than a phone and
+   were left with their last card unreachable under the step strip. main scrolls
+   again, everywhere, with room at the foot for the bar to sit over. */
+main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 </style>
 </head>
 <body>
@@ -5048,7 +5083,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v258 · 5 September 2026";
+const BUILD="v259 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -11214,7 +11249,21 @@ const TENQ=[
  {n:100,a:"teemedere",         o:["cappanɗe sappo","teemedere","cappanɗe jeenayi"]}
 ];
 
-function ndots(k,cls){ let s=""; for(let i=0;i<k;i++) s+=`<i class="coin${cls?" "+cls:""}"></i>`; return s }
+/* v259: these have been invisible since the day they were written. .coin paints
+   itself with radial-gradient(... var(--cn) ... var(--cnd)), and those two
+   variables are set ONLY by .col.tens .coin and .col.ones .coin — the number
+   machine's two columns. Everywhere else both are undefined, the gradient
+   collapses to nothing, and the counter is a 12px transparent circle. Every
+   card that said "count the dots" has been asking a child to count nothing.
+   The one gold dot that did show on the six card showed because v249 gave
+   .coin.gold a flat colour instead of the variables. Defaults below, set on
+   .coin itself so nothing scoped has to change.
+   They are also tappable now, which was your idea and is a better one than
+   mine: a child counting out loud wants to touch each one, and a counted dot
+   should look counted. */
+function ndots(k,cls){ let s="";
+ for(let i=0;i<k;i++) s+=`<button class="coin tapc${cls?" "+cls:""}" data-cnt="${i+1}"></button>`;
+ return s }
 
 /* ---- one hand ---- */
 function hand(){
@@ -11225,7 +11274,7 @@ function hand(){
   if(qi>=HANDQ.length) return done("🖐️","One hand");
   const q=HANDQ[qi], ans=HAND[q.n-1].w, pick=S.hqPick, right=pick===ans;
   return wrap(`<div class="nhead">
-    <div class="bay" style="justify-content:center">${ndots(q.n)}</div>
+    <div class="cntrow">${ndots(q.n)}</div>
     <div class="numword">${right?esc(ans):`<span class="jeeblank">?</span>`}</div>
    </div>`,HAND.length+qi,HAND.length+HANDQ.length)
   +(right?face("⭐",`<b class="ff">${esc(ans)}</b> — ${q.n}.`)
@@ -11239,7 +11288,7 @@ function hand(){
  const c=HAND[i], said=S.hnSaid;
  return wrap(`<div class="nhead">
    <div class="numeral">${c.n}</div>
-   <div class="bay" style="justify-content:center">${ndots(c.n)}</div>
+   <div class="cntrow">${ndots(c.n)}</div>
    <div class="numword">${c.syl.map(function(s){return `<span class="syl">${esc(s)}</span>`}).join("")}</div>
    <button class="hearbtn" data-clip="num/n${pad(c.n,3)}.mp3" data-hsaid><span class="bars"><i></i><i></i><i></i></span>listen</button>
   </div>`,i,HAND.length+HANDQ.length)
@@ -11260,9 +11309,9 @@ function jee(){
     <div class="numeral">${c.n}</div>
     <div class="mat" style="gap:8px">
      <div class="col"><span class="cname"><span class="sw" style="background:#6E9C7C"></span><b>jowi</b>five</span>
-      <div class="bay">${ndots(5)}</div></div>
+      <div class="cntrow">${ndots(5)}</div></div>
      <div class="col"><span class="cname"><span class="sw" style="background:#F0B54A"></span><b>${esc(HAND[small-1].w)}</b>${small} more</span>
-      <div class="bay">${ndots(small,"gold")}</div></div>
+      <div class="cntrow">${ndots(small,"gold")}</div></div>
     </div>
     <div class="numword"><span class="jeepre">jee</span><span class="jeetail ok">${esc(c.tail)}</span></div>
     <button class="hearbtn" data-clip="num/n${pad(c.n,3)}.mp3" data-jmsaid><span class="bars"><i></i><i></i><i></i></span>listen</button>
@@ -11279,9 +11328,9 @@ function jee(){
    <div class="numeral">${c.n}</div>
    <div class="mat" style="gap:8px">
     <div class="col"><span class="cname"><span class="sw" style="background:#6E9C7C"></span><b>jowi</b>five</span>
-     <div class="bay">${ndots(5)}</div></div>
+     <div class="cntrow">${ndots(5)}</div></div>
     <div class="col"><span class="cname"><span class="sw" style="background:#F0B54A"></span><b>?</b>${small} more</span>
-     <div class="bay">${ndots(small,"gold")}</div></div>
+     <div class="cntrow">${ndots(small,"gold")}</div></div>
    </div>
    <div class="numword"><span class="jeepre">jee</span>${pick?`<span class="jeetail${right?" ok":" no"}">${esc(pick)}</span>`:`<span class="jeeblank">?</span>`}</div>
    ${right?`<button class="hearbtn" data-clip="num/n${pad(c.n,3)}.mp3"><span class="bars"><i></i><i></i><i></i></span>listen</button>`:""}
@@ -12588,7 +12637,9 @@ document.body.addEventListener("click",function(e){
   if((S.vlI||0)>=VPAIRS.length-1){ S.vlDone=true }
   else { S.vlI=(S.vlI||0)+1 }
   sMove(); render(); return}
- if(d.rtback!==undefined){ S.rt=null; sMove(); render(); return}
+ if(d.cnt!==undefined){ /* v259: touch each one as you count it */
+    t.classList.toggle("counted"); sTap(); return}
+   if(d.rtback!==undefined){ S.rt=null; sMove(); render(); return}
    /* v258: the look-again letter swells while its clip runs, so the sound is
       visibly coming from the letter and not from the button. */
    if(d.clip&&t.closest&&t.closest(".rtcard")){
@@ -12603,7 +12654,7 @@ document.body.addEventListener("click",function(e){
      if(d.hq===ans){ rtOK("hq",q.n); sGood() }
      else { sOops();
       if(rtMiss("hq",q.n,{big:`<div class="numeral">${c.n}</div>
-        <div class="bay" style="justify-content:center">${ndots(c.n)}</div>
+        <div class="cntrow">${ndots(c.n)}</div>
         <div class="numword">${c.syl.map(function(s){return `<span class="syl">${esc(s)}</span>`}).join("")}</div>`,
         clip:"num/n"+pad(c.n,3)+".mp3",
         say:"Count them together, then say "+c.w+"."})){ S.hqPick=null; render(); return } }
@@ -12618,9 +12669,9 @@ document.body.addEventListener("click",function(e){
       if(rtMiss("je",c.n,{big:`<div class="numeral">${c.n}</div>
         <div class="mat" style="gap:8px">
          <div class="col"><span class="cname"><span class="sw" style="background:#6E9C7C"></span><b>jowi</b>five</span>
-          <div class="bay">${ndots(5)}</div></div>
+          <div class="cntrow">${ndots(5)}</div></div>
          <div class="col"><span class="cname"><span class="sw" style="background:#F0B54A"></span><b>${esc(HAND[small-1].w)}</b>${small} more</span>
-          <div class="bay">${ndots(small,"gold")}</div></div></div>
+          <div class="cntrow">${ndots(small,"gold")}</div></div></div>
         <div class="numword"><span class="jeepre">jee</span><span class="jeetail ok">${esc(c.tail)}</span></div>`,
         clip:"num/n"+pad(c.n,3)+".mp3",
         note:`<b class="ff">jee</b> is jowi \u2014 five. What comes after it is the number you added.`,
