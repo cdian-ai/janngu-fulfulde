@@ -4975,6 +4975,32 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 /* the way on must not be hunted for */
 .controls .ctl[data-finish]{position:sticky;bottom:6px;z-index:3;
  background:var(--gold-bg);border-color:rgba(184,138,42,.45);box-shadow:0 4px 14px rgba(27,46,107,.10)}
+
+/* v270: the week as a calendar */
+.dayweek,.dayq{align-items:center;text-align:center;gap:0;width:100%}
+.dqlab{margin:0 0 16px;font-size:13.5px;color:var(--muted);text-align:center}
+.calwrap{display:flex;flex-direction:column;gap:8px;width:100%;margin-top:16px}
+.calrow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.calrow.three{grid-template-columns:repeat(3,1fr);padding:0 12%}
+.daytile{position:relative;overflow:hidden;display:flex;flex-direction:column;
+ align-items:center;justify-content:center;gap:2px;min-height:82px;padding:14px 4px 8px;
+ border:1.5px solid var(--line);border-radius:16px;background:#fff;cursor:pointer;font-family:inherit}
+.daystrip{position:absolute;top:0;left:0;right:0;height:9px;background:#C4553F}
+.daynum{position:absolute;top:12px;right:7px;font-size:10px;font-weight:700;color:var(--muted)}
+.daytile b.ff{font-size:14px;color:var(--unit);line-height:1.15;overflow-wrap:anywhere}
+.dayalt{font-size:10px;color:var(--muted)}
+.daytile.been{border-color:rgba(110,156,124,.55);background:#F6FAF7}
+.daytile.on{border-color:var(--unit);border-width:2.5px;box-shadow:0 4px 12px rgba(27,46,107,.12)}
+.calcount{margin:14px 0 0;font-size:12.5px;color:var(--muted)}
+
+.daycard{position:relative;overflow:hidden;width:100%;max-width:340px;padding:22px 14px 16px;
+ border-radius:20px;border:2px solid var(--line);background:#fff;margin:0 auto}
+.daycard .daystrip{height:10px}
+.daycard b.ff{font-size:clamp(26px,7.4vw,38px);color:var(--unit)}
+.daycard.own{background:#EFF6F1;border-color:rgba(60,107,76,.45)}
+.daycard.lent{background:var(--gold-bg);border-color:rgba(184,138,42,.45)}
+.daycard.settled{margin-top:12px}
+.daycard .daynum{top:14px;right:12px;font-size:12px}
 </style>
 </head>
 <body>
@@ -5276,7 +5302,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v269 · 6 September 2026";
+const BUILD="v270 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -9081,23 +9107,81 @@ function numq(){
    relation. It is the same judgement as the gloss captions.
    Which one a child's own family says is the question the grown-ups' drawer
    asks them to answer, because it differs house to house. */
-function days(){const[a,b]=DAYS[S.di];
- /* v269: hear both said one file for two names and taught nothing about which
-    was which. Each name says itself now, and the seven days are a week rather
-    than seven numbered buttons — a child looking for Wednesday should be looking
-    at a row of days, not at the digit 3. */
- return wrap(`<div class="twoname">
-   <button class="nmcard own" data-clip="days/d${S.di}-own.mp3">
-    <b class="ff">${esc(b)}</b><span>our own word</span>
-    <span class="nmtap"><span class="bars"><i></i><i></i><i></i></span></span></button>
-   <button class="nmcard lent" data-clip="days/d${S.di}-lent.mp3">
-    <b class="ff">${esc(a)}</b><span>came with Arabic</span>
-    <span class="nmtap"><span class="bars"><i></i><i></i><i></i></span></span></button>
-  </div>
-  <p class="nmsame">one day · two names · press either to hear it</p>`,S.di,7)
- +`<div class="weekrow">${DAYS.map(function(d,i){
-    return `<button class="wkday${S.di===i?" on":""}${S.dSeen&&S.dSeen[i]?" been":""}"
-      data-d="${i}"><b>${esc(d[1].slice(0,3))}</b><span>${esc(d[0].slice(0,3))}</span></button>`}).join("")}</div>`}
+function days(){
+ /* ================= v270: the days were displayed, not taught =================
+    Seven pairs of names on a card with a next button. A child could walk all
+    seven without pressing either name, and nothing afterwards ever asked which
+    name belonged to which day. It was a reference page with a counter on it.
+
+    Now it is a week. Seven cards laid out as a calendar — four above, three
+    below, each with its number and a red strip, the way the week is printed on
+    a wall. Tapping one opens it: both names, either of which says itself. The
+    way on does not appear until all seven have been opened, so the shape of the
+    activity is now "visit the week" rather than "press next seven times".
+
+    Then it asks. One name is shown and the child chooses its partner from three,
+    which is the only thing this stop actually teaches — that every day here
+    carries two names, one Fulɓe and one that came with Arabic, and that they go
+    together. Seven shown, seven asked. */
+ const seen=S.dSeen||{}, nseen=Object.keys(seen).length;
+ if(S.dPhase==="q"){
+  const qi=S.dqI||0;
+  if(qi>=DAYS.length) return done("\ud83c\udf19","You know the week");
+  const order=DAYS.map(function(_,i){return i}).sort(function(a,b){
+    return (wordHash("dq|"+a)%97)-(wordHash("dq|"+b)%97) });
+  const di=order[qi], pair=DAYS[di];
+  const askOwn=(di%2===0);            /* alternate which side is shown */
+  const shown=askOwn?pair[0]:pair[1];  /* Arabic-side then Fulɓe-side */
+  const ans=askOwn?pair[1]:pair[0];
+  const wrongs=order.filter(function(x){return x!==di})
+    .slice(0,2).map(function(x){ return askOwn?DAYS[x][1]:DAYS[x][0] });
+  const trio=[ans].concat(wrongs), rot=(qi*2+di)%3;
+  const opts=trio.slice(rot).concat(trio.slice(0,rot));
+  const pick=S.dqPick, right=pick===ans;
+  return wrap(`<div class="meet dayq">
+    <p class="dqlab">${askOwn?"which is our own word for this day?":"which name came with Arabic?"}</p>
+    <div class="daycard big ${askOwn?"lent":"own"}">
+     <span class="daynum">${di+1}</span>
+     <b class="ff">${esc(shown)}</b>
+    </div>
+    ${right?`<div class="daycard big ${askOwn?"own":"lent"} settled">
+      <b class="ff">${esc(ans)}</b></div>`:""}
+   </div>`,DAYS.length+qi,DAYS.length*2)
+  +(right?`<button class="wallbtn good" data-dqnext>next \u203a</button>`
+   :`<div class="controls">${opts.map(function(o){
+      return `<button class="ctl${pick===o?" wrong":""}" data-dq="${esc(o)}">${esc(o)}</button>`
+     }).join("")}</div>`
+    +(pick?face("\ud83e\udd14","Not that one \u2014 open the week again if you need to."):""));
+ }
+ const open=S.di;
+ return wrap(`<div class="meet dayweek">
+   ${open===null||open===undefined?`<p class="dqlab">open every day of the week</p>`
+    :`<div class="twoname">
+      <button class="nmcard own" data-clip="days/d${open}-own.mp3">
+       <b class="ff">${esc(DAYS[open][1])}</b><span>our own word</span>
+       <span class="nmtap"><span class="bars"><i></i><i></i><i></i></span></span></button>
+      <button class="nmcard lent" data-clip="days/d${open}-lent.mp3">
+       <b class="ff">${esc(DAYS[open][0])}</b><span>came with Arabic</span>
+       <span class="nmtap"><span class="bars"><i></i><i></i><i></i></span></span></button>
+     </div>
+     <p class="nmsame">one day \u00b7 two names \u00b7 press either to hear it</p>`}
+   <div class="calwrap">
+    <div class="calrow">${[0,1,2,3].map(function(i){ return dayTile(i,seen,open) }).join("")}</div>
+    <div class="calrow three">${[4,5,6].map(function(i){ return dayTile(i,seen,open) }).join("")}</div>
+   </div>
+   <p class="calcount">${nseen} of 7 opened</p>
+  </div>`,nseen,DAYS.length*2)
+ +(nseen>=DAYS.length?`<button class="wallbtn good" data-dqgo>now check \u203a</button>`:"");
+}
+function dayTile(i,seen,open){
+ const d=DAYS[i];
+ return `<button class="daytile${open===i?" on":""}${seen[i]?" been":""}" data-d="${i}">
+   <span class="daystrip"></span>
+   <span class="daynum">${i+1}</span>
+   <b class="ff">${esc(d[1])}</b>
+   <span class="dayalt">${esc(d[0])}</span>
+  </button>`;
+}
 
 function seasons(){const left=MONTHS.filter(m=>!(m in S.moput));
  if(!left.length) return done("🌦️","A whole year sorted");
@@ -12103,7 +12187,7 @@ function tens(){
  +`<button class="wallbtn" data-tnnext>next ›</button>`;
 }
 
-const OPEN_ENDED=["parade","sylmac","nummac","days","sentread"];
+const OPEN_ENDED=["parade","sylmac","nummac","sentread"] /* v270: days earns its way on by opening all seven */;
 const VIEWS={visiting,hand,jee,tens,parade,hearfind,greet,kinfolk,onemany,verbs,adjs,gpens,sylmac,pairs,gemin,littleset,jobset,wordmac,wordmac2,wordmac3,makeword,masswords,mpens,swap,nummac,numq,days,seasons,splitter,shapes,names,sentbuild,sentmark,sentread};
 
 /* one stop per letter group — they share the activity, each carrying its own
@@ -12552,7 +12636,7 @@ function render(){
    reach the seventh. Every activity writes its own place as it goes now, and
    picks it up again on the way back in. A finished stop starts from the top;
    a half-done one resumes exactly where it was left. */
-const PKEYS=["dSeen","srDid","vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
+const PKEYS=["dSeen","dPhase","dqI","dqPick","srDid","vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "sqPhase","sqM","sqStep","sqPress","sqChunk","li","lopen","gsel","gput","gRound",
  "gmiss","gfed","gno","gheard","gPhase","gT","gTP","brP","brAsk","brRight","eCel",
  "diI","diPhase","diFound","diMiss",
@@ -12578,7 +12662,7 @@ const PKEYS=["dSeen","srDid","vsM","vsSaid","vsPhase","vsPut","fa","warmLast","w
    screen changed; v155 changes only the drawer, so a v153 place still resumes
    onto exactly the screen it was written from. Bump it the next time an
    activity's stages move. */
-const PLACE_BUILD=267;   /* v243 inserts a screen in the greeting and one
+const PLACE_BUILD=270;   /* v243 inserts a screen in the greeting and one
                             between the asking and the machine, so a place
                             written by an older build would resume past them */
 function placeKeep(){
@@ -12913,6 +12997,7 @@ function openAct(id,force){ S.world=stopOf(id); S.startAt=null;
      activity instead of back through its cards, and why start-over was greyed:
      there was no earlier screen recorded to go back to. */
   rt:null,rtN:{},
+  di:null,dSeen:{},dPhase:"meet",dqI:0,dqPick:null,
   vsM:0,vsSaid:null,vsPhase:"meet",vsPut:{},vsBad:null,
   intro2:!S.done.has(id),
   warmList:(!S.done.has(id)&&warmOK(id))?warmDraw(id):null, warmI:0, warmPick:null,
@@ -13377,7 +13462,16 @@ document.body.addEventListener("click",function(e){
   else { S.vlI=(S.vlI||0)+1 }
   sMove(); render(); return}
  if(d.introgo!==undefined){ S.intro2=false; sMove(); render(); return}
-   if(d.d!==undefined){ S.di=+d.d; if(!S.dSeen) S.dSeen={}; S.dSeen[S.di]=1; sMove(); render(); return}
+   if(d.d!==undefined){ S.di=+d.d; if(!S.dSeen) S.dSeen={}; S.dSeen[S.di]=1; sTap(); render();
+     setTimeout(function(){ const b=document.querySelector(".nmcard.own[data-clip]");
+       if(b) play(b,b.dataset.clip) },260); return}
+   if(d.dqgo!==undefined){ S.dPhase="q"; S.dqI=0; S.dqPick=null; sMove(); render(); return}
+   if(d.dq){ const order=DAYS.map(function(_,i){return i}).sort(function(a,b){
+       return (wordHash("dq|"+a)%97)-(wordHash("dq|"+b)%97) });
+     const di=order[S.dqI||0], askOwn=(di%2===0), ans=askOwn?DAYS[di][1]:DAYS[di][0];
+     if(S.dqPick===ans) return;
+     S.dqPick=d.dq; (d.dq===ans?sGood:sOops)(); render(); return}
+   if(d.dqnext!==undefined){ S.dqI=(S.dqI||0)+1; S.dqPick=null; sMove(); render(); return}
    if(d.srdid!==undefined){ if(!S.srDid) S.srDid={}; S.srDid[S.sri]=+d.srdid;
      (+d.srdid?sGood:sTap)(); render(); return}
    if(d.vssaid!==undefined){ if(d.clip) play(t,d.clip); S.vsSaid=true; render(); return}
