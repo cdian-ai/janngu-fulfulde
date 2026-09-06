@@ -4801,6 +4801,37 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 .intosay{margin:0 8px 14px;font-size:15.5px;line-height:1.55;color:var(--ink)}
 .intowhy{margin:0 10px 26px;font-size:13px;line-height:1.6;color:var(--muted)}
 .introcard .wallbtn{width:100%;max-width:340px}
+
+/* v261: the counting card stages itself — the number lands, then the word and
+   its sound arrive together. It plays once on arrival; the listen button
+   repeats the sound and never the animation. */
+@keyframes numIn{from{opacity:0;transform:translateY(14px) scale(.86)}to{opacity:1;transform:none}}
+@keyframes wordIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.nhead .numeral{animation:numIn .42s cubic-bezier(.2,1.2,.4,1) both}
+.nhead .cntrow{animation:wordIn .4s ease .55s both}
+.numword.staged{animation:wordIn .45s ease 1.15s both}
+.hearbtn.staged{animation:wordIn .4s ease 1.35s both}
+@media (prefers-reduced-motion:reduce){
+ .nhead .numeral,.nhead .cntrow,.numword.staged,.hearbtn.staged{animation:none}}
+
+/* v261: the swap teaching card */
+.swteach{align-items:center;text-align:center;gap:0;justify-content:center;padding:6px 8px}
+.swg{font-size:clamp(56px,15vw,84px);line-height:1;margin-bottom:14px}
+.swpair{display:flex;align-items:center;justify-content:center;gap:clamp(8px,3vw,18px);width:100%}
+.swside{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
+.swlab{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.swword{font-size:clamp(23px,6.4vw,34px);color:var(--ink);overflow-wrap:anywhere}
+.swarrow{font-size:26px;color:var(--muted);flex:0 0 auto}
+.swa{font-style:normal;color:var(--coral);border-bottom:4px solid var(--coral);padding-bottom:1px}
+.swb{font-style:normal;color:var(--leaf-deep);border-bottom:4px solid var(--leaf);padding-bottom:1px}
+.swrule{margin:20px 6px 0;font-size:15px;line-height:1.55;color:var(--ink)}
+.swteach .hearbtn{margin-top:18px}
+
+/* v261: the six-to-nine question loses the two empty boxes — the number sits
+   over the word, the word is the subject, the answers come under it */
+.jeeq .mat{display:none}
+.jeeq .numeral{margin-bottom:2px}
+.jeeq .numword{margin-top:0}
 </style>
 </head>
 <body>
@@ -5099,7 +5130,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v260 · 5 September 2026";
+const BUILD="v261 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -5759,10 +5790,12 @@ function autoSay(){
  const key=S.act+"|"+S.progI+"|"+el.dataset.clip;
  if(AUTOP===key) return;
  AUTOP=key;
+ /* v261: a card can ask for a longer beat — the counting cards let the number
+    land on its own first, and the word and its sound arrive together after. */
  setTimeout(function(){
   const now=document.querySelector("[data-autoplay][data-clip]");
   if(now && AUTOP===key) play(now,now.dataset.clip);
- },430);
+ },+(el.dataset.wait||430));
 }
 function playLetter(){
  try{
@@ -8450,12 +8483,51 @@ function mpens(){
    data-cq="${i}" ${S.cpick!==null&&S.cpick===q.a?'disabled':''}>${esc(o)}</button>`).join("")}</div>
   ${S.cpick===q.a?`<button class="wallbtn" data-cnext>next ›</button>`:""}`}
 
-function swap(){const q=SWAP[S.si],tail=q.pl.slice(q.b.length),ok=S.spick===q.b;
+/* ================= v261: the swap is shown before it is asked =================
+   This stop opened on a question. A child was handed a plural with its first
+   letter blanked and four letters to choose from, having never once been shown
+   that a Fulfulde word changes its first letter when it goes from one to many.
+   The whole idea was in the question and nowhere else, so the only way through
+   was to guess and then read the answer — which is not the same as being taught
+   and does not survive the walk to the next stop.
+
+   Six teaching cards now come first, one per swap: the singular and the plural
+   side by side, first letters lit in their own colours, the change spelled out
+   underneath. Then the same six as questions, in the same order, so the card
+   being asked is the card just seen.
+
+   The pairs themselves are the ones v249 mined out of Peeral's singular-plural
+   entries, so every swap shown is a swap that exists in Guinea Pular. */
+function swapTeach(){
+ const m=S.swM||0;
+ if(m>=SWAP.length) return null;
+ const q=SWAP[m], said=S.swSaid;
+ const tail=q.pl.slice(q.b.length), head=q.sg.slice(q.a.length);
+ return wrap(`<div class="meet swteach">
+   <div class="swg">${q.g}</div>
+   <div class="swpair">
+    <div class="swside"><span class="swlab">one</span>
+     <b class="ff swword"><i class="swa">${esc(q.a)}</i>${esc(head)}</b></div>
+    <span class="swarrow">\u2192</span>
+    <div class="swside"><span class="swlab">many</span>
+     <b class="ff swword"><i class="swb">${esc(q.b)}</i>${esc(tail)}</b></div>
+   </div>
+   <p class="swrule"><b class="ff swa">${esc(q.a)}</b> becomes
+     <b class="ff swb">${esc(q.b)}</b> when there is more than one</p>
+   <button class="hearbtn" data-clip="words/sw${m}.mp3" data-swsaid
+     ><span class="bars"><i></i><i></i><i></i></span>listen</button>
+  </div>`,m,SWAP.length*2)
+ +(said?`<button class="wallbtn" data-swnext>next \u203a</button>`
+       :face("\ud83d\udc40","Look at the first letter of each one. Press the word."));
+}
+function swap(){
+ if(S.swPhase!=="q"&&(S.swM||0)<SWAP.length) return swapTeach();
+ const q=SWAP[S.si],tail=q.pl.slice(q.b.length),ok=S.spick===q.b;
  return wrap(`<div style="font-size:38px;letter-spacing:3px">${ok?q.g.repeat(4):q.g}</div>
   <div class="wordbig" style="margin-top:12px">
    <span style="display:inline-block;min-width:46px;border-bottom:5px solid ${ok?'var(--leaf)':'var(--coral)'};
     color:${ok?'var(--leaf-deep)':'var(--coral)'}">${ok?esc(q.b):"?"}</span>${esc(tail)}</div>
-  <div style="font-size:13px;color:var(--muted);margin-top:9px">from <b class="ff" style="font-size:17px">${esc(q.sg)}</b></div>`,S.si,SWAP.length)
+  <div style="font-size:13px;color:var(--muted);margin-top:9px">from <b class="ff" style="font-size:17px">${esc(q.sg)}</b></div>`,SWAP.length+S.si,SWAP.length*2)
  +`<div class="controls c4">${q.o.map(o=>`<button class="ctl big ${S.spick?(o===q.b?'right':(o===S.spick?'wrong':'')):''}"
    data-lt="${esc(o)}" ${S.spick?'disabled':''}>${esc(o)}</button>`).join("")}</div>
   ${S.spick?face(ok?"⭐":"🤔",`<b class="ff">${esc(q.a)}</b> becomes <b class="ff">${esc(q.b)}</b> — and stays that way for the little one too.`)
@@ -11357,8 +11429,8 @@ function hand(){
  return wrap(`<div class="nhead">
    <div class="numeral">${c.n}</div>
    <div class="cntrow">${ndots(c.n)}</div>
-   <div class="numword">${c.syl.map(function(s){return `<span class="syl">${esc(s)}</span>`}).join("")}</div>
-   <button class="hearbtn" data-clip="num/n${pad(c.n,3)}.mp3" data-hsaid><span class="bars"><i></i><i></i><i></i></span>listen</button>
+   <div class="numword staged">${c.syl.map(function(s){return `<span class="syl">${esc(s)}</span>`}).join("")}</div>
+   <button class="hearbtn staged" data-clip="num/n${pad(c.n,3)}.mp3" data-autoplay data-wait="1250" data-hsaid><span class="bars"><i></i><i></i><i></i></span>listen</button>
   </div>`,i,HAND.length+HANDQ.length)
  +(said?`<button class="wallbtn" data-hnext>next ›</button>`
        :face("👆","Press it, then say it. Hold up that many fingers while you do."));
@@ -11392,7 +11464,7 @@ function jee(){
  if(i>=JEE.length) return done("🖐️🖐️","The other hand");
  const c=JEE[i], pick=S.jePick, right=pick===c.tail;
  const small=c.n-5;
- return wrap(`<div class="nhead">
+ return wrap(`<div class="nhead jeeq">
    <div class="numeral">${c.n}</div>
    <div class="mat" style="gap:8px">
     <div class="col"><span class="cname"><span class="sw" style="background:#6E9C7C"></span><b>jowi</b>five</span>
@@ -11885,7 +11957,7 @@ function render(){
    reach the seventh. Every activity writes its own place as it goes now, and
    picks it up again on the way back in. A finished stop starts from the top;
    a half-done one resumes exactly where it was left. */
-const PKEYS=["intro2","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
+const PKEYS=["intro2","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "sqPhase","sqM","sqStep","sqPress","sqChunk","li","lopen","gsel","gput","gRound",
  "gmiss","gfed","gno","gheard","gPhase","gT","gTP","brP","brAsk","brRight","eCel",
  "diI","diPhase","diFound","diMiss",
@@ -11911,7 +11983,7 @@ const PKEYS=["intro2","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","
    screen changed; v155 changes only the drawer, so a v153 place still resumes
    onto exactly the screen it was written from. Bump it the next time an
    activity's stages move. */
-const PLACE_BUILD=260;   /* v243 inserts a screen in the greeting and one
+const PLACE_BUILD=261;   /* v243 inserts a screen in the greeting and one
                             between the asking and the machine, so a place
                             written by an older build would resume past them */
 function placeKeep(){
@@ -12247,6 +12319,7 @@ function openAct(id,force){ S.world=stopOf(id); S.startAt=null;
      there was no earlier screen recorded to go back to. */
   rt:null,rtN:{},
   intro2:!S.done.has(id),
+  swM:0,swSaid:null,swPhase:"meet",
   hnI:0,hnSaid:null,hnPhase:"meet",hqI:0,hqPick:null,
   jmI:0,jmSaid:null,jePhase:"meet",jeI:0,jePick:null,
   tnI:0,tnPhase:"meet",tqI:0,tqPick:null,
@@ -12479,7 +12552,7 @@ document.body.addEventListener("click",function(e){
     word and never counted as pressed — leaving a stop with no door out of it */
  if(d.clip!==undefined&&d.mpress===undefined&&d.mstep===undefined
     &&d.lsmeet===undefined&&d.jobpick===undefined&&d.esee===undefined&&d.ehear===undefined
-    &&d.gsaid===undefined&&d.hsaid===undefined&&d.jmsaid===undefined){play(t,d.clip);return}
+    &&d.gsaid===undefined&&d.hsaid===undefined&&d.jmsaid===undefined&&d.swsaid===undefined){play(t,d.clip);return}
  if(d.act){openAct(d.act);return}
  if(d.goto){openAct(d.goto,true);return}
  if(d.force){openAct(d.force,true);return}
@@ -12707,6 +12780,9 @@ document.body.addEventListener("click",function(e){
   else { S.vlI=(S.vlI||0)+1 }
   sMove(); render(); return}
  if(d.introgo!==undefined){ S.intro2=false; sMove(); render(); return}
+   if(d.swsaid!==undefined){ if(d.clip) play(t,d.clip); S.swSaid=true; render(); return}
+   if(d.swnext!==undefined){ S.swM=(S.swM||0)+1; S.swSaid=null;
+     if(S.swM>=SWAP.length) S.swPhase="q"; sMove(); render(); return}
    if(d.cnt!==undefined){ /* v259: touch each one as you count it */
     t.classList.toggle("counted"); sTap(); return}
    if(d.rtback!==undefined){ S.rt=null; sMove(); render(); return}
