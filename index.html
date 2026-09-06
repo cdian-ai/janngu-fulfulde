@@ -4709,6 +4709,47 @@ body{min-height:0}
 .rtbig .rthit{font-style:normal;color:var(--end-ink);
  border-bottom:4px solid var(--end-line);padding:0 2px 2px}
 .rtbig b.ff{max-width:100%;overflow-wrap:break-word}
+
+/* ================= v258: where things sit =================
+
+   ONE rule was doing most of the damage. .lower carried margin-top:auto, which
+   in a flex column means "take every pixel left over and put it above me". On
+   a full card that reads as the sound button sitting at the foot, which is
+   right. On a card with three little answer tiles it flung the button to the
+   very bottom of a tall card and left a hand's width of nothing in the middle —
+   the two halves running away from each other, exactly as described. The push
+   is now bounded: a real gap, never more than a sixth of the screen, so a short
+   card stays gathered in the middle and a full one still puts the button below
+   everything.
+
+   Deliberately NOT done: spreading every screen's contents to fill the height.
+   Space between two things is a claim that they are separate, and on most of
+   these cards the picture, the word and the sound are one thing being said
+   three ways. They should sit together, centred, with the room falling outside
+   them rather than between them. */
+.lower{margin-top:clamp(16px,6vh,72px)!important}
+.doarea{justify-content:center}
+
+/* the look-again card: one screenful, no scrolling, and the letter is the
+   point of the screen so it gets the room */
+.rtarea{padding-top:18px}
+.rtcard{justify-content:center;gap:0;padding:6px 8px 4px;min-height:0}
+.rtlab{margin:0 0 14px}
+.rtbig{min-height:0;flex:0 1 auto;gap:8px}
+.rtbig .rtletter{font-size:clamp(120px,34vh,220px);line-height:1.02}
+.rtbig b.ff{font-size:clamp(28px,7.2vw,44px)}
+.rtbig .rtg{font-size:clamp(72px,20vh,132px)}
+.rtcard .hearbtn{margin-top:clamp(12px,3vh,26px);font-size:22px;
+ padding:18px 34px;border-radius:22px}
+.rtcard .hearbtn .bars i{width:7px}
+.rtcard .wallbtn{margin-top:clamp(12px,3vh,26px);width:100%;max-width:340px;align-self:center}
+.rten,.rtnote{margin-top:10px}
+
+/* v258: the letter said on the look-again card breathes while it is spoken,
+   so a child watching the screen knows the sound belongs to the thing they
+   are looking at rather than to the button they pressed */
+.rtbig .rtletter,.rtbig b.ff{transition:transform .18s ease}
+.rtcard.saying .rtbig .rtletter,.rtcard.saying .rtbig b.ff{transform:scale(1.08)}
 </style>
 </head>
 <body>
@@ -5007,7 +5048,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v257 · 5 September 2026";
+const BUILD="v258 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -8104,14 +8145,17 @@ function rtOK(a,k){ if(S.rtN) delete S.rtN[rtKey(a,k)] }
 function rtCard(){
  const o=S.rt||{};
  sayNow(o.say||"Look at it again, then have another go.");
- return `<div class="meet rtcard">
+ /* v258: it was returning bare markup, so it drew straight onto the page
+    background with no card under it and the way on ended up shunted to one
+    side by the docking. It is a teaching card and should look like one. */
+ return `<div class="doarea clean rtarea"><div class="meet rtcard">
    <p class="rtlab">look again</p>
    <div class="rtbig">${o.big||""}</div>
    ${o.en?`<p class="rten">${esc(o.en)}</p>`:""}
    ${o.note?`<p class="rtnote">${o.note}</p>`:""}
    ${o.clip?`<button class="hearbtn" data-clip="${esc(o.clip)}"><span class="bars"><i></i><i></i><i></i></span>listen</button>`:""}
    <button class="wallbtn good" data-rtback>try again \u203a</button>
-  </div>`;
+  </div></div>`;
 }
 
 function wmFind(){
@@ -11414,6 +11458,22 @@ function howtoPanel(){
    <span class="hp">${SPKSVG}<i>say it aloud to them</i></span>
   </button>`;
 }
+/* v258: what the last few taps were, and whether the page acted on them.
+   done:true means the handler for that tap finished without throwing — a tap
+   that shows done:false is a tap that hit an error on its way through. A tap
+   that never appears at all never reached the page: something is lying over
+   the top of it. */
+function tapLogHTML(){
+ const L=(window.TAPLOG||[]);
+ if(!L.length) return `<h4>Taps</h4><p style="font-size:12px;color:#6C7186">
+   Nothing tapped yet. Tap something, then open this again.</p>`;
+ return `<h4>Taps <span style="font-weight:400;color:#6C7186">(newest first)</span></h4>
+  <div class="clip" style="line-height:1.7">${L.map(function(x){
+   return `${x.t} &nbsp;<b>${esc(x.k)}</b> &nbsp;<span style="opacity:.6">${esc(x.cls)}</span>
+     &nbsp;${x.done?"\u2713":"\u2717 stopped"}` }).join("<br>")}</div>
+  <p style="font-size:12px;color:#6C7186">A tap that is not listed here never
+   reached the page at all.</p>`;
+}
 function paintDrawer(){
  if(S.view==="act"){
   const a=ACTS[S.act];
@@ -11426,10 +11486,11 @@ function paintDrawer(){
    <p style="color:#6C7186;font-size:12px">Points come from turning up, not from being right.
    Nothing here is scored and a wrong answer costs nothing.</p>
    ${lexTable()}
-   <h4>Last sound file</h4><div class="clip">audio/${esc(AUDIO.last)}</div>`;
+   <h4>Last sound file</h4><div class="clip">audio/${esc(AUDIO.last)}</div>
+   ${tapLogHTML()}`;
  } else {
   const nid=nextId();
-  db.innerHTML=drawerControls()+`<div class="gup">
+  db.innerHTML=drawerControls()+tapLogHTML()+`<div class="gup">
     <h4>For the grown-up</h4>
     <p>This teaches a child to read Pular from nothing — the letters first, then
      words, then whole sentences. It does not need you to read Pular. It needs
@@ -12185,6 +12246,20 @@ document.body.addEventListener("click",function(e){
  if(av){ actx(); sTap(); S.view="avatar"; render(); return; }
  armAudio();
  const t=e.target.closest("button"); if(!t) return; const d=t.dataset;
+  /* ---- v258: the tap log ----
+     "This page is not responding" is impossible to tell apart from "this page
+     received the tap and decided to do nothing" without seeing inside. Every
+     tap on a button now records which data key it carried and whether the
+     handler ran to completion. It is four lines, it costs nothing, and it
+     turns a guess into a reading: open Settings after a dead tap and look. */
+  try{
+   if(!window.TAPLOG) window.TAPLOG=[];
+   const keys=Object.keys(d);
+   TAPLOG.unshift({k:keys.length?keys.join(","):"(none)",
+     cls:(t.className||"").split(" ")[0]||"-", t:new Date().toTimeString().slice(0,8), done:false});
+   TAPLOG.length=Math.min(TAPLOG.length,8);
+   setTimeout(function(){ if(TAPLOG[0]) TAPLOG[0].done=true },0);
+  }catch(err){}
  if(d.face){ AVA={kind:"emoji",val:d.face}; sGood(); render(); return; }
  /* an island on the road, or the fork at the door: either way the helicopter
     takes the child out to it. From the door the card lifts away first, so the
@@ -12514,6 +12589,13 @@ document.body.addEventListener("click",function(e){
   else { S.vlI=(S.vlI||0)+1 }
   sMove(); render(); return}
  if(d.rtback!==undefined){ S.rt=null; sMove(); render(); return}
+   /* v258: the look-again letter swells while its clip runs, so the sound is
+      visibly coming from the letter and not from the button. */
+   if(d.clip&&t.closest&&t.closest(".rtcard")){
+    const card=t.closest(".rtcard");
+    card.classList.add("saying");
+    setTimeout(function(){ card.classList.remove("saying") },900);
+   }
    if(d.hsaid!==undefined){ if(d.clip) play(t,d.clip); S.hnSaid=true; render(); return}
    if(d.hnext!==undefined){ S.hnI=(S.hnI||0)+1; S.hnSaid=null; if(S.hnI>=HAND.length) S.hnPhase="q"; sMove(); render(); return}
    if(d.hq){ const q=HANDQ[S.hqI||0], c=HAND[q.n-1], ans=c.w; if(S.hqPick===ans) return;
