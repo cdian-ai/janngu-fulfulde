@@ -4885,6 +4885,22 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 .machinesay{margin:0 6px 12px;font-size:14px;line-height:1.5;color:var(--gold-deep);
  background:var(--gold-bg);border-radius:14px;padding:10px 13px;text-align:center}
 .machinesay b{font-size:17px}
+
+/* v265: the arrival card announces itself and leaves */
+.introskip{width:auto!important;min-width:64px;align-self:center;opacity:.5;
+ font-size:20px;padding:6px 22px}
+.introcard{animation:introFade 1.6s ease both}
+@keyframes introFade{0%{opacity:0}12%{opacity:1}82%{opacity:1}100%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.introcard{animation:none}}
+
+.fwhint{font-size:12px;color:var(--muted);letter-spacing:.04em}
+
+/* v265: the hooked letters carry their whole difference in a small curl, and
+   the syllable keyboard draws them at the size of everything else. ɓ ɗ ƴ ŋ are
+   the four a beginner confuses with b d y n, and on that grid they get a little
+   more room and a little more weight so the hook is doing visible work. */
+.key.ck{font-size:23px}
+.key.ck.hooked{font-size:27px;font-weight:600}
 </style>
 </head>
 <body>
@@ -5183,7 +5199,7 @@ const SHAPES=[["ɗala","ML"],["fala","ML"],["hara","ML"],["jala","ML"],["kala","
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v264 · 5 September 2026";
+const BUILD="v265 · 5 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -6248,7 +6264,7 @@ function sylmac(){
    ${chalbar}
    ${c?"":`<div class="sytip">pick a letter \u2014 the vowels come up over it</div>
    <div class="crow">${CONS.map(function(x){
-     return `<button class="key ck ff${!S.touched?" pulse":""}" data-c="${esc(x)}">${esc(x)}</button>`}).join("")}</div>
+     return `<button class="key ck ff${"ɓɗƴŋñ".indexOf(x)>=0?" hooked":""}${!S.touched?" pulse":""}" data-c="${esc(x)}">${esc(x)}</button>`}).join("")}</div>
    ${made.length?`<div class="maderow">${made.map(function(s){
      return `<button class="madechip ff" data-made="${esc(s)}">${esc(s)}</button>`}).join("")}</div>`:""}
    <button class="askme" data-chalgo>🧩 ask me for one</button>`}
@@ -8362,7 +8378,16 @@ function introCard(){
    <p class="intowhat"><b>${esc(a.t)}</b>${a.n?` \u00b7 ${esc(a.n)}`:""}</p>
    <p class="intosay">${esc(a.say||"")}</p>
    <p class="intowhy">${a.ad&&a.ad[1]?esc(String(a.ad[1]).split(". ")[0])+".":esc(u.why)}</p>
-   <button class="wallbtn good" data-introgo>start \u203a</button>
+   ${""/* ---- v265: it costs a tap and buys nothing ----
+     This card is generated from the activity's own description, so it can only
+     say what is coming. It never says what just happened or why this follows
+     that, and a staging card earns its tap by connecting two things rather than
+     announcing one. The information is nearly free; the tap was the whole cost.
+     It shows itself for a second and a half and gets out of the way. A child in
+     a hurry can tap it away sooner; a child who wants to look can, because the
+     road is still behind them. The connective sentence, written by hand per
+     stop, is the better version of this and is still worth doing. */}
+   <button class="wallbtn quiet introskip" data-introgo>\u203a</button>
   </div></div>`;
 }
 
@@ -11551,8 +11576,19 @@ function hand(){
  if(!doneP||!S.hnSaid) return wrap(`<div class="meet">
    <p class="grownup">grown-up: it says <b class="ff">${esc(c.w)}</b></p>
    ${numField(c.n,c.n,p)}
+   ${""/* ---- v265: the presses were drilling the name three times ----
+     A letter card has one link to teach: this shape makes this sound, so
+     pressing it three times is three goes at the one thing. A number has three
+     links — the shape, its name, and how many — and pressing the tile three
+     times taught the name three times while the counters arrived afterwards as
+     decoration on a card whose work was already done.
+     Now the quantity assembles under the name: the first press says it, the
+     second says it and drops one counter, the third brings the rest as it is
+     said a last time. Same field, same tile, same three dots, same two ways
+     out — the interaction stays shared and the content stops being blurred. */}
    ${p>0?`<div class="fieldword"><b class="ff">${esc(c.w)}</b>
-     <span class="cntrow small">${ndots(c.n)}</span></div>`:""}
+     <span class="cntrow small">${ndots(p===1?1:c.n)}</span>
+     ${p===1&&c.n>1?`<span class="fwhint">one so far</span>`:""}</div>`:""}
    ${doneP?`<div class="twoway">
       <button class="tw again" data-npress aria-label="hear it again">
        <span class="bars"><i></i><i></i><i></i></span></button>
@@ -11920,6 +11956,9 @@ function render(){
   /* v256: the re-teach card stands in front of whatever the activity would
      have drawn, inside the same stop, with the same header and progress. */
   let body=S.intro2?introCard():(S.rt?rtCard():VIEWS[S.act]());
+  if(S.intro2 && INTROT!==S.act){ INTROT=S.act;
+   setTimeout(function(){ if(S.intro2&&S.view==="act"){ S.intro2=false; render() } },1600); }
+  if(!S.intro2) INTROT=null;
   if(OPEN_ENDED.indexOf(S.act)>=0 && body.indexOf('data-finish')<0
    && !(S.act==="parade"&&S.lopen!==null)) body+=finishBar();
   /* the reference is reachable from inside every activity, and opens over it */
@@ -12190,7 +12229,7 @@ function histSnap(){
  });
  try{ return JSON.stringify(o) }catch(e){ return null }
 }
-let HIST=[], HPOS=-1, HISTHOLD=false;
+let HIST=[], HPOS=-1, HISTHOLD=false, INTROT=null;
 /* A stack could only undo. Walking back and then being made to answer
    everything again to return is worse than not having the arrow at all, so
    this is a cursor into a list rather than a stack: back moves it left,
