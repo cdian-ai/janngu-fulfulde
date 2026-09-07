@@ -5105,6 +5105,10 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 .alldone{text-align:center;padding:8px 0 4px}
 .alldone .big{font-size:44px}
 .alldone b{font-size:16px;color:var(--unit)}
+
+/* v282 */
+.unitname{margin:2px 0 6px;font-size:12.5px;font-weight:700;letter-spacing:.07em;
+ text-transform:uppercase;color:var(--muted);text-align:center}
 </style>
 </head>
 <body>
@@ -5417,7 +5421,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v281 · 6 September 2026";
+const BUILD="v282 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -10010,7 +10014,7 @@ const JALOO_ROAD=["Maamu","Telimile","Pita","Tolo","Dalaba","Ditinn","Mombeya",
    Reading it now: meet the letters, sort them, learn that a vowel can be held,
    build every syllable both ways, learn that a consonant can be doubled, then
    count. */
-JOURNEY[0].ids=["greet","hf0","hf1","hf2","hf3","hf4","hf5","hf6","gpens","pairs","sylmac","gemin","hand","jee"];
+const OLD_TOORO_IDS=["greet","hf0","hf1","hf2","hf3","hf4","hf5","hf6","gpens","pairs","sylmac","gemin","hand","jee"];
 /* a greeting belongs to nobody's town */
 if(ACTS.greet) ACTS.greet.home=true;
 /* one town per group of nouns, then the machine, then the rest of the Fouta:
@@ -10041,7 +10045,8 @@ if(ACTS.greet) ACTS.greet.home=true;
    nduu at Fugumba from the animals; ngol and ndee wait for the outdoor and
    carried words. Nothing on this road now asks about a word the child has
    not met. */
-JOURNEY[1].ids=["wm0","wm1","wm2",
+/* v282: superseded below — the road is rebuilt in one place now */
+const OLD_JALOO_IDS=["wm0","wm1","wm2",
   "littleset","wordmac","wordmac2","wordmac3",
   "lw0","lw1","lw2","lw3",
   "wm3","wm4","wm5",
@@ -10057,6 +10062,48 @@ JOURNEY[1].ids=["wm0","wm1","wm2",
     the child knows the classes, and before the swap, which they now have a
     reason to care about. */
  .concat(["makeword","masswords","verbs","adjs","kinfolk","mpens","onemany","swap"]);
+
+/* ================= v282: five units of roughly equal length =================
+   Fuuta Jaloo held twenty-seven teaching stops and Adamawa held two — thirteen
+   and a half times the difference, and half the whole course inside one Fouta.
+   The Foutas were a map of the Fulɓe world and the lessons were fitted to it
+   afterwards, so the imbalance was never pedagogical; it was geography.
+
+   Only four things in this course cannot be reordered — letters before
+   syllables, syllables before splitting, words before their little words,
+   little words before sentences — and all four still hold. Everything else was
+   preference, which is why an even split was reachable at all.
+
+   The units are now named for what they teach. The Fouta each one is walked in
+   is kept and shown underneath, because the road is still the road and a child
+   still crosses from the river to the mountains. What changes is that a
+   grown-up looking at the map can now see the shape of the course.
+
+   10 / 11 / 10 / 10 / 10. splitter and names moved up beside the syllable
+   machine, where they belong — they are the same skill — and the numbers went
+   with them because seven number stops are nearly a unit on their own. */
+JOURNEY[0].stop="Sounds";        JOURNEY[0].where="Fuuta Tooro";
+JOURNEY[0].why="Meet the letters and the sounds they make.";
+JOURNEY[1].stop="Syllables & numbers"; JOURNEY[1].where="Fuuta Jaloo";
+JOURNEY[1].why="Put sounds together, take words apart, and count.";
+JOURNEY[2].stop="Words";          JOURNEY[2].where="Fuuta Masina";
+JOURNEY[2].why="Meet the words, and the little word each one carries.";
+JOURNEY[3].stop="What the little words do"; JOURNEY[3].where="Adamawa";
+JOURNEY[3].why="One, a little one, little ones, many of them.";
+JOURNEY[4].stop="Words at work";   JOURNEY[4].where="Ka Njananiri";
+JOURNEY[4].why="Doing, describing, changing \u2014 and then sentences.";
+
+JOURNEY[0].ids=["greet","hf0","hf1","hf2","hf3","hf4","hf5","hf6","gpens","pairs"];
+JOURNEY[1].ids=["sylmac","gemin","splitter","names",
+  "hand","jee","tens","nummac","numq","days","seasons"];
+JOURNEY[2].ids=["wm0","wm1","wm2","wm3","wm4","wm5",
+  "littleset","wordmac","wordmac2","wordmac3"];
+JOURNEY[3].ids=["lw0","lw1","lw2","lw3","lw4","lw5","lw6",
+  "jobset","makeword","masswords"];
+JOURNEY[4].ids=["verbs","adjs","kinfolk","mpens","onemany","swap","visiting",
+  "sentbuild","sentmark","sentread"];
+/* the unit each activity belongs to has to follow the road it is now on */
+JOURNEY.forEach(function(u,ui){ u.ids.forEach(function(id){ if(ACTS[id]) ACTS[id].u=ui }) });
 
 const ORDER=JOURNEY.reduce((a,s)=>a.concat(s.ids),[]);
 
@@ -12170,6 +12217,7 @@ function arrival(){
    <span class="trav">${avaHTML()}</span></div>
   <div class="lbl">You have reached</div>
   <h2>${esc(r.n)}</h2>
+  ${JOURNEY[si]&&JOURNEY[si].stop?`<div class="unitname">${esc(JOURNEY[si].stop)}</div>`:""}
   <div class="where">${esc(r.where)}</div>
   <div class="factbox" style="background:${u.c}">
    <b>${esc(r.factT)}</b><p>${r.factP}</p>
@@ -13037,7 +13085,7 @@ const PKEYS=["spShown","sBad","dHeard","hnAnim","seSeen","sePhase","seqI","seqPi
    screen changed; v155 changes only the drawer, so a v153 place still resumes
    onto exactly the screen it was written from. Bump it the next time an
    activity's stages move. */
-const PLACE_BUILD=277;   /* v243 inserts a screen in the greeting and one
+const PLACE_BUILD=282;   /* v243 inserts a screen in the greeting and one
                             between the asking and the machine, so a place
                             written by an older build would resume past them */
 function placeKeep(){
