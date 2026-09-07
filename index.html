@@ -5077,6 +5077,19 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 .amex{display:flex;flex-direction:column;gap:5px;width:100%}
 .amex b{font-family:'FulSerif',serif;font-size:17px;color:var(--ink);font-weight:400}
 .amex span{font-size:12px;color:var(--muted)}
+
+/* v278 */
+.ctl.wide{width:100%}
+.spdemo{align-items:center;text-align:center;gap:0}
+.splitline.demo{opacity:.95;pointer-events:none;justify-content:center}
+.splitline.demo .cutd{display:inline-block;width:3px;height:30px;margin:0 6px;
+ border-radius:2px;background:rgba(27,46,107,.12)}
+.spwhy{margin:16px 6px 0;font-size:14px;line-height:1.6;color:var(--ink)}
+.spwhy b{font-family:'FulSerif',serif;font-size:17px}
+.spwhy i{font-style:normal;font-family:'FulSerif',serif;color:var(--leaf-deep)}
+.splitline .tok{transition:transform .2s ease,color .2s ease}
+.splitline.saying0 .tok:first-of-type,.splitline.whole .tok{color:var(--leaf-deep)}
+.splitline.whole .tok{transform:scale(1.06)}
 </style>
 </head>
 <body>
@@ -5341,8 +5354,19 @@ const SPLITS=[
     stops, the borrowed words from Adamawa, and two kin words. A child splitting
     a word they own is splitting something, not sounding out a stranger. */
  ["alluwal","al/lu/wal"], ["mbabba","mbab/ba"], ["ndaarorgal","ndaa/ror/gal"],
- ["ƴuruƴukkuwal","ƴu/ru/ƴuk/ku/wal"], ["karambol","ka/ram/bol"], ["ñaariiru","ñaa/rii/ru"],
- ["booliwal","boo/li/wal"], ["woofoonde","woo/foon/de"], ["saabiwal","saa/bi/wal"],
+ ["ƴuruƴukkuwal","ƴu/ru/ƴuk/ku/wal"], /* ---- v278: two answers no child could reach ----
+    karambol asked for ka/ram/bol and woofoonde for woo/foon/de, and neither cut
+    exists on screen: the course teaches mb and nd as single letters and the line
+    of tiles is built from those letters, so there is no gap between the m and
+    the b to tap. A child tapping every gap would still be told they were wrong.
+    woofoonde is fixed rather than dropped, and the fix is the truer split
+    anyway — woofoo + nde, where nde is the class ending it has carried since
+    Fuuta Jaloo. karambol is dropped: it is a French loan whose m and b really do
+    belong to different syllables when it is said aloud, which is a subtlety
+    about when mb is one letter and when it is two, and this stop is not for
+    that. danki takes its place and splits cleanly. */
+ ["danki","dan/ki"], ["ñaariiru","ñaa/rii/ru"],
+ ["booliwal","boo/li/wal"], ["woofoonde","woo/foo/nde"], ["saabiwal","saa/bi/wal"],
  ["bareeru","ba/ree/ru"], ["ŋannawol","ŋan/na/wol"], ["ñaawoowo","ñaa/woo/wo"],
  ["deftere","def/te/re"], ["koyngal","koy/ngal"], ["bonooru","bo/noo/ru"],
  ["taabal","taa/bal"], ["luumo","luu/mo"], ["maakiti","maa/ki/ti"],
@@ -5350,7 +5374,7 @@ const SPLITS=[
 ];
 
 /* family names from the book's practice list */
-const NAMES=[["jallo","jal/lo"],["bari","ba/ri"],["balde","bal/de"],["kamraa","kam/raa"],
+const NAMES=[["jallo","jal/lo"],["bari","ba/ri"],["balde","bal/de"],["kamara","kam/raa"],
 ["kaykay","kay/kay"],["munu","mu/nu"],["siisee","sii/see"],["tuuree","tuu/ree"],
 ["sidibee","si/di/bee"],["sangaree","san/ga/ree"],["sankaraa","san/ka/raa"],["baro","ba/ro"],
 ["kannde","kan/nde"],["koromaa","ko/ro/maa"],["bookum","boo/kum"],["ngayde","ngay/de"],
@@ -5378,7 +5402,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v277 · 6 September 2026";
+const BUILD="v278 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -8807,6 +8831,27 @@ function tintJoin(s){
    five of the twelve sentences, every one of them about family. So it is taught
    once, here, where the family words are, and then it is simply theirs. */
 const AMCARD={w:"am", en:"my", ex:[["baaba am","my father"],["neene am","my mother"],["koto am","my brother"]]};
+/* v278: a correct split says itself back — each piece in turn, then the whole
+   word. Getting it right is the moment the child is most ready to hear what
+   they have just done, and hearing the parts before the whole is the same
+   direction the activity works in. Clips are per part; where they are missing
+   this is silent and costs nothing. */
+function sayParts(pair){
+ const parts=String(pair[1]).split("/");
+ const idx=SPLITS.indexOf(pair);
+ parts.forEach(function(p,k){
+  setTimeout(function(){
+   const el=document.querySelector(".splitline");
+   if(el) el.classList.add("saying"+k);
+   try{ play(null,"split/p"+pad(idx,2)+"-"+k+".mp3") }catch(e){}
+  },k*560);
+ });
+ setTimeout(function(){
+  const el=document.querySelector(".splitline");
+  if(el){ el.className="splitline whole"; }
+  try{ play(null,"split/s"+pad(idx,2)+".mp3") }catch(e){}
+ },parts.length*560+180);
+}
 function rtKey(a,k){ return a+"|"+k }
 function rtMiss(a,k,teach){
  S.rtN=S.rtN||{};
@@ -9383,12 +9428,34 @@ function splitLine(w,cuts,attr,cap){const t=tok(w);
   +`<span class="tok" style="${cap?'text-transform:capitalize':''}">${esc(x)}</span>`).join("")}</div>`}
 
 function splitter(){const[w,syl]=SPLITS[S.spi];
+ if(!S.spShown) return wrap(`<div class="meet spdemo">
+   <p class="dqlab">this is how it works</p>
+   <div class="splitline demo">
+    <span class="tok">t</span><span class="cutd"></span><span class="tok">a</span>
+    <span class="cutd"></span><span class="tok">a</span>
+    <button class="cut on" disabled></button>
+    <span class="tok">b</span><span class="cutd"></span><span class="tok">a</span>
+    <span class="cutd"></span><span class="tok">l</span></div>
+   <div class="wordbig" style="font-size:21px;color:var(--leaf-deep);margin-top:12px">taa/bal</div>
+   <p class="spwhy"><b>taabal</b> has two beats \u2014 <i>taa</i> and <i>bal</i>.
+     Say it slowly and you will hear where it breaks. Tap the gap between the
+     letters where the beat ends, then press check.</p>
+  </div>`,0,SPLITS.length)
+ +`<button class="wallbtn good" data-spgo>I am ready \u203a</button>`;
  return wrap(splitLine(w,S.scuts,"cut",false)
   +(S.sdone?`<div class="wordbig" style="font-size:21px;color:var(--leaf-deep);margin-top:13px">${esc(syl)}</div>`
    :`<div style="font-size:13px;color:var(--muted);margin-top:13px">${S.scuts.length} cut${S.scuts.length===1?'':'s'}</div>`)
   +`<button class="hearbtn ghost" data-clip="split/s${pad(S.spi,2)}.mp3"><span class="bars"><i></i><i></i><i></i></span>hear it</button>`,S.spi,SPLITS.length)
- +`<div class="controls c2"><button class="ctl" data-check>check</button>
-   <button class="wallbtn" data-snext2>next ›</button></div>`}
+ /* v278: next sat beside check from the moment the card opened, so the way
+    past a word was always easier than the word. It arrives when the split is
+    right — and after three wrong tries the answer offers itself, because a
+    child stuck on ƴuruƴukkuwal with no way forward is a child who stops. */
+ +(S.sdone
+   ? `<div class="controls c2"><button class="ctl" data-check>check</button>
+      <button class="wallbtn good" data-snext2>next \u203a</button></div>`
+   : `<div class="controls"><button class="ctl wide" data-check>check</button></div>`
+     +((S.sBad||0)>=3?`<button class="wallbtn quiet" data-sshow>show me this one</button>`
+       :(S.sBad?`<p class="meetsay">not yet \u2014 listen again and count the beats</p>`:"")))}
 
 function shapes(){
  if(S.shi>=SHAPES.length) return done("🧩","All shaped");
@@ -12891,7 +12958,7 @@ function render(){
    reach the seventh. Every activity writes its own place as it goes now, and
    picks it up again on the way back in. A finished stop starts from the top;
    a half-done one resumes exactly where it was left. */
-const PKEYS=["dHeard","hnAnim","seSeen","sePhase","seqI","seqPick","dSeen","dPhase","dqI","dqPick","srDid","vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
+const PKEYS=["spShown","sBad","dHeard","hnAnim","seSeen","sePhase","seqI","seqPick","dSeen","dPhase","dqI","dqPick","srDid","vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "sqPhase","sqM","sqStep","sqPress","sqChunk","li","lopen","gsel","gput","gRound",
  "gmiss","gfed","gno","gheard","gPhase","gT","gTP","brP","brAsk","brRight","eCel",
  "diI","diPhase","diFound","diMiss",
@@ -14409,11 +14476,17 @@ document.body.addEventListener("click",function(e){
   S.scuts=S.scuts.indexOf(i)>=0?S.scuts.filter(function(x){return x!==i}):S.scuts.concat([i]).sort(function(a,b){return a-b});
   S.sdone=false;render();return}
  if(d.check!==undefined){const w=cutsFrom(SPLITS[S.spi][1]);
-  S.sdone=w.length===S.scuts.length&&w.every(function(x){return S.scuts.indexOf(x)>=0});
-  (S.sdone?sGood:sOops)(); if(!S.sdone)S.scuts=[];render();return}
+     S.sdone=w.length===S.scuts.length&&w.every(function(x){return S.scuts.indexOf(x)>=0});
+     if(S.sdone){ S.sBad=0; sGood(); sayParts(SPLITS[S.spi]); }
+     else { S.sBad=(S.sBad||0)+1; sOops(); S.scuts=[]; }
+     render();return}
+   if(d.spgo!==undefined){ S.spShown=true; sMove(); render(); return}
+   if(d.sshow!==undefined){ /* v278: hand it over rather than let them stall */
+     S.scuts=cutsFrom(SPLITS[S.spi][1]); S.sdone=true; S.sBad=0; sMove();
+     render(); sayParts(SPLITS[S.spi]); return}
  if(d.snext2!==undefined){S.spi=S.spi+1;
   if(S.spi>=SPLITS.length){finishAct();return}
-  S.scuts=[];S.sdone=false;render();return}
+  S.scuts=[];S.sdone=false;S.sBad=0;render();return}
  if(d.sh){const sh=SHAPES[S.shi][1];
   if(d.sh===sh){t.classList.add("right");S.shwrong=null;
    setTimeout(function(){S.shi++;if(S.shi>=SHAPES.length){finishAct();return}render()},400)}
