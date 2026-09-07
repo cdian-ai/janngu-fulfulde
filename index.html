@@ -5417,7 +5417,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v280 · 6 September 2026";
+const BUILD="v281 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -8837,6 +8837,11 @@ function introCard(){
    itself. The class markers are NOT tinted: a child has spent eighteen stops
    learning those as words in their own right and they should look like it. */
 const JOINW=["no","e","am","ka"];
+/* v281: the three rules a native speaker gave for the little word inside a
+   sentence, kept here so they are not lost the next time someone edits these:
+     a noun with am takes none        Baaba am jooɗike
+     a noun after ka takes none       ka danki
+     a bare noun subject takes the -n form   Bareeru ndun */
 function tintJoin(s){
  return String(s).split(" ").map(function(w){
   const bare=w.replace(/[.?,]/g,"");
@@ -10739,37 +10744,39 @@ function setAt(si,i){
    English glosses are working translations and need the
    author's check before this ships.                          */
 const SENT=[
- /* ================= v280: the little word was missing =================
-    Every one of these was built on a frame of Peeral's — but the frames I copied
-    all had NAMES as subjects (Nduru no natude suudu, Laylaa no wuppude comci),
-    and names take no little word. Swapping in a noun changes the grammar, and
-    his own prose shows it: Bareeru ndun no alɓaade ƴi'al ngal. Kamiyon on no
-    adude njaareendi. Awiyon on no immaade. Subject noun, then its marker.
-    Eighteen stops teach that every noun has a little word and then the first
-    sentence a child built dropped it. They are all in now, subjects and definite
-    objects both, in the forms the course taught.
+ /* ================= v281: how it is actually said =================
+    Corrected by a native speaker, and every correction is a rule rather than a
+    one-off.
 
-    natude is gone entirely. It meant "draw", it is tagged {rare} — Peeral gives
-    deesingol and pirintingol as the everyday words — and it sits one vowel away
-    from naatude, "to enter", which is what a Pular speaker actually reads. A
-    sentence that a fluent reader misreads is not a sentence a learner should
-    meet. ñaamude, to eat, takes its place: everyday, unmistakable, and a thing
-    a six-year-old does three times a day.
+    A noun that already carries am takes no little word. Baaba am jooɗike, not
+    Baaba am oo jooɗike — the possessive has already made it definite and the
+    marker would be saying it twice.
 
-    ka is the locative and it is needed: sitting ON the bed, not sitting the bed.
-    Peeral: Himo ka suudu. He is at the house. */
- ["Baaba am oo jooɗike.","My father has sat down."],
- ["Neene am oo no ñaamude.","My mother is eating."],
- ["Koto am oo no wuppude paɗal ngal.","My brother is washing the shoe."],
- ["Jaaja am oo no winndude e alluwal ngal.","My sister is writing on the writing board."],
+    A noun after ka takes no little word either. Soro am jooɗike ka danki.
+    ka danki kii is not said.
+
+    A bare noun subject DOES take one, and it takes the -n form: Bareeru ndun,
+    not Bareeru nduu. That settles the open question from v280 — the course
+    teaches nduu, ngal, mbaa as the markers standing alone, and inside a running
+    sentence they are ndun, ngal, mban. Peeral's own prose agrees: Bareeru ndun
+    no alɓaade ƴi'al ngal. Mbeewa mban hammani mbaheeri ndin.
+
+    And wuppude is not "washing". Peeral: laver le linge; faire la lessive. It
+    is laundry and only laundry. lootude — laver, baigner — is what you do to an
+    animal, a car, a person. Two of these sentences were washing a donkey and a
+    bowl with the laundry verb. lootude joins the verb list. */
+ ["Baaba am jooɗike.","My father has sat down."],
+ ["Neene am no ñaamude.","My mother is eating."],
+ ["Koto am no lootude bareeru ndun.","My brother is washing the dog."],
+ ["Jaaja am no winndude e alluwal.","My sister is writing on the writing board."],
  ["Binta no ñaamude.","Binta is eating."],
- ["Yero no wuppude booliwal ngal.","Yero is washing the bowl."],
- ["Soro am oo jooɗike ka danki kii.","My grandfather has sat down on the bed."],
+ ["Yero no lootude booliwal ngal.","Yero is washing the bowl."],
+ ["Soro am jooɗike ka danki.","My grandfather has sat down on the bed."],
  ["Koli no amude.","Koli is dancing."],
- ["Sira no winndude e deftere ndee.","Sira is writing in the book."],
- ["Bareeru nduu jooɗike ka ɗatal ngal.","The dog has sat down on the road."],
+ ["Sira no winndude e deftere.","Sira is writing in the book."],
+ ["Bareeru ndun jooɗike ka ɗatal.","The dog has sat down on the road."],
  ["Nduru no ñaamude.","Nduru is eating."],
- ["Kaaw am oo no wuppude mbabba mbaa.","My uncle is washing the donkey."],
+ ["Kaawu am no lootude mbabba mban.","My uncle is washing the donkey."],
  ["Anndaa lamndotaako majjay tun.","One who does not know and will not ask simply stays lost.",1],
  ["Neene e baaba ko fuɗɗorɗum aduna.","Mother and father are the beginning of the world.",1]
 ];
@@ -11838,7 +11845,7 @@ const KIN=[
  ["koto","brother","\ud83d\udc66","",1],
  ["jaaja","sister","\ud83d\udc67","",1],
  ["soro","grandfather","\ud83d\udc74","",1],
- ["kaaw","uncle","\ud83e\uddd4","your mother's side",0],
+ ["kaawu","uncle","\ud83e\uddd4","your mother's side",0],
  ["bappa","uncle","\ud83d\udc68\u200d\ud83e\uddb0","your father's side",0],
  ["yaaye","aunt","\ud83d\udc69\u200d\ud83e\uddb1","your father's side",0,
   "Your mother's sister is <b>neene</b> too \u2014 the same word as mother. You say her name with it: <b>Neenan Binta</b>."],
@@ -11988,7 +11995,8 @@ const VERBS=[
  {si:2, g:"\ud83e\udd64", v:"yarii",    en:"drank"},
  {si:1, g:"\ud83e\ude91", v:"joo\u0257ike",  en:"has sat down"},
  {si:5, g:"\ud83c\udf5a", v:"ñaamude", en:"eating"}   /* v280: natude meant draw, was tagged {rare}, and sits one vowel from naatude — to enter — which is what a Pular reader actually sees. */,
- {si:6, g:"\ud83e\uddfa", v:"wuppude",  en:"washing"},
+ {si:6, g:"\ud83e\uddfa", v:"wuppude", en:"washing clothes"},
+ {si:44,g:"\ud83d\udec1", v:"lootude",  en:"washing a thing"},
  {si:7, g:"\ud83d\udc83", v:"amude",    en:"dancing"},
  {si:9, g:"\ud83d\udcd6", v:"winndude", en:"writing"}];
 
