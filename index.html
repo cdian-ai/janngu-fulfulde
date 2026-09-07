@@ -5059,6 +5059,24 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 @keyframes barjig{0%,100%{transform:scaleY(.55)}50%{transform:scaleY(1.15)}}
 @media (prefers-reduced-motion:reduce){.nmcard.ringing{transform:none}
  .nmcard.ringing .bars i{animation:none}}
+
+/* v277: the three small joining words are tinted wherever a sentence is shown,
+   so a child can see that they are a different kind of word rather than three
+   they were never taught. no and e are grammatical glue and are met in use;
+   am means MY and is taught properly at the kinfolk stop. */
+.jw{color:#8A7BB8;font-style:normal}
+.youknew{margin:0 0 18px;font-size:14.5px;line-height:1.5;color:var(--muted);text-align:center}
+.youknew b{color:var(--unit);font-size:16px}
+
+/* v277 */
+.amcard{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;
+ margin-top:16px;padding:16px 12px;border-radius:20px;background:#F4F1FA;
+ border:2px solid rgba(138,123,184,.35)}
+.amcard .amw{font-family:'FulSerif',serif;font-size:34px;color:#6B5BA5}
+.amcard .amen{font-size:13px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.amex{display:flex;flex-direction:column;gap:5px;width:100%}
+.amex b{font-family:'FulSerif',serif;font-size:17px;color:var(--ink);font-weight:400}
+.amex span{font-size:12px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -5360,7 +5378,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v276 · 6 September 2026";
+const BUILD="v277 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -5565,7 +5583,7 @@ const ACTS={
  swap:{t:"Letter swap",em:"🔁",u:1,n:"7 swaps",say:"Which letter comes back? Tap it.",
   ad:["Mutations","f→p, s→c, r→d, y→g, and the three two-letter ones dropping their front. Seven swaps in the whole language — a closed list, learnable in a week.","v245: the drilled pairs were rebuilt from words Peeral actually prints for Guinea. fowru/pobbi, sehre/cehe, rawaandu/dawaaɗi, njambala/jambali and ngabbu/gabi all went — the first three are other-dialect or marked rare, the last two are not in the book at all, and the Guinea words that replace them (kemmba/kenɗi, gabbii/gabbi) show no mutation, so they could not carry the drill. The pairs now are fayannde/payanɗe (a clay pot), saare/ca'e (a town), debbo/rewɓe (a woman), mbabba/babbi (a donkey), njogaari/jogaaji (a tool) and ngaari/ga'i (a bull). Every one is mined from the dictionary's own singular-plural pairs. ngaari is deliberate: the child already met it learning the two-letter ng."]},
 
- visiting:{t:"Words that came visiting",em:"🧳",u:3,n:"7 borrowed words",
+ visiting:{t:"Words that came visiting",em:"🧳",u:1,n:"7 borrowed words",
   say:"Some words came from somewhere else, and they keep their own little word.",
   ad:["Borrowed words take oo",
    "The ending tells you the little word — for native nouns. Of the roughly 460 borrowed words Peeral gives a class to, 425 take oo whatever they end in: aada from Arabic, lekkol from French, bareeru from Susu. It waits until Adamawa because an exception taught while the rule is still settling teaches a child that the rule does not hold. And it is a sort rather than a card, because a category you separate with your own hands is one you have found rather than been told."]},
@@ -8775,6 +8793,20 @@ function introCard(){
   </div></div>`;
 }
 
+const JOINW=["no","e","am"];
+function tintJoin(s){
+ return String(s).split(" ").map(function(w){
+  const bare=w.replace(/[.?,]/g,"");
+  return JOINW.indexOf(bare.toLowerCase())>=0
+   ? `<i class="jw">${esc(w)}</i>` : esc(w);
+ }).join(" ");
+}
+/* v277: am is not the same kind of word as no and e. Those two are grammatical
+   glue and are met in running text, which is where words like that are met.
+   am means MY — a meaning a child can hold and enjoy owning — and it turns up in
+   five of the twelve sentences, every one of them about family. So it is taught
+   once, here, where the family words are, and then it is simply theirs. */
+const AMCARD={w:"am", en:"my", ex:[["baaba am","my father"],["neene am","my mother"],["koto am","my brother"]]};
 function rtKey(a,k){ return a+"|"+k }
 function rtMiss(a,k,teach){
  S.rtN=S.rtN||{};
@@ -9746,7 +9778,7 @@ const JOURNEY=[
      The wall is no longer a step at all — it lives in the reference. */
   ids:[]},
  {stop:"Words",            lm:"\ud83c\udf33", why:"Now the letters make words that change shape.",
-  ids:["wordmac","kinfolk","mpens","onemany","swap"]},
+  ids:["wordmac","kinfolk","mpens","onemany","swap","visiting"]},
  {stop:"Numbers & time",   lm:"\u26f0\ufe0f", why:"Counting, days, months and seasons.",
   /* ---- v238: the seasons stay, and the reason is a good one ----
      v237 took the twelve months and four seasons off the road on the audit's
@@ -9762,8 +9794,21 @@ const JOURNEY=[
      one. Capping it at twenty means cutting NUMQ to numbers under twenty too,
      and I cannot see which num/nNN.mp3 clips you actually have. */
   ids:["tens","nummac","numq","days","seasons"]},
- {stop:"Splitting words",  lm:"\ud83c\udfc1", why:"Break any word \u2014 even your own name.",
-  ids:["visiting","splitter","shapes","names"]},
+ {stop:"Words come apart",  lm:"\ud83c\udfc1", why:"Break any word \u2014 even your own name.",
+  /* ---- v277: Adamawa was three lessons in a Fouta named for one ----
+   Words that came visiting is a noun-class lesson and belongs where the classes
+   live, so it moves to the end of Fuuta Jaloo — the condition for teaching the
+   exception was that all seven classes be secure, and the last stops of Jaloo
+   already are.
+   Word shapes is gone. Chop it up already taught syllable structure, on words
+   the child owns, and Word shapes taught it a second time in a notation — M for
+   a consonant, L for a vowel — that appeared nowhere else in the course, on
+   twelve words that appeared nowhere else either. A symbol system standing for
+   KINDS of letters is a real linguistic abstraction and nothing here needed it.
+   What survives of it is one card inside Chop it up: two words already split,
+   shown breaking in the same place, with no notation at all.
+   Adamawa is two stops now, and its name says what they share. */
+ids:["splitter","names"]},
  {stop:"Sentences",       lm:"\u2712\ufe0f", why:"Words together, with a big letter and a full stop.",
   ids:["sentbuild","sentmark","sentread"]}
 ];
@@ -10641,8 +10686,10 @@ const SENT=[
  ["Kaaw am no natude mbabba.","My uncle is drawing a donkey."],
  ["Anndaa lamndotaako majjay tun.","One who does not know and will not ask simply stays lost.",1],
  ["Neene e baaba ko fuɗɗorɗum aduna.","Mother and father are the beginning of the world.",1],
- ["Binta janngii fiinannde mum hankiire.","Binta read her lesson from yesterday.",1],
- ["Janngo mi daway yahugol ka defterdu.","Tomorrow I will set out for the book room.",1]
+ /* v277: four hard sentences was a quarter of the last stop, and the two that
+    went were ordinary sentences that happened to use untaught words — the cost
+    without the reward. The two proverbs stay, because a course about a heritage
+    language with no proverb in it has lost something no vocabulary count sees. */
 ];
 const SHUF=[0,1,2,3,4,5,6,7,8,9,10,11];      /* the ones short enough to build */
 const MARKI=[0,2,5,7,9,11,1,3,4,6] /* v268: the ten marked are all from the readable twelve */;        /* the ones used for capital-and-stop */
@@ -10705,13 +10752,13 @@ function sentmark(){
 function sentread(){
  const idx=S.sri, s0=SENT[idx];
  return wrap(`
-  <div class="sentline big">${esc(s0[0])}</div>
+  <div class="sentline big">${tintJoin(s0[0])}</div>
   <button class="hearbtn" data-clip="sent/s${pad(idx,2)}.mp3">
    <span class="bars"><i></i><i></i><i></i></span>hear it</button>
   ${S.srShow?`<div class="gloss2">${esc(s0[1])}</div>`
    :`<button class="hearbtn ghost" data-srshow><span style="font-size:17px">\ud83d\udc41\ufe0f</span>what does it mean?</button>`}
   <div class="wcount">${s0[0].replace(/\./g,"").split(" ").length} words${
-    s0[2]?` \u00b7 <b>a hard one</b> \u2014 the grown-up reads this one`:""}</div>`,idx,SENT.length)
+    s0[2]?` \u00b7 <b>older than you</b> \u2014 grown-ups say this to each other. Ask what it means.`:""}</div>`,idx,SENT.length)
  +`${""/* ---- v268: it asked nothing ----
     This was a back-and-next browser. A child could walk sixteen sentences without
     reading one and the stop completed. It is the last teaching stop in the course
@@ -12870,7 +12917,7 @@ const PKEYS=["dHeard","hnAnim","seSeen","sePhase","seqI","seqPick","dSeen","dPha
    screen changed; v155 changes only the drawer, so a v153 place still resumes
    onto exactly the screen it was written from. Bump it the next time an
    activity's stages move. */
-const PLACE_BUILD=271;   /* v243 inserts a screen in the greeting and one
+const PLACE_BUILD=277;   /* v243 inserts a screen in the greeting and one
                             between the asking and the machine, so a place
                             written by an older build would resume past them */
 function placeKeep(){
