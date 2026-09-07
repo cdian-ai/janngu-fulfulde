@@ -5090,6 +5090,21 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 .splitline .tok{transition:transform .2s ease,color .2s ease}
 .splitline.saying0 .tok:first-of-type,.splitline.whole .tok{color:var(--leaf-deep)}
 .splitline.whole .tok{transform:scale(1.06)}
+
+/* v279 */
+.owedh{margin:16px 0 8px;font-size:11.5px;font-weight:700;letter-spacing:.08em;
+ text-transform:uppercase;color:var(--muted);text-align:center}
+.arrive .owedrow{display:flex;align-items:center;gap:11px;width:100%;padding:11px 13px;
+ margin-bottom:7px;border-radius:16px;border:1.5px solid var(--line);background:#fff;
+ cursor:pointer;font-family:inherit;text-align:left}
+.arrive .owedrow .od{font-size:21px}
+.arrive .owedrow .ox{flex:1 1 auto;display:flex;flex-direction:column}
+.arrive .owedrow .ox b{font-size:14.5px;color:var(--ink)}
+.arrive .owedrow .ox small{font-size:11.5px;color:var(--muted)}
+.arrive .owedrow .oa{color:var(--muted)}
+.alldone{text-align:center;padding:8px 0 4px}
+.alldone .big{font-size:44px}
+.alldone b{font-size:16px;color:var(--unit)}
 </style>
 </head>
 <body>
@@ -5402,7 +5417,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v278 · 6 September 2026";
+const BUILD="v279 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -12117,8 +12132,31 @@ function avatarPick(){
 
 /* ---------- arriving somewhere: the reward for finishing a region ---------- */
 function arrival(){
- const si=S.arrivedAt, r=REGIONS[si], u=UNITS[si], nid=nextId();
- const nx=nid?stopOf(nid):null;
+ /* ================= v279: the door pointed backwards =================
+    This asked nextId() for the way on, and nextId() returns the first unfinished
+    stop in the WHOLE road. So a child who finished Adamawa with anything at all
+    still owed in Fuuta Tooro was shown "Travel to Fuuta Tooro" — back to the
+    beginning — with no way to go on to Ka Njananiri at all. Finishing a Fouta
+    read as being sent home.
+
+    The handoff screen fixed exactly this fault months ago and left a note about
+    it: next means next along the road, not next in the register. The arrival
+    screen never got the same treatment.
+
+    Forward first: the Fouta after this one, if there is one. What is still owed
+    behind is offered underneath, as a choice rather than as the only door. And
+    when there is nothing ahead and nothing behind, the road is finished and it
+    says so. */
+ const si=S.arrivedAt, r=REGIONS[si], u=UNITS[si];
+ const ahead=(si+1<JOURNEY.length)?si+1:null;
+ const owedBack=[];
+ for(let k=0;k<JOURNEY.length;k++){
+  if(k===si) continue;
+  const left=JOURNEY[k].ids.filter(function(x){return !S.done.has(x)}).length;
+  if(left) owedBack.push({w:k,n:left});
+ }
+ const backFirst=owedBack.filter(function(o){return o.w<si});
+ const nx=ahead;
  return `<div class="arrive">
   <div class="stamp" style="background:${u.c}">${r.flag}
    <span class="trav">${avaHTML()}</span></div>
@@ -12128,11 +12166,18 @@ function arrival(){
   <div class="factbox" style="background:${u.c}">
    <b>${esc(r.factT)}</b><p>${r.factP}</p>
    <div class="q ff">${esc(r.factQ)}</div></div>
-  ${nid?`<button class="door open" style="--wc:${UNITS[nx].c};--wc-bg:${UNITS[nx].b};width:100%" data-travel="${nx}">
+  ${nx!==null?`<button class="door open" style="--wc:${UNITS[nx].c};--wc-bg:${UNITS[nx].b};width:100%" data-travel="${nx}">
     <span class="di">${REGIONS[nx].flag}</span>
     <span class="dt"><b>Travel to ${esc(REGIONS[nx].n)}</b><small>${esc(REGIONS[nx].where)}</small></span>
     <span class="da">\u203a</span></button>`
-   :`<button class="ctl" style="width:100%" data-home>Back to the road</button>`}
+   :(owedBack.length?"":`<div class="alldone"><div class="big">\ud83c\udfc6</div>
+      <b>You have walked the whole road.</b></div>`)}
+  ${backFirst.length?`<p class="owedh">still to pick up behind you</p>
+   ${backFirst.map(function(o){
+     return `<button class="owedrow" data-travel="${o.w}">
+      <span class="od">${REGIONS[o.w].flag}</span>
+      <span class="ox"><b>${esc(REGIONS[o.w].n)}</b><small>${o.n} still to walk</small></span>
+      <span class="oa">\u203a</span></button>`}).join("")}`:""}
   <button class="stopnow" style="margin-top:10px" data-home>Look at the map</button>
  </div>`;
 }
