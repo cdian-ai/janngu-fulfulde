@@ -5465,7 +5465,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v285 · 7 September 2026";
+const BUILD="v286 · 7 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -13467,8 +13467,24 @@ function openAct(id,force){ S.world=stopOf(id); S.startAt=null;
  }
  render();
 }
+/* ================= v286: telling the host what was walked =================
+   The course is opened inside Notice Me in an iframe, and Notice Me keeps the
+   family's record of what each child has covered. Rather than have it guess,
+   the course says: every time a stop is finished it posts the whole list of
+   finished stops to the parent window, which marks the ones it does not have
+   yet. The whole list rather than the one just finished, so a child who walked
+   three stops offline is not missing two of them when they next connect.
+   It posts only to its own origin and only when it is framed; opened on its own
+   this does nothing at all. */
+function tellHost(){
+ try{
+  if(window.parent===window) return;
+  window.parent.postMessage({app:"janngu-fulfulde",type:"progress",
+    done:Array.from(S.done||[])}, location.origin);
+ }catch(e){}
+}
 function finishAct(){
- sWin(); S.done.add(S.act); S.handFrom=S.act; S.touched=false;
+ sWin(); S.done.add(S.act); tellHost(); S.handFrom=S.act; S.touched=false;
  placeDrop(S.act);                  /* finished — there is no place to keep */
  const si=stopOf(S.act);
  if(JOURNEY[si].ids.every(function(x){return S.done.has(x)})){ S.arrivedAt=si; S.view="arrival"; }
