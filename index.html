@@ -5465,7 +5465,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v284 · 7 September 2026";
+const BUILD="v285 · 7 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -9206,7 +9206,7 @@ function swapTeach(){
    <button class="hearbtn" data-clip="words/sw${m}.mp3" data-swsaid
      ><span class="bars"><i></i><i></i><i></i></span>listen</button>
   </div>`,m,SWAP.length*2)
- +(said?`<button class="wallbtn" data-swnext>next \u203a</button>`
+ +(said?`<button class="wallbtn" data-swtnext>next \u203a</button>`
        :face("\ud83d\udc40","Look at the first letter of each one. Press the word."));
 }
 function swap(){
@@ -13956,7 +13956,16 @@ document.body.addEventListener("click",function(e){
     return}
    if(d.hmet!==undefined){ S.hnSaid=true; S.hnAnim=null; sMove(); render(); return}
    if(d.swsaid!==undefined){ if(d.clip) play(t,d.clip); S.swSaid=true; render(); return}
-   if(d.swnext!==undefined){ S.swM=(S.swM||0)+1; S.swSaid=null;
+   /* ================= v285: two buttons with one name =================
+     v261 gave the swap teaching card a button called swnext. Dalaba's stage
+     where the child moves the little word between the two boxes has had a
+     button called swnext since long before that, and this handler was inserted
+     earlier in the chain, so it answered first and returned. Pressing next at
+     Dalaba ran the SWAP stop's logic: it advanced a counter belonging to a
+     different activity, re-drew the same card, and looked for all the world
+     like the marker flipping and nothing else happening. The swap's button is
+     swtnext now; nothing else about either stop changes. */
+   if(d.swtnext!==undefined){ S.swM=(S.swM||0)+1; S.swSaid=null;
      if(S.swM>=SWAP.length) S.swPhase="q"; sMove(); render(); return}
    if(d.cnt!==undefined){ /* v259: touch each one as you count it */
     t.classList.toggle("counted"); sTap(); return}
