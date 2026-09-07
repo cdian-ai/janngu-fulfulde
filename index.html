@@ -5045,6 +5045,9 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
  background:#fff;border-radius:14px;padding:9px 12px}
 .seassame b.ff{font-size:15px;color:var(--sc)}
 .seassame i{font-style:normal;font-family:'FulSerif',serif;color:var(--muted)}
+
+/* v273 */
+.crosswhere{margin:2px 0 16px;font-size:13.5px;color:var(--muted);text-align:center}
 </style>
 </head>
 <body>
@@ -5346,7 +5349,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v272 · 6 September 2026";
+const BUILD="v273 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -11512,9 +11515,30 @@ const CROSSINGS=[
 ];
 
 function crossing(){
- const to=S.crossTo, c=CROSSINGS[to-1], nr=REGIONS[to], pr=REGIONS[to-1],
+ const to=S.crossTo, nr=REGIONS[to], pr=REGIONS[to-1],
   nu=UNITS[to], pu=UNITS[to-1];
- if(!c) return "";
+ /* ================= v273: the blank screen =================
+    CROSSINGS holds the four stories told BETWEEN five Foutas, and this read
+    CROSSINGS[to-1] and returned an empty string when there wasn't one. An empty
+    string is what render puts on the page, so the whole app went white with no
+    way out but the step strip. Travelling back to Fuuta Tooro asked for
+    CROSSINGS[-1] every single time — there is no crossing before the first
+    Fouta and there never will be — so going home from anywhere was a dead
+    screen. Any travel with a story missing did the same.
+    There is always a crossing now: if no story is written for it, the card says
+    where you are going and takes you there. A missing paragraph should cost a
+    paragraph, not the app. */
+ const c=CROSSINGS[to-1];
+ if(!c || !nr) return `<div class="cross">
+   <p class="lbl">Between the Foutas</p>
+   <h2>${esc(nr?nr.n:"On your way")}</h2>
+   ${nr?`<p class="crosswhere">${esc(nr.where)}</p>`:""}
+   <button class="door open" style="--wc:${(nu||{}).c||"var(--unit)"};width:100%"
+     data-arrive="${to}"><span class="di">${nr?nr.flag:"\ud83e\udded"}</span>
+     <span class="dt"><b>Go on to ${esc(nr?nr.n:"the next Fouta")}</b></span>
+     <span class="da">\u203a</span></button>
+   <button class="stopnow" style="margin-top:10px" data-home>Look at the map</button>
+  </div>`;
  return `<div class="cross">
    <p class="lbl">Between the Foutas</p>
    <h2>${esc(pr.n)} \u2192 ${esc(nr.n)}</h2>
@@ -12639,9 +12663,29 @@ function render(){
    tb.innerHTML=`<span style="width:44px"></span><div class="tname">On the road</div><span style="width:44px"></span>`;
   }
   app.classList.remove("liftoff");
-  app.innerHTML = (isDash?dash():isSat?satchel():isCross?crossing():isWay?waypoint()
-    :isAva?avatarPick():isArr?arrival():isHand?handoff():isDet?detour():home())
-    + stepNav() + refHTML();   /* no door to dock outside an activity */
+  /* v273: a screen that renders to nothing is indistinguishable from a crash,
+     and both look like a white page with no way back. Whatever happens here, the
+     child gets a card and a door. The reason goes to the tap log in Settings. */
+  let wbody="";
+  try{
+   wbody=(isDash?dash():isSat?satchel():isCross?crossing():isWay?waypoint()
+     :isAva?avatarPick():isArr?arrival():isHand?handoff():isDet?detour():home());
+  }catch(err){
+   wbody=""; try{ window.TAPLOG=window.TAPLOG||[];
+     TAPLOG.unshift({k:"render "+S.view+" threw",cls:String(err&&err.message||err),
+       t:new Date().toTimeString().slice(0,8),done:false}) }catch(e2){}
+  }
+  if(!wbody || !String(wbody).trim()){
+   wbody=`<div class="cross">
+     <p class="lbl">Something did not draw</p>
+     <h2>Let\u2019s go back to the map</h2>
+     <p class="crosswhere">Nothing is lost \u2014 every town you have walked is still walked.</p>
+     <button class="door open" style="width:100%" data-home>
+      <span class="di">\ud83d\uddfa\ufe0f</span>
+      <span class="dt"><b>Back to the map</b></span><span class="da">\u203a</span></button>
+    </div>`;
+  }
+  app.innerHTML = wbody + stepNav() + refHTML();   /* no door to dock outside an activity */
   app.style.padding="";
   if(S.view==="home") requestAnimationFrame(function(){ try{homeSettle()}catch(e){} });
  }
