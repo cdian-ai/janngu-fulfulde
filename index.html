@@ -5039,6 +5039,12 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
  background:color-mix(in srgb,var(--sc) 9%,#fff)}
 .seasrev b.ff{font-size:26px;color:var(--sc)}
 .seasrev span:last-child{font-size:13px;color:var(--ink)}
+
+/* v272 */
+.seassame{margin-top:6px;font-size:12.5px;line-height:1.5;color:var(--ink);
+ background:#fff;border-radius:14px;padding:9px 12px}
+.seassame b.ff{font-size:15px;color:var(--sc)}
+.seassame i{font-style:normal;font-family:'FulSerif',serif;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -5340,7 +5346,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v271 · 6 September 2026";
+const BUILD="v272 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -9248,7 +9254,7 @@ const SEASONS4=[
   months:[["Siilo","January"],["Colite","February"],["Mbooy","March"]]},
  {k:"Setto", alt:"Demminaare", g:"\ud83c\udf31", c:"#6E9C7C",
   what:"the ploughing season \u2014 the last of the dry, the first of the rain",
-  when:"April to June",
+  when:"April to June", same:"Seeɗto",
   months:[["Seeɗto","April"],["Duujal","May"],["Korse","June"]]},
  {k:"Ndunngu", alt:"", g:"\ud83c\udf27\ufe0f", c:"#4E7FA6",
   what:"the rains", when:"July to September",
@@ -9257,7 +9263,14 @@ const SEASONS4=[
   what:"the harvest, and the cold", when:"October to December",
   months:[["Yarkomaa","October"],["Jolal","November"],["Bowte","December"]]}
 ];
-const SEAQ=[[0,0],[1,1],[2,2],[3,0],[0,2],[2,1],[1,0],[3,2]]; /* season, which of its months */
+/* v272: [1,0] is gone from this list. It showed Seeɗto and asked which season,
+   with Setto among the answers — and Seeɗto and Setto are the same word. Peeral
+   breaks setto down as /seeɗ-t-o/, which is letter for letter what seeɗto
+   spells; ɗ and t run together into tt. He gives them two headwords because
+   they name two things, the month and the season, but a child being asked to
+   choose between them is being asked to tell a word apart from itself. Korse
+   takes its place, and the sameness is now taught on the card instead. */
+const SEAQ=[[0,0],[1,1],[2,2],[3,0],[0,2],[2,1],[1,2],[3,2]];
 
 function seasons(){
  const seen=S.seSeen||{}, n=Object.keys(seen).length;
@@ -9289,6 +9302,9 @@ function seasons(){
         <span class="seag">${s.g}</span>
         <b class="ff">${esc(s.k)}</b>
         ${s.alt?`<span class="seasalt">ours \u00b7 <i>${esc(s.alt)}</i> downriver</span>`:""}
+        ${s.same?`<span class="seassame">its first month is <b class="ff">${esc(s.same)}</b> \u2014
+          the same word. <i>seeɗ</i> + <i>t</i> + <i>o</i>, with the \u0257 and the t
+          running together.</span>`:""}
         <span class="seaswhat">${esc(s.what)}</span>
         <span class="seaswhen">${esc(s.when)}</span>
         <div class="seasmonths">${s.months.map(function(m,mi){
