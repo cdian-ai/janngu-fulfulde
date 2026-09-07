@@ -5047,6 +5047,18 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
 
 /* v273 */
 .crosswhere{margin:2px 0 16px;font-size:13.5px;color:var(--muted);text-align:center}
+
+/* v276: a name you have pressed looks pressed */
+.nmcard{position:relative;transition:transform .16s ease, box-shadow .16s ease}
+.nmcard.ringing{transform:translateY(-3px) scale(1.03);box-shadow:0 8px 20px rgba(27,46,107,.16)}
+.nmcard.ringing .bars i{animation:barjig .5s ease-in-out infinite}
+.nmcard.ringing .nmtap{opacity:1}
+.nmcard.heard{border-width:2.5px}
+.nmtick{position:absolute;top:8px;right:10px;font-size:13px;font-weight:700;color:#3C6B4C}
+.nmcard.lent .nmtick{color:var(--gold-deep)}
+@keyframes barjig{0%,100%{transform:scaleY(.55)}50%{transform:scaleY(1.15)}}
+@media (prefers-reduced-motion:reduce){.nmcard.ringing{transform:none}
+ .nmcard.ringing .bars i{animation:none}}
 </style>
 </head>
 <body>
@@ -5348,7 +5360,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v275 · 6 September 2026";
+const BUILD="v276 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -9203,12 +9215,8 @@ function days(){
  return wrap(`<div class="meet dayweek">
    ${open===null||open===undefined?`<p class="dqlab">open every day of the week</p>`
     :`<div class="twoname">
-      <button class="nmcard own" data-clip="days/d${open}-own.mp3">
-       <b class="ff">${esc(DAYS[open][1])}</b><span>our own word</span>
-       <span class="nmtap"><span class="bars"><i></i><i></i><i></i></span></span></button>
-      <button class="nmcard lent" data-clip="days/d${open}-lent.mp3">
-       <b class="ff">${esc(DAYS[open][0])}</b><span>came with Arabic</span>
-       <span class="nmtap"><span class="bars"><i></i><i></i><i></i></span></span></button>
+      ${dayNameCard(open,"own",DAYS[open][1],"our own word","days/d"+open+"-own.mp3")}
+      ${dayNameCard(open,"lent",DAYS[open][0],"came with Arabic","days/d"+open+"-lent.mp3")}
      </div>
      <p class="nmsame">one day \u00b7 two names \u00b7 press either to hear it</p>`}
    <div class="calwrap">
@@ -9218,6 +9226,19 @@ function days(){
    <p class="calcount">${nseen} of 7 opened</p>
   </div>`,nseen,DAYS.length*2)
  +(nseen>=DAYS.length?`<button class="wallbtn good" data-dqgo>now check \u203a</button>`:"");
+}
+/* v276: pressing a name did nothing a child could see. The sound played and the
+   card sat exactly as it had, so there was no telling which of the two you had
+   just heard — or, with no clips recorded yet, whether the press had registered
+   at all. The pressed card lifts and its bars run while it plays, and it keeps a
+   tick afterwards, so the pair reads as one heard and one not. */
+function dayNameCard(open,side,word,label,clip){
+ const hd=S.dHeard||{}, key=open+"-"+side, heard=!!hd[key], ring=(S.dRing===key);
+ return `<button class="nmcard ${side}${heard?" heard":""}${ring?" ringing":""}"
+   data-dsay="${side}" data-clip="${esc(clip)}">
+   <b class="ff">${esc(word)}</b><span>${esc(label)}</span>
+   <span class="nmtap"><span class="bars"><i></i><i></i><i></i></span></span>
+   ${heard?'<span class="nmtick">\u2713</span>':''}</button>`;
 }
 function dayTile(i,seen,open){
  const d=DAYS[i];
@@ -12823,7 +12844,7 @@ function render(){
    reach the seventh. Every activity writes its own place as it goes now, and
    picks it up again on the way back in. A finished stop starts from the top;
    a half-done one resumes exactly where it was left. */
-const PKEYS=["hnAnim","seSeen","sePhase","seqI","seqPick","dSeen","dPhase","dqI","dqPick","srDid","vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
+const PKEYS=["dHeard","hnAnim","seSeen","sePhase","seqI","seqPick","dSeen","dPhase","dqI","dqPick","srDid","vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "sqPhase","sqM","sqStep","sqPress","sqChunk","li","lopen","gsel","gput","gRound",
  "gmiss","gfed","gno","gheard","gPhase","gT","gTP","brP","brAsk","brRight","eCel",
  "diI","diPhase","diFound","diMiss",
@@ -13184,7 +13205,7 @@ function openAct(id,force){ S.world=stopOf(id); S.startAt=null;
      activity instead of back through its cards, and why start-over was greyed:
      there was no earlier screen recorded to go back to. */
   rt:null,rtN:{},
-  di:null,dSeen:{},dPhase:"meet",dqI:0,dqPick:null,
+  di:null,dSeen:{},dHeard:{},dRing:null,dPhase:"meet",dqI:0,dqPick:null,
   seI:null,seSeen:{},sePhase:"meet",seqI:0,seqPick:null,
   vsM:0,vsSaid:null,vsPhase:"meet",vsPut:{},vsBad:null,
   intro2:!S.done.has(id),
@@ -13428,7 +13449,7 @@ document.body.addEventListener("click",function(e){
     word and never counted as pressed — leaving a stop with no door out of it */
  if(d.clip!==undefined&&d.mpress===undefined&&d.mstep===undefined
     &&d.lsmeet===undefined&&d.jobpick===undefined&&d.esee===undefined&&d.ehear===undefined
-    &&d.gsaid===undefined&&d.hsaid===undefined&&d.jmsaid===undefined&&d.swsaid===undefined&&d.vssaid===undefined&&d.hnsay===undefined){play(t,d.clip);return}
+    &&d.gsaid===undefined&&d.hsaid===undefined&&d.jmsaid===undefined&&d.swsaid===undefined&&d.vssaid===undefined&&d.hnsay===undefined&&d.dsay===undefined){play(t,d.clip);return}
  if(d.act){openAct(d.act);return}
  if(d.goto){openAct(d.goto,true);return}
  if(d.force){openAct(d.force,true);return}
@@ -13659,6 +13680,13 @@ document.body.addEventListener("click",function(e){
    if(d.d!==undefined){ S.di=+d.d; if(!S.dSeen) S.dSeen={}; S.dSeen[S.di]=1; sTap(); render();
      setTimeout(function(){ const b=document.querySelector(".nmcard.own[data-clip]");
        if(b) play(b,b.dataset.clip) },260); return}
+   if(d.dsay!==undefined){
+     const key=(S.di)+"-"+d.dsay;
+     S.dHeard=S.dHeard||{}; S.dHeard[key]=1; S.dRing=key;
+     render();
+     if(d.clip) play(document.querySelector(".nmcard.ringing"),d.clip);
+     setTimeout(function(){ if(S.dRing===key){ S.dRing=null; render() } },1100);
+     return}
    if(d.se!==undefined){ S.seI=+d.se; if(!S.seSeen) S.seSeen={}; S.seSeen[S.seI]=1; sTap(); render(); return}
    if(d.seqgo!==undefined){ S.sePhase="q"; S.seqI=0; S.seqPick=null; sMove(); render(); return}
    if(d.seq){ const [si]=SEAQ[S.seqI||0], want=SEASONS4[si].k;
