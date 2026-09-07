@@ -5348,7 +5348,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v274 · 6 September 2026";
+const BUILD="v275 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -10147,6 +10147,19 @@ function roadWhole(svg){
 
 /* which box actually scrolls, so the camera can follow the flight */
 function scrollBox(){
+ /* ================= v275: the camera lost its scroller =================
+    This walked up from the card looking for an ancestor that both scrolls AND
+    is currently taller than itself, and returned null when it found none. Every
+    caller then fell back to window.scrollBy — which did nothing at all, because
+    v248 set html and body to overflow:hidden to stop the page sliding under the
+    settings bar. So the helicopter took off and flew, and the camera stayed
+    where it was: the flight happened off the bottom of the screen and a child
+    saw a still road and then the next stop.
+    main is the scroller now and has been since v259. Ask for it by name, and
+    only fall back to the walk if it is missing. */
+ const m=document.querySelector("main");
+ if(m){ const s=getComputedStyle(m).overflowY;
+  if(s==="auto"||s==="scroll") return m; }
  let e=app;
  while(e && e!==document.body && e!==document.documentElement){
   const s=getComputedStyle(e).overflowY;
@@ -10159,7 +10172,9 @@ function camTo(clientY){
  const vh=window.innerHeight||document.documentElement.clientHeight;
  const delta=clientY-vh*0.56;
  if(Math.abs(delta)<1) return;
- const box=scrollBox();
+ /* v275: window.scrollBy has been a no-op since the shell was locked, so it is
+    the last resort rather than the fallback. */
+ const box=scrollBox()||document.querySelector("main");
  if(box) box.scrollTop+=delta; else window.scrollBy(0,delta);
 }
 
@@ -13355,7 +13370,13 @@ document.body.addEventListener("click",function(e){
   if(S.fetch) S.fetch.phase="on";
   S.view="home"; render(); return;
  }
- if(d.flyto){ S.world=stopOf(d.flyto); S.flyOpen=d.flyto; S.view="home"; render(); return; }
+ if(d.flyto){ /* v275: FLYING is cleared when a leg lands, and a leg that is
+     interrupted — a back button mid-flight, a re-render — used to leave it
+     standing, after which homeSettle returned early and no stop ever flew
+     again for the rest of the session. Walking on always starts from the
+     ground. */
+     FLYING=false;
+     S.world=stopOf(d.flyto); S.flyOpen=d.flyto; S.view="home"; render(); return; }
 
  if(d.photo!==undefined){ document.getElementById("avafile").click(); return; }
  if(d.forget!==undefined){
