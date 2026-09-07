@@ -4810,12 +4810,11 @@ main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
    repeats the sound and never the animation. */
 @keyframes numIn{from{opacity:0;transform:translateY(14px) scale(.86)}to{opacity:1;transform:none}}
 @keyframes wordIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.nhead .numeral{animation:numIn .42s cubic-bezier(.2,1.2,.4,1) both}
-.nhead .cntrow{animation:wordIn .4s ease .55s both}
-.numword.staged{animation:wordIn .45s ease 1.15s both}
-.hearbtn.staged{animation:wordIn .4s ease 1.35s both}
+.nhead.fresh .numeral{animation:numIn .42s cubic-bezier(.2,1.2,.4,1) both}
+.nhead.fresh .cntrow{animation:wordIn .4s ease .55s both}
+.nhead.fresh .numword{animation:wordIn .45s ease 1.15s both}
 @media (prefers-reduced-motion:reduce){
- .nhead .numeral,.nhead .cntrow,.numword.staged,.hearbtn.staged{animation:none}}
+ .nhead.fresh .numeral,.nhead.fresh .cntrow,.nhead.fresh .numword{animation:none}}
 
 /* v261: the swap teaching card */
 .swteach{align-items:center;text-align:center;gap:0;justify-content:center;padding:6px 8px}
@@ -5349,7 +5348,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v273 · 6 September 2026";
+const BUILD="v274 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -12209,11 +12208,16 @@ function hand(){
      </div>`
     :`<p class="meetsay">${p===0?"press the number":`${PRESSES-p} more`}</p>`}
   </div>`,i,HAND.length+HANDQ.length,true);
- return wrap(`<div class="nhead">
+ /* v274: the staging is an arrival, not a state. These classes used to be on
+    the card unconditionally, so every render replayed them — and pressing
+    listen renders. The number flew in again, the word flew in again, and the
+    button itself bounced, every single press. They are on only until the child
+    has pressed listen once, which is exactly the life of the arrival. */
+ return wrap(`<div class="nhead${S.hnAnim===i?"":" fresh"}">
    <div class="numeral">${c.n}</div>
    <div class="cntrow">${ndots(c.n)}</div>
-   <div class="numword staged">${c.syl.map(function(s){return `<span class="syl">${esc(s)}</span>`}).join("")}</div>
-   <button class="hearbtn staged" data-clip="num/n${pad(c.n,3)}.mp3" data-autoplay data-wait="1250" data-hsaid><span class="bars"><i></i><i></i><i></i></span>listen</button>
+   <div class="numword">${c.syl.map(function(s){return `<span class="syl">${esc(s)}</span>`}).join("")}</div>
+   <button class="hearbtn" data-clip="num/n${pad(c.n,3)}.mp3"${S.hnAnim===i?"":" data-autoplay data-wait=\"1250\""} data-hnsay><span class="bars"><i></i><i></i><i></i></span>listen</button>
   </div>`,i,HAND.length+HANDQ.length)
  +(S.hnSaid?`<button class="wallbtn" data-hnext>next ›</button>`
        :face("👆","Press it, then say it. Hold up that many fingers while you do."));
@@ -12804,7 +12808,7 @@ function render(){
    reach the seventh. Every activity writes its own place as it goes now, and
    picks it up again on the way back in. A finished stop starts from the top;
    a half-done one resumes exactly where it was left. */
-const PKEYS=["seSeen","sePhase","seqI","seqPick","dSeen","dPhase","dqI","dqPick","srDid","vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
+const PKEYS=["hnAnim","seSeen","sePhase","seqI","seqPick","dSeen","dPhase","dqI","dqPick","srDid","vsM","vsSaid","vsPhase","vsPut","fa","warmLast","warmList","warmI","warmPick","intro2","hnP","jmP","swM","swSaid","swPhase","rt","rtN","hnI","hnSaid","hnPhase","hqI","hqPick","jmI","jmSaid","jePhase","jeI","jePick","tnI","tnPhase","tqI","tqPick","gi","gpick","ki","kpick","oi","omany","sqI","sqPick","sqWrong",
  "sqPhase","sqM","sqStep","sqPress","sqChunk","li","lopen","gsel","gput","gRound",
  "gmiss","gfed","gno","gheard","gPhase","gT","gTP","brP","brAsk","brRight","eCel",
  "diI","diPhase","diFound","diMiss",
@@ -13171,7 +13175,7 @@ function openAct(id,force){ S.world=stopOf(id); S.startAt=null;
   intro2:!S.done.has(id),
   warmList:(!S.done.has(id)&&warmOK(id))?warmDraw(id):null, warmI:0, warmPick:null,
   swM:0,swSaid:null,swPhase:"meet",
-  hnI:0,hnSaid:null,hnPhase:"meet",hqI:0,hqPick:null,hnP:0,jmP:0,
+  hnI:0,hnSaid:null,hnPhase:"meet",hqI:0,hqPick:null,hnP:0,jmP:0,hnAnim:null,
   jmI:0,jmSaid:null,jePhase:"meet",jeI:0,jePick:null,
   tnI:0,tnPhase:"meet",tqI:0,tqPick:null,
   gi:0,gpick:null,ki:0,kpick:null,oi:0,omany:false,
@@ -13403,7 +13407,7 @@ document.body.addEventListener("click",function(e){
     word and never counted as pressed — leaving a stop with no door out of it */
  if(d.clip!==undefined&&d.mpress===undefined&&d.mstep===undefined
     &&d.lsmeet===undefined&&d.jobpick===undefined&&d.esee===undefined&&d.ehear===undefined
-    &&d.gsaid===undefined&&d.hsaid===undefined&&d.jmsaid===undefined&&d.swsaid===undefined&&d.vssaid===undefined){play(t,d.clip);return}
+    &&d.gsaid===undefined&&d.hsaid===undefined&&d.jmsaid===undefined&&d.swsaid===undefined&&d.vssaid===undefined&&d.hnsay===undefined){play(t,d.clip);return}
  if(d.act){openAct(d.act);return}
  if(d.goto){openAct(d.goto,true);return}
  if(d.force){openAct(d.force,true);return}
@@ -13677,7 +13681,7 @@ document.body.addEventListener("click",function(e){
     sTap(); render();
     try{ play(null,"num/n"+pad(num,3)+".mp3") }catch(e){}
     return}
-   if(d.hmet!==undefined){ S.hnSaid=true; sMove(); render(); return}
+   if(d.hmet!==undefined){ S.hnSaid=true; S.hnAnim=null; sMove(); render(); return}
    if(d.swsaid!==undefined){ if(d.clip) play(t,d.clip); S.swSaid=true; render(); return}
    if(d.swnext!==undefined){ S.swM=(S.swM||0)+1; S.swSaid=null;
      if(S.swM>=SWAP.length) S.swPhase="q"; sMove(); render(); return}
@@ -13691,8 +13695,10 @@ document.body.addEventListener("click",function(e){
     card.classList.add("saying");
     setTimeout(function(){ card.classList.remove("saying") },900);
    }
+   if(d.hnsay!==undefined){ /* v274: the first touch ends the arrival */
+     if(d.clip) play(t,d.clip); S.hnAnim=S.hnI||0; render(); return}
    if(d.hsaid!==undefined){ if(d.clip) play(t,d.clip); S.hnSaid=true; render(); return}
-   if(d.hnext!==undefined){ S.hnI=(S.hnI||0)+1; S.hnSaid=null; S.hnP=0; if(S.hnI>=HAND.length) S.hnPhase="q"; sMove(); render(); return}
+   if(d.hnext!==undefined){ S.hnI=(S.hnI||0)+1; S.hnSaid=null; S.hnP=0; S.hnAnim=null; if(S.hnI>=HAND.length) S.hnPhase="q"; sMove(); render(); return}
    if(d.hq){ const q=HANDQ[S.hqI||0], c=HAND[q.n-1], ans=c.w; if(S.hqPick===ans) return;
      S.hqPick=d.hq;
      if(d.hq===ans){ rtOK("hq",q.n); sGood() }
