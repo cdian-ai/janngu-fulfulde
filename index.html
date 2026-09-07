@@ -5417,7 +5417,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v279 · 6 September 2026";
+const BUILD="v280 · 6 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -8832,7 +8832,11 @@ function introCard(){
   </div></div>`;
 }
 
-const JOINW=["no","e","am"];
+/* v280: ka joins them. It is the locative — at, in, on — and it is the same
+   kind of word as e: it holds two naming words together and names nothing
+   itself. The class markers are NOT tinted: a child has spent eighteen stops
+   learning those as words in their own right and they should look like it. */
+const JOINW=["no","e","am","ka"];
 function tintJoin(s){
  return String(s).split(" ").map(function(w){
   const bare=w.replace(/[.?,]/g,"");
@@ -10735,43 +10739,39 @@ function setAt(si,i){
    English glosses are working translations and need the
    author's check before this ships.                          */
 const SENT=[
- /* ================= v268: sentences a child can actually read =================
-    The sixteen sentences held 71 words and nine of them had been taught. Thirteen
-    per cent. A child walked fifty-four sequenced stops and then met Anndaa
-    lamndotaako majjay tun — a fine proverb, eight words, none of them on the road.
-    What happened at the last stop was an adult reading Pular aloud while a child
-    looked at it. That is a good thing to do and it is not what fifty-four stops of
-    decoding were for.
+ /* ================= v280: the little word was missing =================
+    Every one of these was built on a frame of Peeral's — but the frames I copied
+    all had NAMES as subjects (Nduru no natude suudu, Laylaa no wuppude comci),
+    and names take no little word. Swapping in a noun changes the grammar, and
+    his own prose shows it: Bareeru ndun no alɓaade ƴi'al ngal. Kamiyon on no
+    adude njaareendi. Awiyon on no immaade. Subject noun, then its marker.
+    Eighteen stops teach that every noun has a little word and then the first
+    sentence a child built dropped it. They are all in now, subjects and definite
+    objects both, in the forms the course taught.
 
-    Twelve are rebuilt from met vocabulary — the 52 nouns, the six verbs, the kin
-    words, in the sentence patterns the original set already demonstrated. Every
-    content word has been met. Three function words are not on the road and could
-    not be avoided: no (marks the ongoing), e (in, on, and), am (my). They are
-    short, they repeat, and a child meets them here rather than being taught them
-    in the abstract.
+    natude is gone entirely. It meant "draw", it is tagged {rare} — Peeral gives
+    deesingol and pirintingol as the everyday words — and it sits one vowel away
+    from naatude, "to enter", which is what a Pular speaker actually reads. A
+    sentence that a fluent reader misreads is not a sentence a learner should
+    meet. ñaamude, to eat, takes its place: everyday, unmistakable, and a thing
+    a six-year-old does three times a day.
 
-    Four of Peeral's are kept exactly as they were and marked hard:true. A child
-    should meet language above their level sometimes, deliberately and labelled,
-    and the two proverbs are worth more than any sentence I could build. They are
-    the ones the grown-up reads. */
- ["Baaba am jooɗike.","My father has sat down."],
- ["Neene am no natude suudu.","My mother is drawing a house."],
- ["Koto am no wuppude paɗal.","My brother is washing a shoe."],
- ["Jaaja am no winndude e alluwal.","My sister is writing on a writing board."],
- ["Binta no natude nagge.","Binta is drawing a cow."],
- ["Yero no wuppude booliwal.","Yero is washing a bowl."],
- ["Soro am jooɗike e danki.","My grandfather has sat down on the bed."],
+    ka is the locative and it is needed: sitting ON the bed, not sitting the bed.
+    Peeral: Himo ka suudu. He is at the house. */
+ ["Baaba am oo jooɗike.","My father has sat down."],
+ ["Neene am oo no ñaamude.","My mother is eating."],
+ ["Koto am oo no wuppude paɗal ngal.","My brother is washing the shoe."],
+ ["Jaaja am oo no winndude e alluwal ngal.","My sister is writing on the writing board."],
+ ["Binta no ñaamude.","Binta is eating."],
+ ["Yero no wuppude booliwal ngal.","Yero is washing the bowl."],
+ ["Soro am oo jooɗike ka danki kii.","My grandfather has sat down on the bed."],
  ["Koli no amude.","Koli is dancing."],
- ["Sira no winndude e deftere.","Sira is writing in a book."],
- ["Bareeru jooɗike e ɗatal.","The dog has sat down on the road."],
- ["Nduru no natude sonndu.","Nduru is drawing a bird."],
- ["Kaaw am no natude mbabba.","My uncle is drawing a donkey."],
+ ["Sira no winndude e deftere ndee.","Sira is writing in the book."],
+ ["Bareeru nduu jooɗike ka ɗatal ngal.","The dog has sat down on the road."],
+ ["Nduru no ñaamude.","Nduru is eating."],
+ ["Kaaw am oo no wuppude mbabba mbaa.","My uncle is washing the donkey."],
  ["Anndaa lamndotaako majjay tun.","One who does not know and will not ask simply stays lost.",1],
- ["Neene e baaba ko fuɗɗorɗum aduna.","Mother and father are the beginning of the world.",1],
- /* v277: four hard sentences was a quarter of the last stop, and the two that
-    went were ordinary sentences that happened to use untaught words — the cost
-    without the reward. The two proverbs stay, because a course about a heritage
-    language with no proverb in it has lost something no vocabulary count sees. */
+ ["Neene e baaba ko fuɗɗorɗum aduna.","Mother and father are the beginning of the world.",1]
 ];
 const SHUF=[0,1,2,3,4,5,6,7,8,9,10,11];      /* the ones short enough to build */
 const MARKI=[0,2,5,7,9,11,1,3,4,6] /* v268: the ten marked are all from the readable twelve */;        /* the ones used for capital-and-stop */
@@ -11987,7 +11987,7 @@ function onemany(){
 const VERBS=[
  {si:2, g:"\ud83e\udd64", v:"yarii",    en:"drank"},
  {si:1, g:"\ud83e\ude91", v:"joo\u0257ike",  en:"has sat down"},
- {si:5, g:"\u270f\ufe0f", v:"natude",   en:"drawing"},
+ {si:5, g:"\ud83c\udf5a", v:"ñaamude", en:"eating"}   /* v280: natude meant draw, was tagged {rare}, and sits one vowel from naatude — to enter — which is what a Pular reader actually sees. */,
  {si:6, g:"\ud83e\uddfa", v:"wuppude",  en:"washing"},
  {si:7, g:"\ud83d\udc83", v:"amude",    en:"dancing"},
  {si:9, g:"\ud83d\udcd6", v:"winndude", en:"writing"}];
