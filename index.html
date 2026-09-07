@@ -4788,6 +4788,14 @@ body{min-height:0}
    were left with their last card unreachable under the step strip. main scrolls
    again, everywhere, with room at the foot for the bar to sit over. */
 main{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
+/* ---- v284: the last thing on a tall screen was unreachable ----
+   The step strip and the settings bar sit over the bottom of the page and the
+   scrolling area stopped exactly where they begin, so on any screen taller than
+   the phone the last element was underneath them with nothing left to scroll.
+   That is why the arrival card's way on was half hidden and why the way on at
+   Tolo looked missing when it was simply beneath the strip. */
+main{padding-bottom:calc(190px + env(safe-area-inset-bottom,0px))!important}
+.arrive,.cross,.hand{padding-bottom:14px}
 
 /* v260: the arrival card. Quiet, centred, one way out. */
 .introarea{padding:20px 12px}
@@ -5457,7 +5465,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v283 · 7 September 2026";
+const BUILD="v284 · 7 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -6560,12 +6568,21 @@ function pairs(){
  if(S.pi>=PAIRS.length) return done("👂","Good listening");
  const p=PAIRS[S.pi]; if(S.ptar===null) S.ptar=Math.round(Math.random());
  const fin=S.pans!==null;
- return wrap(`<div style="font-size:52px">🔊</div>
-  <button class="hearbtn big ${S.touched?'':'pulse'}" data-clip="pairs/p${pad(S.pi,2)}${S.ptar?'b':'a'}.mp3">
-   <span class="bars"><i></i><i></i><i></i></span>listen</button>`,S.pi,PAIRS.length)
- +`<div class="controls c2">${p.map((w,i)=>`<button class="ctl big ${fin?(i===S.ptar?'right':(i===S.pans?'wrong':'')):''}"
-   data-pair="${i}" ${fin?'disabled':''}>${esc(w)}</button>`).join("")}</div>
-  ${fin?face(S.pans===S.ptar?"⭐":"🤔",S.pans===S.ptar?`Yes — <b class="ff">${esc(p[S.ptar])}</b>.`
+ /* v284: this card put the sound in the middle and the two words at the very
+    bottom, while every letter stop does the opposite — prompt at the top,
+    answers under it, sound below them. Two layouts for the same kind of screen
+    is a child learning where to look twice. It follows the letter stops now. */
+ return wrap(`<div class="hf">
+   <div style="font-size:44px">🔊</div>
+   <div class="hfrow" style="margin-top:15px">${p.map((w,i)=>`<button class="hfk word ${fin?(i===S.ptar?'hit':(i===S.pans?'miss':'')):'wait'}"
+     data-pair="${i}" ${fin?'disabled':''}>${esc(w)}</button>`).join("")}</div>
+   <div class="lower">
+    <button class="hearbtn big ${S.touched?'':'pulse'}" data-clip="pairs/p${pad(S.pi,2)}${S.ptar?'b':'a'}.mp3">
+     <span class="bars"><i></i><i></i><i></i></span>listen</button>
+    <small class="saysit">grown-up says it</small>
+   </div>
+  </div>`,S.pi,PAIRS.length)
+ +`${fin?face(S.pans===S.ptar?"⭐":"🤔",S.pans===S.ptar?`Yes — <b class="ff">${esc(p[S.ptar])}</b>.`
    :`It was <b class="ff">${esc(p[S.ptar])}</b>. Listen for how long the vowel is held.`)
   +`<button class="wallbtn" data-pnext>next ›</button>`:""}`}
 
