@@ -1414,6 +1414,16 @@ main{padding:12px 14px calc(114px + env(safe-area-inset-bottom))}
 
 /* ---- dashboard ---- */
 .dash{background:var(--paper)}
+/* v289: the course knows who is walking now, so it says so - in the greeting it
+   teaches at the very first stop, and in no other language. The face is the
+   same button it is everywhere else: press it to change who is walking. */
+.hail{display:flex;align-items:center;gap:11px;margin:2px 14px 14px;padding:10px 13px;
+  background:var(--surface);border-radius:16px;box-shadow:var(--shadow)}
+.hail .hface{width:44px;height:44px;border-radius:50%;flex:none;overflow:hidden;
+  display:grid;place-items:center;font-size:22px;background:var(--paper);
+  border:2px solid var(--gold);cursor:pointer}
+.hail .hface img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.hail b{font-family:'FulSerif',serif;font-size:17px;color:var(--ink);font-weight:800;line-height:1.2}
 .dhead2{margin:2px 14px 12px}
 .dhead2 .me{border:2px solid var(--line);box-shadow:var(--shadow)}
 .dhead2 .dt b{font-size:22px;color:var(--ink)}
@@ -5465,7 +5475,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v288 · 11 September 2026";
+const BUILD="v289 · 11 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -10969,9 +10979,15 @@ function dash(){
     holds it now — Dalaba is in Fuuta Jaloo, so Fuuta Jaloo is what carries
     the line. The road inside that Fouta still offers the door itself. */
  const co=carryOn(), coW=co?stopOf(co):-1;
+ /* Jaaraama, <name> — the greeting from step one of the course, used for the
+    one person it is actually for. Only when Notice Me handed a name over; on
+    its own the course still has no idea who is holding the phone. */
+ const hail=(LEARNER&&LEARNER.name)
+  ? `<div class="hail"><span class="hface" data-avatar>${avaHTML()}</span>
+      <b>Jaaraama, ${esc(LEARNER.name)}</b></div>`
+  : "";
  let h=`<div class="dash">
-
-
+  ${hail}
   <div class="droad"><div class="rl"><em style="height:${Math.round(doneAll/total*100)}%"></em></div>`;
 
  JOURNEY.forEach(function(st,i){
