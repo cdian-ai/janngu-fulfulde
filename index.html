@@ -5465,7 +5465,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v287 · 11 September 2026";
+const BUILD="v288 · 11 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -13381,7 +13381,8 @@ function saveState(){
    world:S.world, ava:ava, snd:SND.on, lmk:S.longMark, intros:Array.from(S.introSeen), at:S.at,
    pv:S.previewAll,
    charms:Array.from(S.charms||[]),
-   place:S.place||{}
+   place:S.place||{},
+   lid:S.learnerId||null
   }) };
  try{
   localStorage.setItem(SAVE_KEY, pack(AVA));
@@ -13404,6 +13405,7 @@ function loadState(){
   if(d.at&&typeof d.at==="object") S.at=d.at;
   if(Array.isArray(d.charms)) S.charms=new Set(d.charms);
   if(d.place&&typeof d.place==="object"&&d.place.__build===PLACE_BUILD) S.place=d.place;
+  if(typeof d.lid==="string") S.learnerId=d.lid;
   if(typeof d.snd==="boolean") SND.on=d.snd;
   if(typeof d.lmk==="boolean") S.longMark=d.lmk;
   /* v236: every Fouta is open unless a grown-up has turned that off */
@@ -14703,7 +14705,30 @@ window.addEventListener("error",function(ev){
   +String(ev.message||"error")+' \u00b7 line '+String(ev.lineno||"?")+'</div>');
 });
 
+/* ---- who is learning ----
+   v288: when the course is opened from inside Notice Me it runs in a
+   same-origin iframe, so the two share one localStorage. Notice Me leaves the
+   signed-in child's name and face under nm.learner before it opens the door.
+   One profile across both apps: nobody picks a face twice, and the helicopter
+   carries the child who is actually learning.
+
+   Opened on its own - by anyone learning Pular, which is most of the people
+   this course is for - the key is not there and the picker works as it always
+   did. A face chosen inside the course still wins for that session; the handoff
+   only applies when the child on the other side of the door has changed. */
+let LEARNER=null;
+function readLearner(){
+ try{
+  const raw=localStorage.getItem("nm.learner"); if(!raw) return;
+  const d=JSON.parse(raw);
+  if(!d||typeof d!=="object"||!d.id) return;
+  LEARNER=d;
+  if(d.photo && S.learnerId!==d.id) AVA={kind:"photo",val:d.photo};
+  S.learnerId=d.id;
+ }catch(e){}
+}
 try{loadState()}catch(e){}
+try{readLearner()}catch(e){}
 render();
 
 
