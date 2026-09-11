@@ -5465,7 +5465,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v286 · 7 September 2026";
+const BUILD="v287 · 11 September 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -13372,16 +13372,24 @@ function stepNav(){
 }
 const SAVE_KEY="janngu-fulfulde-1";
 function saveState(){
- try{
-  localStorage.setItem(SAVE_KEY, JSON.stringify({
+ /* v287: if the write is refused - a picture too big for what is left, private
+    mode, a full disk - the progress is what matters, so it goes again without
+    the picture rather than the whole save being dropped on the floor. */
+ const pack=function(ava){ return JSON.stringify({
    v:1,
    done:Array.from(S.done), seen:Array.from(S.seen), offered:Array.from(S.offered),
-   world:S.world, ava:AVA, snd:SND.on, lmk:S.longMark, intros:Array.from(S.introSeen), at:S.at,
+   world:S.world, ava:ava, snd:SND.on, lmk:S.longMark, intros:Array.from(S.introSeen), at:S.at,
    pv:S.previewAll,
    charms:Array.from(S.charms||[]),
    place:S.place||{}
-  }));
- }catch(e){}                       /* private mode, full disk — never block play */
+  }) };
+ try{
+  localStorage.setItem(SAVE_KEY, pack(AVA));
+ }catch(e){
+  try{
+   localStorage.setItem(SAVE_KEY, pack({kind:"emoji",val:"\ud83e\uddd2"}));
+  }catch(e2){}                     /* private mode, full disk — never block play */
+ }
 }
 function loadState(){
  try{
@@ -14646,11 +14654,44 @@ document.body.addEventListener("click",function(e){
   S.nacuts=[];S.nadone=false;render();return}
 });
 
+/* ---- the traveller's own face ----
+   v287: a photo off a phone camera is two to six megabytes as a data URL, and
+   localStorage gives the whole app about five. So the picture was kept in
+   memory, drawn once, and then lost on the next visit - and worse, the save it
+   was part of threw on the way out, which saveState swallows, so a photo could
+   quietly stop the child's progress being written at all. The picture is cut
+   down to a 224px square before it becomes state: a few tens of kilobytes,
+   which fits beside everything else. */
+function shrinkPhoto(file, cb){
+ const fr=new FileReader();
+ fr.onerror=function(){ cb(null) };
+ fr.onload=function(){
+  const img=new Image();
+  img.onerror=function(){ cb(null) };
+  img.onload=function(){
+   try{
+    const N=224, cv=document.createElement("canvas");
+    cv.width=N; cv.height=N;
+    const cx=cv.getContext("2d");
+    /* square crop from the middle, so a tall photo keeps the face */
+    const side=Math.min(img.width,img.height);
+    cx.drawImage(img,(img.width-side)/2,(img.height-side)/2,side,side,0,0,N,N);
+    cb(cv.toDataURL("image/jpeg",.82));
+   }catch(e){ cb(null) }
+  };
+  img.src=fr.result;
+ };
+ fr.readAsDataURL(file);         /* stays on the device — nothing is uploaded */
+}
 document.getElementById("avafile").addEventListener("change",function(ev){
  const f=ev.target.files&&ev.target.files[0]; if(!f) return;
- const fr=new FileReader();
- fr.onload=function(){ AVA={kind:"photo",val:fr.result}; sGood(); render(); };
- fr.readAsDataURL(f);            /* stays in memory — nothing is uploaded */
+ shrinkPhoto(f,function(small){
+  if(!small){ sOops(); return; }
+  AVA={kind:"photo",val:small};
+  sGood();
+  saveState();                   /* the face is chosen once; write it then */
+  render();
+ });
  ev.target.value="";
 });
 
