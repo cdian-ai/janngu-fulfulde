@@ -4526,6 +4526,10 @@ main{padding-bottom:calc(126px + env(safe-area-inset-bottom))}
 .gopt .gob i:nth-child(2){height:9px}.gopt .gob i:nth-child(3){height:6px}
 .gopt:active{transform:scale(.96)}
 .gopt.no{background:var(--oops-bg);animation:shake .3s}
+/* v291: Bah's greetings can carry two or three ways of saying it */
+.greet .gsay.long b{font-size:23px;line-height:1.25}
+.greet .gword.long{font-size:22px;line-height:1.25}
+.gopts .gopt.long b{font-size:19px}
 @media (prefers-reduced-motion:reduce){.gline.new .gbub,.gwho.arrive .w,
   .gwho.arrive .f,.gbub.mine.nudge{animation:none}.gwho.arrive .f{opacity:1}}
 
@@ -5210,7 +5214,7 @@ const LETTERS=[["A","a","aa","amugol"],["B","b","baa","barkugol"],["Ɓ","ɓ","ɓ
 ["Nj","nj","njaa","njaareendi"],["Ŋ","ŋ","ŋaa","ŋatugol"],["Ñ","ñ","ñaa","ñaamugol"],["O","o","oo","okkugol"],
 ["P","p","paa","paamugol"],["R","r","raa","raɗagol"],["S","s","saa","saalugol"],["T","t","taa","taalugol"],
 ["U","u","uu","unugol"],["W","w","waa","waalugol"],["Y","y","yaa","yahugol"],["Ƴ","ƴ","ƴaa","ƴawugol"],
-["’","’","’","a’ugol"]];
+["’","’","’aa","a’ugol"]];
 
 const CONS=["b","ɓ","c","d","ɗ","f","g","h","j","k","l","m","mb","n","nd","ng","nj","ŋ","ñ","p","r","s","t","w","y","ƴ","’"];
 /* ---- what is heard and what is tapped are spelled the same ----
@@ -5341,15 +5345,15 @@ const W2=[
 {g:"🪴",sg:"naakoore",pl:"naakooje",de:"naakowel",dp:"naakohoy",m:["ndee","ɗee","ngel","koy"],en:"garden",fr:"jardin potager",unverified:true},
 {g:"🪞",sg:"ndaarorgal",pl:"ndaarorɗe",de:"ndaarorgel",dp:"ndaarorkoy",m:["ngal","ɗee","ngel","koy"],en:"mirror",fr:"miroir ; glace ; vitre"},
 {g:"🦛",sg:"gabbii",pl:"gabbi",de:"",dp:"",nd:1,m:["ngii","ɗii"],en:"hippo",fr:"hippopotame"},
-{g:"🦒",sg:"kemmba",pl:"kenɗi",de:"",dp:"",nd:1,m:["mbaa","ɗii"],en:"giraffe",fr:"girafe"},
+{g:"🦒",sg:"njambala",pl:"jambali",de:"",dp:"",nd:1,m:["mbaa","ɗii"],en:"giraffe",fr:"girafe"},
 {g:"📿",sg:"ŋannawol",pl:"ŋannaaji",de:"ŋannawel",dp:"ŋannahoy",m:["ngol","ɗii","ngel","koy"],en:"necklace",fr:"collier"},
 {g:"🧑‍⚖️",sg:"ñaawoowo",pl:"ñaawooɓe",de:"ñaawoowel",dp:"ñaawoohoy",m:["oo","ɓee","ngel","koy"],en:"judge",fr:"juge"},
 {g:"✂️",sg:"pennitorgal",pl:"pennitorɗe",de:"pennitorgel",dp:"pennitorkoy",m:["ngal","ɗee","ngel","koy"],en:"nail cutter",fr:"coupe-ongles",unverified:true},
-{g:"🐕",sg:"bareeru",pl:"bareeji",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"dog",fr:"chien"},
+{g:"🐕",sg:"rawaandu",pl:"dawaaɗi",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"dog",fr:"chien"},
 {g:"🏔️",sg:"sehre",pl:"cehe",de:"cehel",dp:"cehoy",m:["ndee","ɗee","ngel","koy"],en:"plateau",fr:"plateau",unverified:true},
 {g:"🍽️",sg:"taabal",pl:"taabe",de:"taabel",dp:"taaboy",m:["ngal","ɗee","ngel","koy"],en:"table",fr:"table"},
 {g:"☂️",sg:"waado",pl:"waadooji",de:"waadowel",dp:"waadohoy",m:["ngoo","ɗii","ngel","koy"],en:"umbrella",fr:"parapluie"},
-{g:"🦫",sg:"yeendu",pl:"yeenduuji",de:"yeenduwel",dp:"yeenduhoy",m:["nduu","ɗii","ngel","koy"],en:"aardvark",fr:"oryctérope",unverified:true},
+{g:"👁️",sg:"yitere",pl:"gite",de:"gitel",dp:"gitoy",m:["ndee","ɗee","ngel","koy"],en:"eye",fr:"œil"},
 {g:"🦵",sg:"koyngal",pl:"koyɗe",de:"koyngel",dp:"koykoy",m:["ngal","ɗee","ngel","koy"],en:"leg",fr:"jambe ; pied"},
 {g:"🦉",sg:"ƴuruƴukkuwal",pl:"ƴuruƴukkuuje",de:"ƴuruƴukkuwel",dp:"ƴuruƴukkuhoy",m:["ngal","ɗee","ngel","koy"],en:"owl",fr:"hibou"},
 {g:"🐄",sg:"nagge",pl:"na’i",de:"naggel",dp:"nakkoy",m:["ngee","ɗii","ngel","koy"],en:"cow",fr:"vache, bovin"},
@@ -5364,7 +5368,7 @@ const W2=[
 {g:"👃",sg:"kinal",pl:"kine",de:"",dp:"",nd:1,m:["ngal","ɗee"],en:"nose",fr:"nez"},
 {g:"🦷",sg:"ñiire",pl:"ñiiƴe",de:"",dp:"",nd:1,m:["ndee","ɗee"],en:"tooth",fr:"dent"},
 {g:"✋",sg:"junngo",pl:"juuɗe",de:"",dp:"",nd:1,m:["ngoo","ɗee"],en:"hand",fr:"main"},
-{g:"🐈",sg:"ñaariiru",pl:"ñaariiji",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"cat",fr:"chat"},
+{g:"🐈",sg:"ullundu",pl:"ulluɗi",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"cat",fr:"chat"},
 {g:"🐦",sg:"sonndu",pl:"colli",de:"",dp:"",nd:1,m:["nduu","ɗii"],en:"bird",fr:"oiseau"},
 {g:"🐟",sg:"linngii",pl:"liƴƴi",de:"",dp:"",nd:1,m:["ngii","ɗii"],en:"fish",fr:"poisson"},
 {g:"🥚",sg:"woofoonde",pl:"boofooɗe",de:"",dp:"",nd:1,m:["ndee","ɗee"],en:"egg",fr:"œuf"},
@@ -5402,8 +5406,8 @@ const CQ=[
 {w:"maayo",o:["oo","ngoo","koo"],a:1},
 {w:"bamɗi",o:["koy","ɗee","ɗii"],a:2},{w:"mawɗi",o:["ngol","ɗii","ngal"],a:1},
 {w:"gabbi",o:["ɗii","ɗee","ɓee"],a:0},{w:"ñaawoowo",o:["ngel","oo","kii"],a:1},
-{w:"bareeru",o:["nduu","nguu","ngol"],a:0},{w:"waado",o:["nduu","ngel","ngoo"],a:2},
-{w:"yeendu",o:["nduu","oo","ɗii"],a:0},{w:"laɓi",o:["kaa","kii","kum"],a:1},
+{w:"rawaandu",o:["nduu","nguu","ngol"],a:0},{w:"waado",o:["nduu","ngel","ngoo"],a:2},
+{w:"yitere",o:["ndee","oo","ɗee"],a:0},{w:"laɓi",o:["kaa","kii","kum"],a:1},
 {w:"ngudirde",o:["nduu","ngee","ndee"],a:2},{w:"janngoowo",o:["koo","ngoo","oo"],a:2},
 {w:"mbeewa",o:["mbaa","kaa","ngal"],a:0},{w:"puccu",o:["nduu","nguu","kum"],a:1},
 {w:"teewu",o:["nguu","nduu","ngii"],a:0}];
@@ -5421,9 +5425,9 @@ const UNITSW=["","go’o","ɗiɗi","tati","nayi","jowi","jeego’o","jeeɗiɗi",
 const TENSW=["","sappo","noogay","cappanɗe tati","cappanɗe nayi","cappanɗe jowi",
 "cappanɗe jeego’o","cappanɗe jeeɗiɗi","cappanɗe jeetati","cappanɗe jeenayi"];
 const NUMQ=[16,23,37,74,49,54,86,97,67];
-const DAYS=[["Asewe","Hoore biir"],["Alati","Dewo"],["Tenen","Aaɓnde"],["Talaata","Mawbaare"],
-["Alarba","Njeslaare"],["Alkamisa","Naasannde"],["Juma","Mawnde"]];
-const SEASONS={"Ceeɗu":["Siilo","Colite","Mbooy"],"Demminaare":["Seeɗto","Duujal","Korse"],
+const DAYS=[["Asewe","Hoorebiire"],["Alati","Dewo"],["Tenen","Aaɓnde"],["Talaata","Mawbaare"],
+["Alarba","Njeslaare"],["Alkamisa","Naasaande"],["Juma","Mawnde"]];
+const SEASONS={"Ceeɗu":["Siilo","Colite","Mbooy"],"Demminaare":["Setto","Duujal","Korse"],
 "Ndunngu":["Morso","Juko","Silto"],"Dabbunde":["Yarkomaa","Jolal","Bowte"]};
 const MONTHS=[].concat(...Object.values(SEASONS));
 
@@ -5447,10 +5451,10 @@ const SPLITS=[
     belong to different syllables when it is said aloud, which is a subtlety
     about when mb is one letter and when it is two, and this stop is not for
     that. danki takes its place and splits cleanly. */
- ["danki","dan/ki"], ["ñaariiru","ñaa/rii/ru"],
- ["booliwal","boo/li/wal"], ["woofoonde","woo/foo/nde"], ["saabiwal","saa/bi/wal"],
- ["bareeru","ba/ree/ru"], ["ŋannawol","ŋan/na/wol"], ["ñaawoowo","ñaa/woo/wo"],
- ["deftere","def/te/re"], ["koyngal","koy/ngal"], ["bonooru","bo/noo/ru"],
+ ["danki","dan/ki"], ["ullundu","ul/lun/du"],
+ ["booliwal","boo/li/wal"], ["woofoonde","woo/foo/nde"], ["soktirgal","sok/tir/gal"],
+ ["rawaandu","ra/waan/du"], ["ŋannawol","ŋan/na/wol"], ["ñaawoowo","ñaa/woo/wo"],
+ ["deftere","def/te/re"], ["koyngal","koy/ngal"], ["fowru","fow/ru"],
  ["taabal","taa/bal"], ["luumo","luu/mo"], ["maakiti","maa/ki/ti"],
  ["lekkol","lek/kol"], ["neene","nee/ne"], ["baaba","baa/ba"]
 ];
@@ -5484,7 +5488,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v290 · 22 September 2026";
+const BUILD="v291 · 19 October 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -5665,10 +5669,10 @@ const ACTS={
   ad:["Which little word?","Six words, four little ones to choose from, no scoring and no penalty for a wrong tap. Then the machine itself, where any of the thirty-three can be turned through its four forms. The asking was the tail of a very long stop before this; on its own it is a short one a child can walk into and finish."]},
  greet:{t:"Jaaraama",em:"👋",u:1,n:"5 greetings",
   say:"Someone greets you. What do you say back?",
-  ad:["Greetings","The only thing in this course a child can carry to a grandparent the same evening. Hear the greeting, choose the reply, then say it out loud. Two ways of asking how you are: Ko honnoway? / Mi\u0257o e jam in Fuuta Jaloo, No mba\u0257\u0257a? / Jam tan in Fuuta Tooro. Each carries a chip saying where it is said."]},
+  ad:["Greetings","The only thing in this course a child can carry to a grandparent the same evening. Hear the greeting, choose the reply, then say it out loud. Amadu Sajoh Bah\u0027s five greetings. Where he gives two or three ways of saying it, the card shows them all."]},
  kinfolk:{t:"Who is who",em:"👪",u:1,n:"9 people",
   say:"Listen. Then tap who it is.",
-  ad:["Family words","baba, neene, koto, jaaja, soro, pati \u2014 asked by picture. kaaw, bappa and yaaye are told rather than asked, because the difference between them is which side of the family they are on, which no face can show. pati is told, not asked, because it is a word for talking about your grandmother \u2014 to her face you say neene or neene maw\u0257o. Juuli\u2019s story uses maama, which still wants placing."]},
+  ad:["Family words","baaba, neene, kotoo, jaaja, maama, pati \u2014 asked by picture. kaaw, bappa and yaaye are told rather than asked, because the difference between them is which side of the family they are on, which no face can show. pati is told, not asked, because it is a word for talking about your grandmother \u2014 to her face you say neene or neene maw\u0257o. Juuli\u2019s story uses maama, which still wants placing."]},
  verbs:{t:"Doing words",em:"🏃",u:1,n:"6 verbs",
   say:"What is she doing? Choose the word.",
   ad:["Doing words","Six verbs, each lifted out of one of the primer's own sentences and put back by the child, so the recording is the one the sentence unit already uses and nothing new had to be written or recorded. The child arrives at the sentences with thirty-three nouns and, until this stop, no verbs at all \u2014 and every one of the sixteen sentences has a verb in it. The decoys are the other five verbs from this same stop, never invented forms, so a wrong tap still shows a real word. Some of the subjects and objects are words the child has not met, comci and kummbele among them; that is deliberate, because a verb learnt outside a sentence is a label. The gloss underneath carries the rest."]},
@@ -5704,7 +5708,7 @@ const ACTS={
  numq:{t:"Catch it",em:"🎯",u:2,n:"9 numbers",say:"Read it. Tap the number it means.",
   ad:["Number reading","The book's own nine. If they stall, read the Fulfulde aloud with a pause between the tens part and the ones part."]},
  days:{t:"Seven days",em:"🌙",u:2,n:"7 days",say:"Tap a day to hear both its names.",
-  ad:["Days","Two names for every day, and the card shows them side by side rather than one above the other. The tenen / talaata / alarba set came through Arabic with Islam — Peeral marks them Etym: Ar. Aaɓnde, Mawbaare, Njeslaare, Naasannde, Mawnde, Dewo and Hoore biir are what Fulɓe said in their own language, and they are the same seven used in Fuuta Tooro: common inheritance sitting in a Guinean course, not a Guinean list. None of the seven is in Peeral's dictionary, which is worth knowing — it is the set that has been falling out of houses, and the reason it is here. One caution before telling a child these are the ancient names: they are probably not pre-Islamic. Peeral has mawnde as greatness, so Friday — Mawnde — is the great one, the day of the great prayer; and the week as ordered here begins on Saturday, which is the Islamic week rather than an inherited Fulɓe one. What these seven most likely record is Fulɓe meeting Islam and answering in their own words instead of borrowing — which is a better story than an older one, and a true one. Which set your own family says differs house to house. Tell the child yours, and tell them the other exists."]},
+  ad:["Days","Two names for every day, and the card shows them side by side rather than one above the other. The tenen / talaata / alarba set came through Arabic with Islam — Peeral marks them Etym: Ar. Aaɓnde, Mawbaare, Njeslaare, Naasaande, Mawnde, Dewo and Hoorebiire are what Fulɓe said in their own language, and they are the same seven used in Fuuta Tooro: common inheritance sitting in a Guinean course, not a Guinean list. None of the seven is in Peeral's dictionary, which is worth knowing — it is the set that has been falling out of houses, and the reason it is here. One caution before telling a child these are the ancient names: they are probably not pre-Islamic. Peeral has mawnde as greatness, so Friday — Mawnde — is the great one, the day of the great prayer; and the week as ordered here begins on Saturday, which is the Islamic week rather than an inherited Fulɓe one. What these seven most likely record is Fulɓe meeting Islam and answering in their own words instead of borrowing — which is a better story than an older one, and a true one. Which set your own family says differs house to house. Tell the child yours, and tell them the other exists."]},
  seasons:{t:"Four seasons",em:"🌦️",u:2,n:"12 months",say:"Pick a month. Then pick its season.",
   ad:["Months and seasons","Twelve months, four seasons, three months each. The pattern is the lesson."]},
 
@@ -8001,7 +8005,7 @@ function wmTCheck(){
    \u2014 a word cannot be both the name of the group and a thing to put in it. */
 const MASSQ=[
  {w:"njaareendi", g:"\ud83c\udfdc\ufe0f", en:"sand", mass:true},
- {w:"bareeru",   g:"\ud83d\udc15", en:"dog",         mass:false},
+ {w:"rawaandu",  g:"\ud83d\udc15", en:"dog",         mass:false},
  {w:"leydi",      g:"\ud83c\udf0d", en:"earth, land", mass:true},
  {w:"kaakol",     g:"\ud83c\udf41", en:"leaf",        mass:false},
  {w:"lamɗam",     g:"\ud83e\uddc2", en:"salt",        mass:true},
@@ -8115,13 +8119,13 @@ const MQ=(function(){
    is not true. */
 const FSET=["ngal","nduu","ndee","ngol"];
 const FAMS=[
- {k:"nduu", end:"du and -ru", lead:25, rest:[10,29,3]},
+ {k:"nduu", end:"du and -ru", lead:25, rest:[10,3,44]},
  {k:"ndee", end:"re",         lead:13, rest:[18,26]},
  {k:"ngol", end:"ol",         lead:6,  rest:[14,22]}];
 /* Two from each family, interleaved rather than blocked, so the answer cannot
    be carried over from the card before. Every question offers the same four,
    so only the ending tells you. */
-const FQ=[10,18,14,29,26,22];
+const FQ=[10,18,14,44,26,22];
 
 function fmTeach(){
  const k=Math.min(S.fmM||0,FAMS.length-1), F=FAMS[k], w=W2[F.lead];
@@ -8523,7 +8527,6 @@ const NEIGH1={
 "ŋannawol": "ŋannagol",
 "sehre": "seere",
 "waado": "waaño",
-"yeendu": "weendu",
 "nagge": "jagge",
 "danki": "banki",
 "booliwal": "kooliwal",
@@ -8557,10 +8560,6 @@ const NEIGH={
 "jawre": [
 "awre",
 "jowre"
-],
-"kemmba": [
-"emmba",
-"kemmbu"
 ],
 "nowru": [
 "ndowru",
@@ -9331,7 +9330,7 @@ function numq(){
    underneath, as though the second were a footnote to the first. It is the
    other way round in age: tenen, talaata, alarba, alkamisa, asewe, alat and
    juma are borrowings — Peeral tags them Etym: Ar himself — and Aaɓunde,
-   Mawbaare, Njeslaare, Naasannde, Mawnde, Dewo and Hoore biir are what Fulɓe
+   Mawbaare, Njeslaare, Naasaande, Mawnde, Dewo and Hoorebiire are what Fulɓe
    said in their own language for the same seven days. The second set is the
    one missing from the dictionary, the one that fell out of houses, and the
    one this course exists to carry.
@@ -9455,7 +9454,7 @@ const SEASONS4=[
  {k:"Setto", alt:"Demminaare", g:"\ud83c\udf31", c:"#6E9C7C",
   what:"the ploughing season \u2014 the last of the dry, the first of the rain",
   when:"April to June", same:"Seeɗto",
-  months:[["Seeɗto","April"],["Duujal","May"],["Korse","June"]]},
+  months:[["Setto","April"],["Duujal","May"],["Korse","June"]]},
  {k:"Ndunngu", alt:"", g:"\ud83c\udf27\ufe0f", c:"#4E7FA6",
   what:"the rains", when:"July to September",
   months:[["Morso","July"],["Juko","August"],["Silto","September",1]]},
@@ -9600,7 +9599,7 @@ const REGIONS=[
   learn:"The thirty-two letters and the sounds they make. Short vowels against long ones, and the doubled letters.",
   factT:"Two names, one language",
   factP:"Here by the river people call the language <b>Pulaar</b>. Further east it is called <b>Fulfulde</b>. Same language, two names \u2014 which is why the very first page of the book says <i>Limto Fulfulde (Pulaar)</i>.",
-  factQ:"The old Fulɓe day-names \u2014 Hoore biir, Dewo, Aa\u0253nde \u2014 are still used by Fulɓe here."},
+  factQ:"The old Fulɓe day-names \u2014 Hoorebiire, Dewo, Aa\u0253nde \u2014 are still used by Fulɓe here."},
 
  {n:"Fuuta Jaloo", where:"Guinea", flag:"\u26f0\ufe0f",
   learn:"Thirty-three words and their classes \u2014 one, many, little one \u2014 and the letter that changes at the front.",
@@ -9640,7 +9639,7 @@ const WORLDS=[
   fly:[{e:"\ud83d\udd4a\ufe0f",d:26,y:"top:30px",z:22},{e:"\ud83d\udd4a\ufe0f",d:34,y:"top:56px",z:17}],
   orb:{s:"right:24px;top:24px;width:54px;height:54px;background:radial-gradient(circle,#FFF0C0,#FFC24D);animation:glow 4s ease-in-out infinite"}},
 
- {name:"The cattle plain", sub:"nagge, kemmba, mawba",
+ {name:"The cattle plain", sub:"nagge, njambala, mawba",
   sky:"linear-gradient(180deg,#9FD8F2 0%,#BFE7D8 60%,#DCEFC9 100%)",
   band:"linear-gradient(180deg,#E4F2D8,#D8EDCA)", g1:"#7FB871", g2:"#6BA65E",
   props:[{e:"\ud83c\udf33",s:"left:7%;bottom:14px;font-size:44px"},
@@ -10872,14 +10871,14 @@ const SENT=[
     bowl with the laundry verb. lootude joins the verb list. */
  ["Baaba am jooɗike.","My father has sat down."],
  ["Neene am no ñaamude.","My mother is eating."],
- ["Koto am no lootude bareeru ndun.","My brother is washing the dog."],
+ ["Kotoo am no lootude rawaandu ndun.","My brother is washing the dog."],
  ["Jaaja am no winndude e alluwal.","My sister is writing on the writing board."],
  ["Binta no ñaamude.","Binta is eating."],
  ["Yero no lootude booliwal ngal.","Yero is washing the bowl."],
  ["Soro am jooɗike ka danki.","My grandfather has sat down on the bed."],
  ["Koli no amude.","Koli is dancing."],
  ["Sira no winndude e deftere.","Sira is writing in the book."],
- ["Bareeru ndun jooɗike ka ɗatal.","The dog has sat down on the road."],
+ ["Rawaandu ndun jooɗike ka ɗatal.","The dog has sat down on the road."],
  ["Nduru no ñaamude.","Nduru is eating."],
  ["Kaawu am no lootude mbabba mban.","My uncle is washing the donkey."],
  ["Anndaa lamndotaako majjay tun.","One who does not know and will not ask simply stays lost.",1],
@@ -11863,16 +11862,19 @@ function crossing(){
    is which is part of knowing where you are from. reg:"" means it is said
    everywhere and carries no chip. */
 const GREET=[
- {who:"\ud83e\uddd3", say:"Jaaraama",     en:"Hello",           reg:"",
-  reply:"Jaaraama",    ren:"Hello to you too"},
- {who:"\ud83d\udc69", say:"Tanaa alaa?",  en:"No trouble?",     reg:"",
-  reply:"Jam tan",     ren:"Peace only"},
- {who:"\ud83d\udc66", say:"Ko honnoway?", en:"How are you?",    reg:"Fuuta Jaloo",
-  reply:"Miɗo e jam", ren:"I am in peace"},
- {who:"\ud83d\udc74", say:"No mbaɗɗa?",   en:"How are you?",    reg:"Fuuta Tooro",
-  reply:"Jam tan",     ren:"Peace only"},
- {who:"\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67", say:"On jaaraama", en:"Hello, to more than one", reg:"",
-  reply:"On jaaraama", ren:"Hello to you all"}
+ /* v291: Amadu Sajoh Bah's greetings for the recording list (Oct 2026), in his
+    order. Where he gives two or three ways of saying it, all of them are on the
+    card and in the one clip. Files: greet/0-say, greet/0-reply ... greet/4-reply. */
+ {who:"\ud83e\uddd3", say:"No wa’i / Ko honno wa’i / No mbaɗɗaa?", en:"How are you?", reg:"",
+  reply:"Jam tun / Miɗo e jam.", ren:"Only peace / I am at peace"},
+ {who:"\ud83d\udc69", say:"Hiɗa e jam?", en:"Are you at peace?", reg:"",
+  reply:"Jam tan / Miɗo e jam.", ren:"Only peace / I am at peace"},
+ {who:"\ud83d\udc74", say:"Jannde nden le?", en:"And your studies?", reg:"",
+  reply:"Ko yettude Alla.", ren:"Praise be to God"},
+ {who:"\ud83d\udc66", say:"En on tuma.", en:"Until next time", reg:"",
+  reply:"Awa, si Alla jaɓii.", ren:"Yes, if God wills"},
+ {who:"\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67", say:"Jaaraama.", en:"Thank you", reg:"",
+  reply:"Jaaraama.", ren:"Thank you too"}
 ];
 
 /* ---- v237: the same card, twice, doing two jobs ----
@@ -11893,8 +11895,14 @@ function greet(){
    <p class="sayto"><b class="ff">${esc(GREET[0].say)}</b>
      <span>say it to someone today</span></p>
    <button class="ctl" style="width:100%;margin-top:10px" data-finish>done \u2713</button></div>`;
- const opts=[g.reply].concat(GREET.filter(function(x){return x.reply!==g.reply})
-   .slice(0,2).map(function(x){return x.reply}));
+ const gw=function(t){return String(t).toLowerCase().replace(/[^a-zɓɗŋñƴ’ ]/g," ").split(/\s+/).filter(function(w){return w.length>3})};
+ const opts=[g.reply];
+ GREET.forEach(function(x){
+  if(opts.length>=3||opts.indexOf(x.reply)>=0) return;
+  const w=gw(x.reply);
+  if(opts.some(function(o){return gw(o).some(function(v){return w.indexOf(v)>=0})})) return;
+  opts.push(x.reply);
+ });
  const order=opts.slice().sort(function(a,b){return (a+i).length-(b+i).length||a.localeCompare(b)});
  /* v243: the reply is chosen on both passes. It used to be handed over on the
     first visit, before the letters, on the grounds that a child who cannot
@@ -11915,16 +11923,16 @@ function greet(){
  const said=S.gsaid===i;
  return wrap(`<div class="greet thread">
    <div class="gline${wave?" new":""}">
-    <div class="gbub" data-clip="greet/${pad(i,2)}-say.mp3" data-autoplay>
-     <span class="gsay gtext">
+    <div class="gbub" data-clip="greet/${i}-say.mp3" data-autoplay>
+     <span class="gsay gtext${g.say.length>22?" long":""}">
       <b class="ff">${esc(g.say)}</b><small>${esc(g.en)}</small></span>
      ${g.reg?`<span class="regchip">${esc(g.reg)}</span>`:""}</div>
     <span class="gwho${wave?" arrive":""}">${wave
       ?`<i class="w">\ud83d\udc4b</i><i class="f">${g.who}</i>`:g.who}</span>
    </div>
    ${got?`<div class="gline you new">
-      <div class="gbub mine${said?"":" nudge"}" data-clip="greet/${pad(i,2)}-reply.mp3" data-gsaid>
-       <span class="gword ff">${esc(g.reply)}</span>
+      <div class="gbub mine${said?"":" nudge"}" data-clip="greet/${i}-reply.mp3" data-gsaid>
+       <span class="gword ff${g.reply.length>18?" long":""}">${esc(g.reply)}</span>
        <small>${esc(g.ren)}</small></div>
       <span class="gwho me">${avaHTML("")}</span>
      </div>
@@ -11934,7 +11942,7 @@ function greet(){
        <span class="gwho me">${avaHTML("")}</span>
       </div>
       <div class="gopts">${order.map(function(o){
-      return `<button class="gopt${S.gpick===o?" no":""}" data-greply="${esc(o)}">
+      return `<button class="gopt${S.gpick===o?" no":""}${o.length>18?" long":""}" data-greply="${esc(o)}">
         <b class="ff">${esc(o)}</b>
         <span class="gob"><i></i><i></i><i></i></span></button>`
      }).join("")}</div>`}
@@ -11950,12 +11958,15 @@ function greet(){
    chip saying whose side. That distinction is the point of the activity, not
    a detail: in Fulɓe families it decides who you joke with and who you defer
    to, and a child who confuses them has said something wrong about a person. */
+/* v291: the files are named as on the recording list (kin/koto.m4a ...); the
+   words on screen can change without the files changing name. */
+const KINF=["baaba","neene","koto","jaaja","soro","kaawu","bappa","yaaye","pati"];
 const KIN=[
  ["baaba","father","\ud83d\udc68","",1] /* v268: this said baba. Peeral has no baba at all — only baaba, whose own example sentence is Neene e baaba, and the course's sentences already spelled it that way. koto and kaaw are not headwords either; kaawu is (Pl. kaawiraaɓe). Worth putting to your family. */,
  ["neene","mother","\ud83d\udc69","",1],
- ["koto","brother","\ud83d\udc66","",1],
+ ["kotoo","brother","\ud83d\udc66","",1],
  ["jaaja","sister","\ud83d\udc67","",1],
- ["soro","grandfather","\ud83d\udc74","",1],
+ ["maama","grandfather","\ud83d\udc74","",1],
  ["kaawu","uncle","\ud83e\uddd4","your mother's side",0],
  ["bappa","uncle","\ud83d\udc68\u200d\ud83e\uddb0","your father's side",0],
  ["yaaye","aunt","\ud83d\udc69\u200d\ud83e\uddb1","your father's side",0,
@@ -11982,7 +11993,7 @@ function kinfolk(){
      <b class="ff">${esc(t[0])}</b>
      <small>${esc(t[1])}</small>
     </div>
-    <button class="hearbtn big" data-clip="kin/${pad(i,2)}.mp3">
+    <button class="hearbtn big" data-clip="kin/${KINF[i]}.mp3">
       <span class="bars"><i></i><i></i><i></i></span>${esc(t[0])}</button>
     <p class="grownup">grown-up: say <b class="ff">${esc(t[0])}</b></p>
     ${t[5]?`<p class="knote">${t[5]}</p>`:""}
@@ -11996,7 +12007,7 @@ function kinfolk(){
  const got=S.kpick===t[0];
  ACTS.kinfolk.say=got?`Yes \u2014 ${t[0]} is ${t[1]}.`:"Listen. Then tap who it is.";
  return wrap(`<div class="kin">
-   <button class="hearbtn big" data-clip="kin/${pad(i,2)}.mp3">
+   <button class="hearbtn big" data-clip="kin/${KINF[i]}.mp3">
      <span class="bars"><i></i><i></i><i></i></span>${got?esc(t[0]):"listen"}</button>
    <p class="grownup">grown-up: say <b class="ff">${esc(t[0])}</b></p>
    <div class="kinrow">${row.map(function(k){
