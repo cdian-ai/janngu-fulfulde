@@ -5488,7 +5488,7 @@ const SHAPES=[
    is a setting, applied once as the clip is loaded, and every path in the code
    below can go on saying .mp3 without a single one of them being wrong.
    Change AUDIO.ext to ".mp3" if the library is ever re-cut. */
-const BUILD="v291 · 19 October 2026";
+const BUILD="v292 · 4 November 2026";
 const AUDIO={base:"audio/",ext:".m4a",last:"—",el:{},buf:{},cur:null,src:null,order:[],
  missing:{},scope:null};
 /* ---- when there is no sound ----
@@ -13435,7 +13435,13 @@ function stepNav(){
      aria-label="Forward a step">${BACKSVG}</button>
   </div>`;
 }
-const SAVE_KEY="janngu-fulfulde-1";
+/* v292: each child keeps their own progress. Notice Me writes the child who opened the course to
+   nm.learner; their progress is saved under "janngu-fulfulde-1:<id>". Before, one save held the whole
+   phone's progress, so on a shared phone the next child carried on with (and reported) the last child's
+   stops. Opened on its own, with no child handed over, it uses the one save as before. */
+const SAVE_BASE="janngu-fulfulde-1";
+function learnerIdNow(){ try{ const d=JSON.parse(localStorage.getItem("nm.learner")||"null"); return (d&&d.id)?String(d.id):""; }catch(e){ return ""; } }
+const SAVE_KEY=learnerIdNow() ? SAVE_BASE+":"+learnerIdNow() : SAVE_BASE;
 function saveState(){
  /* v287: if the write is refused - a picture too big for what is left, private
     mode, a full disk - the progress is what matters, so it goes again without
@@ -13459,7 +13465,18 @@ function saveState(){
 }
 function loadState(){
  try{
-  const raw=localStorage.getItem(SAVE_KEY); if(!raw) return;
+  let raw=localStorage.getItem(SAVE_KEY);
+  /* v292: the first time a child opens it after the update, the old one save moves to them only if it was
+     theirs (lid), or it was nobody's and no child has a save of their own yet. Otherwise they start fresh. */
+  if(!raw && SAVE_KEY!==SAVE_BASE){
+   const old=localStorage.getItem(SAVE_BASE);
+   if(old){
+    let lid=null; try{ lid=(JSON.parse(old)||{}).lid||null; }catch(e){}
+    let anyOwn=false; try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.indexOf(SAVE_BASE+":")===0){ anyOwn=true; break; } } }catch(e){}
+    if(lid===learnerIdNow() || (!lid && !anyOwn)) raw=old;
+   }
+  }
+  if(!raw) return;
   const d=JSON.parse(raw); if(!d||d.v!==1) return;
   if(Array.isArray(d.done))    S.done=new Set(d.done.filter(function(x){return ORDER.indexOf(x)>=0}));
   if(Array.isArray(d.seen))    S.seen=new Set(d.seen);
